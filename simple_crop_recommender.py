@@ -217,44 +217,65 @@ class SimpleCropRecommender:
         if self.model is None:
             raise ValueError("Model not initialized. Please train the model first.")
         
-        # Create input feature vector
-        x = np.array([n, p, k, temperature, humidity, ph, rainfall])
+        # Skip KNN method entirely - it's likely overfitting to "rice"
+        # Instead, focus on matching parameters to optimal growing conditions
         
-        # Normalize input
-        x_norm = (x - self.model['x_mean']) / (self.model['x_std'] + 1e-8)
+        # Calculate suitability for each crop based on optimal conditions
+        suitability_scores = {}
+        for crop_name in self.crop_data:
+            conditions = self.crop_data[crop_name]
+            
+            # Calculate parameter scores based on how well they fit the optimal ranges
+            n_score = self.calculate_parameter_score(n, conditions['n_min'], conditions['n_max'])
+            p_score = self.calculate_parameter_score(p, conditions['p_min'], conditions['p_max'])
+            k_score = self.calculate_parameter_score(k, conditions['k_min'], conditions['k_max'])
+            temp_score = self.calculate_parameter_score(temperature, conditions['temperature_min'], conditions['temperature_max'])
+            humidity_score = self.calculate_parameter_score(humidity, conditions['humidity_min'], conditions['humidity_max'])
+            ph_score = self.calculate_parameter_score(ph, conditions['ph_min'], conditions['ph_max'])
+            rainfall_score = self.calculate_parameter_score(rainfall, conditions['rainfall_min'], conditions['rainfall_max'])
+            
+            # Calculate average score with balanced weights
+            params = {
+                'n': n_score,
+                'p': p_score,
+                'k': k_score,
+                'temperature': temp_score,
+                'humidity': humidity_score,
+                'ph': ph_score,
+                'rainfall': rainfall_score
+            }
+            
+            # Create an overall score that emphasizes the minimum value
+            # This means all factors need to be good for a high score
+            min_score = min(params.values())
+            avg_score = sum(params.values()) / len(params)
+            
+            # Final score is 60% minimum score (weakest link) and 40% average score
+            final_score = (0.6 * min_score) + (0.4 * avg_score)
+            
+            # Store the suitability score as a percentage
+            suitability_scores[crop_name] = min(100, final_score * 100)
         
-        # Calculate distances to all data points
-        distances = []
-        for i, sample in enumerate(self.model['x_data']):
-            dist = self.euclidean_distance(x_norm, sample)
-            distances.append((dist, i))
+        # Find the crop with the highest suitability score
+        if suitability_scores:
+            recommended_crop = max(suitability_scores.items(), key=lambda x: x[1])[0]
+            
+            # Normalized confidence scores - make sure they all add up to 100%
+            total_score = sum(suitability_scores.values())
+            if total_score > 0:
+                confidence_scores = {crop: (score / total_score) * 100 
+                                     for crop, score in suitability_scores.items()}
+            else:
+                # If all scores are 0, assign equal probability
+                equal_score = 100 / len(suitability_scores)
+                confidence_scores = {crop: equal_score for crop in suitability_scores}
+        else:
+            # Fallback in case no crops are available
+            recommended_crop = list(self.crop_data.keys())[0]
+            confidence_scores = {crop: 0 for crop in self.get_all_crops()}
+            confidence_scores[recommended_crop] = 100
         
-        # Sort by distance
-        distances.sort()
-        
-        # Get the k nearest neighbors
-        k = self.model['k']
-        k_nearest = distances[:k]
-        
-        # Count the crops of the nearest neighbors
-        crop_counts = defaultdict(int)
-        for _, idx in k_nearest:
-            crop_idx = self.model['y_data'][idx]
-            crop_name = self.model['crop_map_inv'][crop_idx]
-            crop_counts[crop_name] += 1
-        
-        # Calculate confidence scores
-        total_neighbors = len(k_nearest)
-        confidence_scores = {crop: (count / total_neighbors) * 100 for crop, count in crop_counts.items()}
-        
-        # Find the most common crop
-        recommended_crop = max(crop_counts.items(), key=lambda x: x[1])[0]
-        
-        # Generate confidence scores for all known crops
-        all_crop_confidence = {crop: 0 for crop in self.get_all_crops()}
-        all_crop_confidence.update(confidence_scores)
-        
-        return recommended_crop, all_crop_confidence
+        return recommended_crop, confidence_scores
     
     def get_optimal_conditions(self, crop_name):
         """Get optimal growing conditions for a specific crop"""
