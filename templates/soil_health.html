@@ -1,0 +1,416 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Soil Health Analysis - Simple Crop Advisor{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Soil Health Analysis</h1>
+        <p class="lead mb-4">Analyze your soil's health and get recommendations for improvement</p>
+    </div>
+</section>
+
+<!-- Analysis Form Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">Enter Soil Parameters</div>
+                    <div class="card-body">
+                        <form id="soil-health-form">
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nitrogen" class="form-label">Nitrogen (N) Content</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1" id="nitrogen" name="nitrogen" min="0" max="140" value="50">
+                                        <span class="range-value ms-3" id="nitrogen-value">50</span>
+                                        <span class="ms-1">kg/ha</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="phosphorus" class="form-label">Phosphorus (P) Content</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1" id="phosphorus" name="phosphorus" min="5" max="145" value="50">
+                                        <span class="range-value ms-3" id="phosphorus-value">50</span>
+                                        <span class="ms-1">kg/ha</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="potassium" class="form-label">Potassium (K) Content</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1" id="potassium" name="potassium" min="5" max="205" value="50">
+                                        <span class="range-value ms-3" id="potassium-value">50</span>
+                                        <span class="ms-1">kg/ha</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="ph" class="form-label">pH Value</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="range" class="form-range flex-grow-1" id="ph" name="ph" min="0" max="14" step="0.1" value="6.5">
+                                        <span class="range-value ms-3" id="ph-value">6.5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Analyze Soil Health</button>
+                            </div>
+                            
+                            <!-- Loading Spinner -->
+                            <div id="loading-spinner" class="loading-spinner">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Analyzing soil health...</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Results Section -->
+                <div id="results-section" class="results-section">
+                    <div class="card mb-4">
+                        <div class="card-header">Soil Health Report</div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-6 text-center">
+                                    <div id="health-gauge-container" style="position: relative; height: 200px; width: 200px; margin: 0 auto;">
+                                        <canvas id="health-gauge"></canvas>
+                                        <div id="health-score-display" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                            <div id="health-score" style="font-size: 24px; font-weight: bold; color: var(--primary);">75%</div>
+                                            <div id="health-category" style="font-size: 16px;">Good</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="mb-3">Your Soil Parameters</h5>
+                                    <table class="table">
+                                        <tbody id="soil-params-table">
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="mb-3">Recommendations</h5>
+                                <ul id="recommendations-list" class="list-group">
+                                    <!-- Will be populated by JavaScript -->
+                                </ul>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i> Soil health is based on NPK levels and pH balance. The analysis provides general guidelines; for precise recommendations, consider professional soil testing.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header">Soil Health Information</div>
+                        <div class="card-body">
+                            <h5 class="mb-3">Understanding NPK Values</h5>
+                            <div class="row mb-4">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title" style="color: var(--primary);">Nitrogen (N)</h6>
+                                            <p class="card-text">Essential for leaf growth and protein formation. It promotes lush, green foliage and is crucial for photosynthesis.</p>
+                                            <ul class="mt-2">
+                                                <li><strong>Low:</strong> Yellow leaves, stunted growth</li>
+                                                <li><strong>Optimal:</strong> 40-80 kg/ha</li>
+                                                <li><strong>High:</strong> Excessive vegetative growth, delayed flowering</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title" style="color: var(--primary);">Phosphorus (P)</h6>
+                                            <p class="card-text">Critical for root development, flowering, and seed formation. It helps plants convert nutrients into usable building blocks.</p>
+                                            <ul class="mt-2">
+                                                <li><strong>Low:</strong> Poor root growth, delayed maturity</li>
+                                                <li><strong>Optimal:</strong> 30-60 kg/ha</li>
+                                                <li><strong>High:</strong> Can inhibit micronutrient uptake</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title" style="color: var(--primary);">Potassium (K)</h6>
+                                            <p class="card-text">Regulates water uptake, strengthens stems, and improves disease resistance and overall plant vigor.</p>
+                                            <ul class="mt-2">
+                                                <li><strong>Low:</strong> Weak stems, increased disease susceptibility</li>
+                                                <li><strong>Optimal:</strong> 20-50 kg/ha</li>
+                                                <li><strong>High:</strong> Can create imbalances with other nutrients</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mb-3">Understanding Soil pH</h5>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <p>Soil pH affects nutrient availability and microbial activity:</p>
+                                    <div class="progress mb-3" style="height: 30px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">Acidic (0-5.5)</div>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Optimal (5.5-7.5)</div>
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Alkaline (7.5-14)</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>Acidic Soil (pH below 5.5)</h6>
+                                            <ul>
+                                                <li>Reduced availability of P, Ca, Mg</li>
+                                                <li>Increased availability of Al, Fe, Mn</li>
+                                                <li>Solution: Add lime to raise pH</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Optimal Range (pH 5.5-7.5)</h6>
+                                            <ul>
+                                                <li>Maximum availability of nutrients</li>
+                                                <li>Ideal for most crops</li>
+                                                <li>Optimal microbial activity</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>Alkaline Soil (pH above 7.5)</h6>
+                                            <ul>
+                                                <li>Reduced availability of P, Fe, Mn, Zn</li>
+                                                <li>May have excess salts</li>
+                                                <li>Solution: Add sulfur to lower pH</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update range input values
+    const rangeInputs = document.querySelectorAll('input[type="range"]');
+    rangeInputs.forEach(input => {
+        const valueDisplay = document.getElementById(`${input.id}-value`);
+        if (valueDisplay) {
+            // Set initial value
+            valueDisplay.textContent = input.value;
+            
+            // Update on input change
+            input.addEventListener('input', function() {
+                valueDisplay.textContent = this.value;
+            });
+        }
+    });
+    
+    // Handle form submission
+    const soilHealthForm = document.getElementById('soil-health-form');
+    if (soilHealthForm) {
+        soilHealthForm.addEventListener('submit', handleSoilHealthFormSubmit);
+    }
+});
+
+function handleSoilHealthFormSubmit(event) {
+    event.preventDefault();
+    
+    // Show loading spinner
+    const loadingSpinner = document.getElementById('loading-spinner');
+    loadingSpinner.style.display = 'block';
+    
+    // Hide previous results
+    document.getElementById('results-section').style.display = 'none';
+    
+    // Get form data
+    const formData = new FormData(event.target);
+    
+    // Send request to server
+    fetch('/api/analyze_soil', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide loading spinner
+        loadingSpinner.style.display = 'none';
+        
+        if (data.success) {
+            displaySoilHealthResults(data.health_report, formData);
+        } else {
+            displayError(data.error);
+        }
+    })
+    .catch(error => {
+        // Hide loading spinner
+        loadingSpinner.style.display = 'none';
+        displayError('An error occurred while processing your request. Please try again later.');
+        console.error('Error:', error);
+    });
+}
+
+function displaySoilHealthResults(healthReport, formData) {
+    // Update health score and category
+    document.getElementById('health-score').textContent = `${Math.round(healthReport.score)}%`;
+    document.getElementById('health-category').textContent = healthReport.category;
+    
+    // Update gauge chart
+    createGaugeChart(healthReport.score);
+    
+    // Update soil parameters table
+    const soilParamsTable = document.getElementById('soil-params-table');
+    soilParamsTable.innerHTML = '';
+    
+    const n = formData.get('nitrogen');
+    const p = formData.get('phosphorus');
+    const k = formData.get('potassium');
+    const ph = formData.get('ph');
+    
+    const params = [
+        { name: 'Nitrogen (N)', value: `${n} kg/ha`, status: getParameterStatus(n, 30, 80) },
+        { name: 'Phosphorus (P)', value: `${p} kg/ha`, status: getParameterStatus(p, 20, 80) },
+        { name: 'Potassium (K)', value: `${k} kg/ha`, status: getParameterStatus(k, 20, 80) },
+        { name: 'pH', value: ph, status: (ph >= 5.5 && ph <= 7.5) ? 'Optimal' : ((ph < 5.5) ? 'Low (Acidic)' : 'High (Alkaline)') }
+    ];
+    
+    params.forEach(param => {
+        const row = document.createElement('tr');
+        
+        const nameCell = document.createElement('td');
+        nameCell.textContent = param.name;
+        
+        const valueCell = document.createElement('td');
+        valueCell.textContent = param.value;
+        
+        const statusCell = document.createElement('td');
+        let statusClass = '';
+        
+        if (param.status === 'Optimal') {
+            statusClass = 'text-success';
+        } else if (param.status === 'Low' || param.status === 'Low (Acidic)') {
+            statusClass = 'text-danger';
+        } else {
+            statusClass = 'text-warning';
+        }
+        
+        statusCell.innerHTML = `<span class="${statusClass}">${param.status}</span>`;
+        
+        row.appendChild(nameCell);
+        row.appendChild(valueCell);
+        row.appendChild(statusCell);
+        
+        soilParamsTable.appendChild(row);
+    });
+    
+    // Update recommendations list
+    const recommendationsList = document.getElementById('recommendations-list');
+    recommendationsList.innerHTML = '';
+    
+    if (healthReport.recommendations.length === 0) {
+        const li = document.createElement('li');
+        li.className = 'list-group-item text-success';
+        li.innerHTML = '<i class="fas fa-check-circle me-2"></i> Your soil parameters are within optimal ranges. No specific recommendations needed.';
+        recommendationsList.appendChild(li);
+    } else {
+        healthReport.recommendations.forEach(recommendation => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `<i class="fas fa-info-circle me-2 text-primary"></i> ${recommendation}`;
+            recommendationsList.appendChild(li);
+        });
+    }
+    
+    // Display results section
+    document.getElementById('results-section').style.display = 'block';
+    
+    // Scroll to results
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function getParameterStatus(value, low, high) {
+    value = parseFloat(value);
+    if (value < low) {
+        return 'Low';
+    } else if (value > high) {
+        return 'High';
+    } else {
+        return 'Optimal';
+    }
+}
+
+function createGaugeChart(healthScore) {
+    const ctx = document.getElementById('health-gauge').getContext('2d');
+    
+    // Determine color based on health score
+    let color = '#D32F2F'; // Red for poor
+    
+    if (healthScore >= 75) {
+        color = '#388E3C'; // Green for good
+    } else if (healthScore >= 50) {
+        color = '#FFA000'; // Amber for moderate
+    }
+    
+    // Destroy previous chart if exists
+    if (window.healthChart) {
+        window.healthChart.destroy();
+    }
+    
+    // Create gauge chart
+    window.healthChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [healthScore, 100 - healthScore],
+                backgroundColor: [color, '#E0E0E0'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: '75%',
+            rotation: -90,
+            circumference: 180,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        }
+    });
+}
+
+function displayError(message) {
+    const errorAlert = document.createElement('div');
+    errorAlert.className = 'alert alert-danger alert-dismissible fade show';
+    errorAlert.setAttribute('role', 'alert');
+    errorAlert.innerHTML = `
+        <strong>Error:</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    const formContainer = document.querySelector('.card-body');
+    formContainer.insertBefore(errorAlert, document.getElementById('soil-health-form'));
+}
+</script>
+{% endblock %}
