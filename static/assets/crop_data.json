@@ -1,0 +1,222 @@
+{
+    "rice": {
+        "n_min": 60, "n_max": 100,
+        "p_min": 35, "p_max": 60,
+        "k_min": 35, "k_max": 45,
+        "temperature_min": 20, "temperature_max": 27,
+        "humidity_min": 80, "humidity_max": 85,
+        "ph_min": 5.0, "ph_max": 8.0,
+        "rainfall_min": 180, "rainfall_max": 300,
+        "description": "Rice is a staple food for over half the world's population. It grows best in warm, humid environments with plenty of water. Rice fields are typically flooded during cultivation, which helps control weeds."
+    },
+    "maize": {
+        "n_min": 60, "n_max": 100,
+        "p_min": 35, "p_max": 60,
+        "k_min": 15, "k_max": 25,
+        "temperature_min": 18, "temperature_max": 26,
+        "humidity_min": 55, "humidity_max": 75,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 60, "rainfall_max": 110,
+        "description": "Maize (corn) is one of the most versatile crops, used for food, feed, and industrial products. It prefers warm soil and good drainage. Maize is sensitive to frost and drought during flowering stages."
+    },
+    "chickpea": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 15, "temperature_max": 25,
+        "humidity_min": 20, "humidity_max": 40,
+        "ph_min": 6.0, "ph_max": 8.0,
+        "rainfall_min": 40, "rainfall_max": 100,
+        "description": "Chickpeas are drought-resistant legumes rich in protein. They grow well in semi-arid regions with moderate temperatures. As a legume, chickpeas can fix nitrogen in the soil, reducing the need for nitrogen fertilizers."
+    },
+    "kidneybeans": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 18, "temperature_max": 30,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 7.5,
+        "rainfall_min": 60, "rainfall_max": 150,
+        "description": "Kidney beans require warm temperatures and moderate rainfall. They are nitrogen-fixing plants that improve soil fertility. Kidney beans are sensitive to frost and extreme heat, especially during flowering and pod development."
+    },
+    "pigeonpeas": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 20, "temperature_max": 35,
+        "humidity_min": 50, "humidity_max": 80,
+        "ph_min": 5.0, "ph_max": 7.0,
+        "rainfall_min": 60, "rainfall_max": 150,
+        "description": "Pigeon peas are drought-resistant legumes that can grow in marginal soils. They are an important source of protein in many regions and can be grown as a perennial crop in some areas."
+    },
+    "mothbeans": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 35, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 25, "temperature_max": 35,
+        "humidity_min": 30, "humidity_max": 60,
+        "ph_min": 6.0, "ph_max": 7.5,
+        "rainfall_min": 40, "rainfall_max": 100,
+        "description": "Moth beans are heat and drought tolerant, making them suitable for arid and semi-arid regions with limited rainfall. They can grow in poor soil conditions and are often intercropped with other crops."
+    },
+    "mungbean": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 20, "temperature_max": 35,
+        "humidity_min": 50, "humidity_max": 80,
+        "ph_min": 6.0, "ph_max": 7.5,
+        "rainfall_min": 60, "rainfall_max": 150,
+        "description": "Mung beans are fast-growing legumes that prefer warm temperatures and moderate humidity. They are commonly used for sprouts and can be harvested in as little as 60-90 days after planting."
+    },
+    "blackgram": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 20, "temperature_max": 35,
+        "humidity_min": 50, "humidity_max": 80,
+        "ph_min": 6.0, "ph_max": 7.5,
+        "rainfall_min": 60, "rainfall_max": 150,
+        "description": "Black gram is a drought-resistant legume that grows well in a variety of soil types. It's an important source of protein and is often used in traditional dishes. Black gram improves soil fertility through nitrogen fixation."
+    },
+    "lentil": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 15, "temperature_max": 25,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 6.0, "ph_max": 8.0,
+        "rainfall_min": 40, "rainfall_max": 100,
+        "description": "Lentils are cool-season legumes that are relatively drought tolerant. They are a good source of protein and fiber. Lentils have a shallow root system and prefer well-drained soils."
+    },
+    "pomegranate": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 18, "temperature_max": 35,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 7.5,
+        "rainfall_min": 50, "rainfall_max": 100,
+        "description": "Pomegranates are drought-tolerant fruit trees that prefer hot, dry summers and cool winters. They can grow in a variety of soil types but do best in deep, loamy soils with good drainage."
+    },
+    "banana": {
+        "n_min": 75, "n_max": 100,
+        "p_min": 45, "p_max": 75,
+        "k_min": 25, "k_max": 55,
+        "temperature_min": 20, "temperature_max": 30,
+        "humidity_min": 70, "humidity_max": 90,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 120, "rainfall_max": 220,
+        "description": "Bananas require consistent moisture and warm temperatures. They are sensitive to frost and wind damage. Bananas need well-drained, deep, fertile soils rich in organic matter."
+    },
+    "mango": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 24, "temperature_max": 35,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 7.5,
+        "rainfall_min": 80, "rainfall_max": 180,
+        "description": "Mangoes thrive in tropical climates with distinct wet and dry seasons. They are sensitive to frost and cold temperatures. Mango trees can grow in a wide range of soils but prefer well-drained, sandy loams."
+    },
+    "grapes": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 15, "temperature_max": 30,
+        "humidity_min": 50, "humidity_max": 80,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 50, "rainfall_max": 100,
+        "description": "Grapes prefer warm, dry climates with long growing seasons. Good drainage is essential for grape cultivation. Grapevines need full sun exposure and protection from strong winds."
+    },
+    "watermelon": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 22, "temperature_max": 30,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 40, "rainfall_max": 100,
+        "description": "Watermelons need warm temperatures, plenty of sunlight, and moderate water. They grow best in well-drained, sandy loam soils. Watermelons require a long, warm growing season and are sensitive to frost."
+    },
+    "muskmelon": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 22, "temperature_max": 30,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 6.0, "ph_max": 7.0,
+        "rainfall_min": 40, "rainfall_max": 100,
+        "description": "Muskmelons (cantaloupes) require warm temperatures and consistent moisture during the growing season. They are sensitive to frost and prefer well-drained, fertile soils with good water-holding capacity."
+    },
+    "apple": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 10, "temperature_max": 25,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 80, "rainfall_max": 120,
+        "description": "Apples require a period of winter dormancy (chill hours) and moderate summers. They grow best in well-drained, loamy soils. Apple trees need full sun exposure and protection from late spring frosts."
+    },
+    "orange": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 15, "temperature_max": 30,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 80, "rainfall_max": 180,
+        "description": "Oranges prefer subtropical climates with mild winters and warm summers. They require regular moisture for optimal fruit production. Orange trees prefer well-drained soils with good fertility."
+    },
+    "papaya": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 22, "temperature_max": 35,
+        "humidity_min": 60, "humidity_max": 80,
+        "ph_min": 6.0, "ph_max": 7.0,
+        "rainfall_min": 100, "rainfall_max": 200,
+        "description": "Papayas are fast-growing tropical fruits that require warm temperatures and regular moisture. They are sensitive to frost and waterlogging. Papaya trees prefer well-drained, loamy soils rich in organic matter."
+    },
+    "coconut": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 45, "p_max": 75,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 20, "temperature_max": 35,
+        "humidity_min": 70, "humidity_max": 90,
+        "ph_min": 5.5, "ph_max": 7.0,
+        "rainfall_min": 150, "rainfall_max": 250,
+        "description": "Coconuts thrive in tropical coastal areas with high humidity and regular rainfall. They are salt-tolerant and can grow in sandy soils. Coconut palms need full sun exposure and protection from strong winds."
+    },
+    "cotton": {
+        "n_min": 60, "n_max": 100,
+        "p_min": 35, "p_max": 65,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 20, "temperature_max": 35,
+        "humidity_min": 40, "humidity_max": 70,
+        "ph_min": 5.5, "ph_max": 8.0,
+        "rainfall_min": 60, "rainfall_max": 150,
+        "description": "Cotton requires a long, warm growing season with plenty of sunshine. It prefers well-drained soils and moderate rainfall. Cotton is sensitive to waterlogging and early frost."
+    },
+    "jute": {
+        "n_min": 60, "n_max": 100,
+        "p_min": 35, "p_max": 65,
+        "k_min": 35, "k_max": 55,
+        "temperature_min": 25, "temperature_max": 35,
+        "humidity_min": 70, "humidity_max": 90,
+        "ph_min": 6.0, "ph_max": 7.5,
+        "rainfall_min": 120, "rainfall_max": 200,
+        "description": "Jute thrives in hot, humid conditions with abundant rainfall. It is often grown in rotation with rice in tropical regions. Jute prefers well-drained, loamy soils with good water-holding capacity."
+    },
+    "coffee": {
+        "n_min": 15, "n_max": 45,
+        "p_min": 35, "p_max": 65,
+        "k_min": 15, "k_max": 45,
+        "temperature_min": 15, "temperature_max": 25,
+        "humidity_min": 50, "humidity_max": 80,
+        "ph_min": 5.0, "ph_max": 6.5,
+        "rainfall_min": 120, "rainfall_max": 200,
+        "description": "Coffee grows best at higher elevations in tropical climates with well-defined wet and dry seasons. It prefers rich, well-drained soils. Coffee plants often benefit from partial shade, especially in hotter regions."
+    }
+}

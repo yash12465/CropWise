@@ -1,0 +1,313 @@
+{% extends 'layout.html' %}
+
+{% block title %}Crop Advisor - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Grow Better with AI-Powered Crop Recommendations</h1>
+        <p class="hero-subtitle">Get personalized crop suggestions based on your soil parameters and environmental conditions</p>
+        <a href="#recommendation-form" class="btn btn-accent btn-lg">Get Recommendations</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center section-title mb-5">Why Choose Crop Advisor?</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">AI-Powered Analysis</h3>
+                    <p class="feature-description">Our machine learning algorithm analyzes soil parameters to provide accurate crop recommendations tailored to your specific conditions.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Data-Driven Decisions</h3>
+                    <p class="feature-description">Make informed farming decisions based on scientific data and proven agricultural research for maximum yield potential.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="feature-title">Sustainable Farming</h3>
+                    <p class="feature-description">Optimize resource utilization by growing crops best suited for your soil, reducing waste and environmental impact.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recommendation Form Section -->
+<section class="py-5 bg-light" id="recommendation-form">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="text-center section-title mb-4">Get Your Crop Recommendation</h2>
+                <p class="text-center mb-5">Enter your soil parameters and environmental conditions to receive personalized crop recommendations</p>
+                
+                <div class="input-section">
+                    <form id="recommendation-form">
+                        <div class="mb-3">
+                            <label for="nitrogen" class="form-label">Nitrogen (N) Content <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Nitrogen promotes leaf growth and forms proteins and chlorophyll"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="nitrogen" name="nitrogen" min="0" max="140" value="50">
+                                <span class="range-value ms-3" id="nitrogen-value">50</span>
+                                <span class="ms-1">kg/ha</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phosphorus" class="form-label">Phosphorus (P) Content <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Phosphorus stimulates root development, flowering, and fruit formation"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="phosphorus" name="phosphorus" min="5" max="145" value="50">
+                                <span class="range-value ms-3" id="phosphorus-value">50</span>
+                                <span class="ms-1">kg/ha</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="potassium" class="form-label">Potassium (K) Content <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Potassium helps in photosynthesis, protein synthesis, and disease resistance"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="potassium" name="potassium" min="5" max="205" value="50">
+                                <span class="range-value ms-3" id="potassium-value">50</span>
+                                <span class="ms-1">kg/ha</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="temperature" class="form-label">Temperature <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Average temperature affects plant growth, development, and reproduction"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="temperature" name="temperature" min="0" max="50" value="25">
+                                <span class="range-value ms-3" id="temperature-value">25</span>
+                                <span class="ms-1">°C</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="humidity" class="form-label">Humidity <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Relative humidity impacts water loss through transpiration and disease susceptibility"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="humidity" name="humidity" min="0" max="100" value="65">
+                                <span class="range-value ms-3" id="humidity-value">65</span>
+                                <span class="ms-1">%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="ph" class="form-label">pH Value <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Soil pH affects nutrient availability and microbial activity"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="ph" name="ph" min="0" max="14" step="0.1" value="6.5">
+                                <span class="range-value ms-3" id="ph-value">6.5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="rainfall" class="form-label">Rainfall <i class="fas fa-info-circle info-tooltip" data-bs-toggle="tooltip" title="Annual rainfall determines water availability for plant growth"></i></label>
+                            <div class="d-flex align-items-center">
+                                <input type="range" class="form-range flex-grow-1" id="rainfall" name="rainfall" min="0" max="300" value="150">
+                                <span class="range-value ms-3" id="rainfall-value">150</span>
+                                <span class="ms-1">mm</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Get Recommendation</button>
+                        </div>
+                    </form>
+                    
+                    <!-- Loading Spinner -->
+                    <div id="loading-spinner" class="loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing your soil parameters...</p>
+                    </div>
+                </div>
+                
+                <!-- Results Section -->
+                <div id="results-section" class="results-section mt-4">
+                    <div class="text-center mb-4">
+                        <h3 class="crop-name" id="crop-name">Rice</h3>
+                        <span class="crop-confidence" id="crop-confidence">95% Confidence</span>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">Your Soil Parameters</div>
+                                <div class="card-body">
+                                    <div id="parameter-table"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">Crop Description</div>
+                                <div class="card-body">
+                                    <p id="crop-description" class="crop-description"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">Confidence Scores</div>
+                                <div class="card-body">
+                                    <canvas id="confidence-chart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">Parameter Comparison</div>
+                                <div class="card-body">
+                                    <canvas id="parameter-chart" height="250"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="/reverse_lookup" class="btn btn-outline-primary me-2">View Detailed Crop Information</a>
+                        <button type="button" class="btn btn-secondary" onclick="window.print()">Print Results</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center section-title mb-5">How It Works</h2>
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1558387074-274b703ffc29" alt="Soil Analysis" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3" style="color: var(--primary);">1. Input Your Soil Parameters</h3>
+                <p>Enter your soil's nitrogen, phosphorus, potassium levels, along with environmental factors like temperature, humidity, pH, and rainfall. Don't have exact measurements? Use our recommended ranges as a starting point.</p>
+            </div>
+        </div>
+        
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6 order-md-2">
+                <img src="https://images.unsplash.com/photo-1632384542287-34b2fa8324b5" alt="AI Analysis" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6 order-md-1">
+                <h3 class="mb-3" style="color: var(--primary);">2. AI-Powered Analysis</h3>
+                <p>Our machine learning algorithm analyzes your input against thousands of data points from successful crop cultivation. The model identifies patterns and correlations to determine which crops will thrive in your specific conditions.</p>
+            </div>
+        </div>
+        
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b" alt="Personalized Recommendations" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3" style="color: var(--primary);">3. Get Personalized Recommendations</h3>
+                <p>Receive a tailored list of recommended crops ranked by confidence score, complete with detailed information about optimal growing conditions and comparison to your soil parameters. Use these insights to make informed planting decisions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center section-title mb-5">What Farmers Say</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="mb-3 text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="card-text">"The crop recommendations were spot on! I switched from my traditional crop rotation to the suggested varieties and saw a 30% increase in yield. The soil analysis tool saved me from making costly mistakes."</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                                <h5 class="mb-0">John Thompson</h5>
+                                <small class="text-muted">Farmer, Iowa</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="mb-3 text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="card-text">"As a first-generation farmer, I wasn't sure what crops would work best on my newly acquired land. This tool gave me the confidence to make the right decisions, and the educational resources helped me understand why."</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                                <h5 class="mb-0">Maria Rodriguez</h5>
+                                <small class="text-muted">New Farmer, California</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="mb-3 text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="card-text">"I've been farming for over 40 years, and I was skeptical about AI recommendations. But after testing it on a small plot, I was impressed with the results. Now I use it for planning all my seasonal crops."</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                                <h5 class="mb-0">Robert Miller</h5>
+                                <small class="text-muted">Experienced Farmer, Georgia</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5" style="background-color: var(--light-primary);">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to optimize your crop selection?</h2>
+        <p class="lead mb-4">Get personalized recommendations based on your specific soil conditions</p>
+        <a href="#recommendation-form" class="btn btn-primary btn-lg">Try It Now</a>
+    </div>
+</section>
+{% endblock %}

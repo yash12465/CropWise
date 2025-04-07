@@ -1,0 +1,289 @@
+{% extends 'layout.html' %}
+
+{% block title %}About - Crop Advisor{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">About Crop Advisor</h1>
+        <p class="lead">Learn how our AI-powered recommendation system is transforming agriculture</p>
+    </div>
+</section>
+
+<!-- About Content Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="section-title mb-4">Our Mission</h2>
+                <p class="lead mb-4">Crop Advisor aims to empower farmers with data-driven insights to optimize crop selection and maximize yields while promoting sustainable farming practices.</p>
+                <p class="mb-4">Our AI-powered recommendation system analyzes soil parameters and environmental conditions to suggest the most suitable crops for specific farming contexts. By leveraging machine learning and agricultural science, we provide accurate, personalized crop recommendations that can help improve agricultural productivity, reduce resource waste, and enhance economic outcomes for farmers worldwide.</p>
+                
+                <h2 class="section-title mb-4 mt-5">The Technology Behind Crop Advisor</h2>
+                <p class="mb-4">Our crop recommendation system uses a Support Vector Machine (SVM) model trained on a comprehensive dataset of successful crop cultivation. The model analyzes multiple soil and environmental parameters to identify optimal growing conditions for various crops.</p>
+                
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Data Collection</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Our dataset comprises thousands of records from diverse agricultural regions, capturing variations in soil composition, climate, and successful crop outcomes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Machine Learning</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>We employ advanced machine learning algorithms to analyze patterns between soil parameters and successful crop growth, achieving high prediction accuracy.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Continuous Improvement</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Our system constantly learns from new data and feedback, improving recommendation accuracy over time with evolving agricultural practices.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">User-Friendly Interface</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>We've designed an intuitive platform that makes complex agricultural data accessible to farmers regardless of technical expertise.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Soil Parameters Information Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Understanding Soil Parameters</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card parameter-info-card">
+                    <div class="card-header">
+                        NPK Values
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Nitrogen (N), Phosphorus (P), Potassium (K)</h5>
+                        <p class="card-text">The primary nutrients essential for plant growth:</p>
+                        <ul>
+                            <li><strong>Nitrogen (N):</strong> Crucial for leaf growth and forming proteins and chlorophyll.</li>
+                            <li><strong>Phosphorus (P):</strong> Important for root development, flowering, and fruit formation.</li>
+                            <li><strong>Potassium (K):</strong> Helps in photosynthesis, protein synthesis, and disease resistance.</li>
+                        </ul>
+                        <p>NPK values are typically measured in kg/ha (kilograms per hectare) in soil tests.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card parameter-info-card">
+                    <div class="card-header">
+                        Environmental Factors
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Temperature, Humidity, Rainfall</h5>
+                        <p class="card-text">Climate conditions that significantly impact crop growth:</p>
+                        <ul>
+                            <li><strong>Temperature:</strong> Affects germination, growth rate, and metabolic activities in plants.</li>
+                            <li><strong>Humidity:</strong> Influences transpiration rate and susceptibility to certain diseases.</li>
+                            <li><strong>Rainfall:</strong> Determines water availability, which is crucial for nutrient uptake and overall plant health.</li>
+                        </ul>
+                        <p>Different crops have specific requirements for these environmental factors to thrive.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card parameter-info-card">
+                    <div class="card-header">
+                        Soil pH
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Soil Acidity/Alkalinity</h5>
+                        <p class="card-text">pH level indicates the acidity or alkalinity of soil on a scale of 0-14:</p>
+                        <ul>
+                            <li><strong>Below 7.0:</strong> Acidic soil</li>
+                            <li><strong>7.0:</strong> Neutral</li>
+                            <li><strong>Above 7.0:</strong> Alkaline soil</li>
+                        </ul>
+                        <p>Soil pH affects nutrient availability to plants. Most crops prefer a pH between 5.5 and 7.5, but specific crops may have narrower preferences.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Our Team</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <p class="text-center mb-5">Crop Advisor was developed by a multidisciplinary team of agricultural scientists, data analysts, machine learning engineers, and farming experts committed to transforming agriculture through technology.</p>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-flask" style="font-size: 3rem; color: var(--primary);"></i>
+                        </div>
+                        <h5>Agricultural Scientists</h5>
+                        <p>Specialists in soil science, crop physiology, and agronomy who ensure our recommendations are scientifically sound.</p>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-robot" style="font-size: 3rem; color: var(--primary);"></i>
+                        </div>
+                        <h5>Data Scientists</h5>
+                        <p>Experts in machine learning and AI who develop and refine our predictive algorithms.</p>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-tractor" style="font-size: 3rem; color: var(--primary);"></i>
+                        </div>
+                        <h5>Farming Consultants</h5>
+                        <p>Experienced farmers who provide practical insights and validate our recommendations in real-world settings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="section-title mb-4">Get In Touch</h2>
+        <p class="lead mb-4">Have questions or feedback about Crop Advisor? We'd love to hear from you!</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4 mb-3 mb-md-0 text-center text-md-start">
+                                <strong><i class="fas fa-envelope me-2"></i> Email:</strong>
+                            </div>
+                            <div class="col-md-8 text-center text-md-start">
+                                info@cropadvisor.com
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 mb-3 mb-md-0 text-center text-md-start">
+                                <strong><i class="fas fa-phone me-2"></i> Phone:</strong>
+                            </div>
+                            <div class="col-md-8 text-center text-md-start">
+                                +1 (555) 123-4567
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3 mb-md-0 text-center text-md-start">
+                                <strong><i class="fas fa-map-marker-alt me-2"></i> Address:</strong>
+                            </div>
+                            <div class="col-md-8 text-center text-md-start">
+                                123 Agricultural Way, Innovation Valley, CA 94025
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Frequently Asked Questions</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                How accurate are the crop recommendations?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Our crop recommendations achieve over 90% accuracy in controlled testing. However, accuracy in real-world applications depends on the precision of your soil parameter inputs and local factors like microclimate variations, which may not be captured in our model.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                How can I get my soil tested for accurate parameter values?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                For accurate soil testing, you can contact your local agricultural extension office, which often provides soil testing services at a reasonable cost. Alternatively, you can purchase home soil test kits or send samples to private soil testing laboratories that provide detailed analysis of NPK levels, pH, and other important parameters.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Can Crop Advisor recommend organic farming practices?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                While our current model focuses on matching crops to soil conditions, we're working on incorporating organic farming practices and sustainability metrics into our recommendations. In the meantime, our crop encyclopedia provides information that can be applied to organic farming methods.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Does Crop Advisor take climate change into account?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Our current model is based on established growing conditions for crops. We are actively working on incorporating climate change projections into our system to provide forward-looking recommendations that account for changing temperature and precipitation patterns in different regions.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                How often should I recheck my soil parameters?
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We recommend testing your soil at least once a year, ideally before the planting season. However, if you've made significant changes to your soil (like adding amendments or after heavy fertilization), it's advisable to retest after a few months to understand how these changes have affected your soil composition.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

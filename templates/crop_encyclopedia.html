@@ -1,0 +1,376 @@
+{% extends 'layout.html' %}
+
+{% block title %}Crop Encyclopedia - Crop Advisor{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="encyclopedia-hero">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Crop Encyclopedia</h1>
+        <p class="lead">Explore detailed information about various crops and their optimal growing conditions</p>
+    </div>
+</section>
+
+<!-- Encyclopedia Content Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="section-title">Browse Crops</h2>
+                <p class="lead">Discover detailed information about various crops including optimal soil conditions, climate requirements, and growing tips.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" id="crop-filter" placeholder="Search crops...">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Crop Categories -->
+        <div class="mb-4">
+            <div class="d-flex flex-wrap">
+                <button class="btn btn-outline-primary me-2 mb-2 crop-filter-btn" data-category="all">All Crops</button>
+                <button class="btn btn-outline-primary me-2 mb-2 crop-filter-btn" data-category="cereals">Cereals</button>
+                <button class="btn btn-outline-primary me-2 mb-2 crop-filter-btn" data-category="pulses">Pulses</button>
+                <button class="btn btn-outline-primary me-2 mb-2 crop-filter-btn" data-category="fruits">Fruits</button>
+                <button class="btn btn-outline-primary me-2 mb-2 crop-filter-btn" data-category="vegetables">Vegetables</button>
+                <button class="btn btn-outline-primary me-2 mb-2 crop-filter-btn" data-category="commercial">Commercial Crops</button>
+            </div>
+        </div>
+        
+        <!-- Crop Cards Grid -->
+        <div class="row" id="crop-grid">
+            <!-- Crop cards will be dynamically added here by JavaScript -->
+            <div class="col-12 text-center py-5" id="loading-crops">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading crop information...</p>
+            </div>
+            
+            <div class="col-12 text-center py-5" id="no-crops-found" style="display: none;">
+                <i class="fas fa-seedling" style="font-size: 3rem; color: var(--primary);"></i>
+                <h4 class="mt-3">No crops found</h4>
+                <p>Try adjusting your search criteria</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Understanding Crops Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Understanding Crop Categories</h2>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1530267981375-f0de937f5f13" class="card-img-top" alt="Cereals" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);">Cereals</h5>
+                        <p class="card-text">Cereal crops like rice, wheat, and maize are staple foods that provide essential carbohydrates. They typically require moderate to high levels of nitrogen and consistent moisture during growing periods.</p>
+                        <ul class="mt-3">
+                            <li>Examples: Rice, Maize, Wheat</li>
+                            <li>Growing Season: Varies by region</li>
+                            <li>Primary Use: Food staples</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1527762031550-522c5d9240fd" class="card-img-top" alt="Pulses" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);">Pulses</h5>
+                        <p class="card-text">Pulses are leguminous crops that fix atmospheric nitrogen into the soil. They are excellent sources of plant-based protein and are often used in crop rotation to improve soil fertility.</p>
+                        <ul class="mt-3">
+                            <li>Examples: Chickpeas, Lentils, Beans</li>
+                            <li>Growing Season: Cool to moderate temperatures</li>
+                            <li>Primary Use: Protein source, soil improvement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1583602096973-37ca0307326d" class="card-img-top" alt="Fruits" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);">Fruits</h5>
+                        <p class="card-text">Fruit crops include a wide variety of perennial and annual plants that produce edible fruits. They generally require well-drained soils with specific pH ranges and adequate rainfall or irrigation.</p>
+                        <ul class="mt-3">
+                            <li>Examples: Mango, Apple, Grapes</li>
+                            <li>Growing Season: Varies widely by fruit</li>
+                            <li>Primary Use: Fresh consumption, processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1528839390497-a161db4bac71" class="card-img-top" alt="Vegetables" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);">Vegetables</h5>
+                        <p class="card-text">Vegetable crops encompass a diverse group of plants grown for their edible parts. They typically require fertile soils with good organic matter content and regular watering.</p>
+                        <ul class="mt-3">
+                            <li>Examples: Tomatoes, Peppers, Leafy Greens</li>
+                            <li>Growing Season: Seasonal variations</li>
+                            <li>Primary Use: Culinary applications</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="https://images.unsplash.com/photo-1534940519139-f860fb3c6e38" class="card-img-top" alt="Commercial Crops" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);">Commercial Crops</h5>
+                        <p class="card-text">Commercial crops are grown primarily for profit rather than direct food consumption. These include fiber crops, oil seeds, and cash crops with specific market demands.</p>
+                        <ul class="mt-3">
+                            <li>Examples: Cotton, Jute, Coffee</li>
+                            <li>Growing Season: Varies by crop and region</li>
+                            <li>Primary Use: Industrial processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                        <i class="fas fa-leaf mb-3" style="font-size: 3rem; color: var(--primary);"></i>
+                        <h5 class="card-title" style="color: var(--primary);">Sustainable Farming</h5>
+                        <p class="card-text">Understanding crop categories and their specific needs allows farmers to implement sustainable practices like crop rotation, intercropping, and appropriate resource management.</p>
+                        <a href="/about" class="btn btn-outline-primary mt-3">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Soil and Crop Relationship Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Soil Parameters & Crop Success</h2>
+        
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1598125442842-63db026783c7" alt="Soil Analysis" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3" style="color: var(--primary);">Understanding NPK Values</h3>
+                <p>Nitrogen (N), Phosphorus (P), and Potassium (K) are the three primary nutrients essential for plant growth:</p>
+                <ul>
+                    <li><strong>Nitrogen (N):</strong> Promotes leaf growth and is essential for chlorophyll production. Cereal crops like rice typically require higher nitrogen levels.</li>
+                    <li><strong>Phosphorus (P):</strong> Critical for root development, flowering, and seed formation. Particularly important for pulses and fruit crops.</li>
+                    <li><strong>Potassium (K):</strong> Enhances overall plant vigor, disease resistance, and water regulation. Important for quality and yield in many crops.</li>
+                </ul>
+                <p>The balance between these nutrients significantly impacts which crops will thrive in your soil.</p>
+            </div>
+        </div>
+        
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6 order-md-2">
+                <img src="https://images.unsplash.com/photo-1598125443624-9cca7bb8c633" alt="pH Testing" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6 order-md-1">
+                <h3 class="mb-3" style="color: var(--primary);">The Critical Role of pH</h3>
+                <p>Soil pH affects nutrient availability and microbial activity, making it a crucial factor in crop selection:</p>
+                <ul>
+                    <li><strong>Acidic Soils (pH below 6.5):</strong> Favor crops like rice, potatoes, and certain berries. Many nutrients become more available, but calcium and magnesium may be deficient.</li>
+                    <li><strong>Neutral Soils (pH 6.5-7.5):</strong> Ideal for most crops, offering balanced nutrient availability. Most vegetables and grains thrive in this range.</li>
+                    <li><strong>Alkaline Soils (pH above 7.5):</strong> Better for crops like asparagus and beets. Iron, manganese, and phosphorus availability may be reduced.</li>
+                </ul>
+                <p>Understanding your soil's pH can help you select crops that will naturally perform well or guide soil amendment strategies.</p>
+            </div>
+        </div>
+        
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1442774503508-2e17027df511" alt="Climate Factors" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3" style="color: var(--primary);">Environmental Factors</h3>
+                <p>Beyond soil chemistry, these environmental conditions greatly influence crop success:</p>
+                <ul>
+                    <li><strong>Temperature:</strong> Each crop has an optimal temperature range for germination, growth, and yield. For example, rice thrives in warm conditions (20-27°C), while apples prefer cooler climates.</li>
+                    <li><strong>Humidity:</strong> High humidity crops like rice and jute (80-90%) contrast with lower humidity crops like chickpeas (20-40%).</li>
+                    <li><strong>Rainfall/Irrigation:</strong> Water requirements vary dramatically - from drought-resistant crops like moth beans to water-intensive crops like rice and bananas.</li>
+                </ul>
+                <p>Matching crops to your local climate conditions is essential for sustainable and productive farming.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Resources Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Additional Resources</h2>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);"><i class="fas fa-book me-2"></i> Educational Materials</h5>
+                        <p class="card-text">Explore our collection of guides, articles, and research papers on crop cultivation, soil management, and sustainable farming practices.</p>
+                        <ul class="mt-3">
+                            <li>Beginner's Guide to Soil Testing</li>
+                            <li>Understanding Crop Rotation</li>
+                            <li>Seasonal Planting Calendars</li>
+                            <li>Organic Farming Techniques</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary mt-3">Browse Resources</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);"><i class="fas fa-video me-2"></i> Video Tutorials</h5>
+                        <p class="card-text">Watch instructional videos covering various aspects of crop cultivation, from soil preparation to harvest techniques.</p>
+                        <ul class="mt-3">
+                            <li>How to Take Soil Samples</li>
+                            <li>Interpreting Soil Test Results</li>
+                            <li>Pest Management Strategies</li>
+                            <li>Water Conservation Techniques</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary mt-3">Watch Videos</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: var(--primary);"><i class="fas fa-tools me-2"></i> Farming Tools</h5>
+                        <p class="card-text">Explore additional tools and calculators to optimize your farming operations.</p>
+                        <ul class="mt-3">
+                            <li>Fertilizer Calculator</li>
+                            <li>Seasonal Planting Calendar</li>
+                            <li>Crop Rotation Planner</li>
+                            <li>Yield Estimator</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary mt-3">Access Tools</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced JavaScript for this page -->
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add crop category information
+        const cropCategories = {
+            'rice': 'cereals',
+            'maize': 'cereals',
+            'chickpea': 'pulses',
+            'kidneybeans': 'pulses',
+            'pigeonpeas': 'pulses',
+            'mothbeans': 'pulses',
+            'mungbean': 'pulses',
+            'blackgram': 'pulses',
+            'lentil': 'pulses',
+            'pomegranate': 'fruits',
+            'banana': 'fruits',
+            'mango': 'fruits',
+            'grapes': 'fruits',
+            'watermelon': 'fruits',
+            'muskmelon': 'fruits',
+            'apple': 'fruits',
+            'orange': 'fruits',
+            'papaya': 'fruits',
+            'coconut': 'fruits',
+            'cotton': 'commercial',
+            'jute': 'commercial',
+            'coffee': 'commercial'
+        };
+        
+        // Handle category filtering
+        const categoryBtns = document.querySelectorAll('.crop-filter-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                
+                // Update active button
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter crops
+                if (category === 'all') {
+                    document.querySelectorAll('.crop-card').forEach(card => {
+                        card.parentElement.style.display = 'block';
+                    });
+                } else {
+                    document.querySelectorAll('.crop-card').forEach(card => {
+                        const cropName = card.getAttribute('data-crop');
+                        if (cropCategories[cropName] === category) {
+                            card.parentElement.style.display = 'block';
+                        } else {
+                            card.parentElement.style.display = 'none';
+                        }
+                    });
+                }
+                
+                // Check if any crops are visible
+                checkVisibleCrops();
+            });
+        });
+        
+        // Modify the existing crop cards to include category information
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    const cropCards = document.querySelectorAll('.crop-card');
+                    cropCards.forEach(card => {
+                        const cropName = card.getAttribute('data-crop');
+                        if (cropName && cropCategories[cropName]) {
+                            // Add category badge if it doesn't exist
+                            if (!card.querySelector('.category-badge')) {
+                                const category = cropCategories[cropName];
+                                const badge = document.createElement('span');
+                                badge.className = 'badge rounded-pill bg-light text-primary category-badge';
+                                badge.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                                badge.style.position = 'absolute';
+                                badge.style.top = '10px';
+                                badge.style.right = '10px';
+                                card.querySelector('.card-img-top').parentNode.style.position = 'relative';
+                                card.querySelector('.card-img-top').parentNode.appendChild(badge);
+                            }
+                        }
+                    });
+                    
+                    // Once we've processed the cards, disconnect the observer
+                    if (cropCards.length > 0) {
+                        observer.disconnect();
+                        document.getElementById('loading-crops').style.display = 'none';
+                    }
+                }
+            });
+        });
+        
+        // Start observing the target node for configured mutations
+        observer.observe(document.getElementById('crop-grid'), { childList: true });
+        
+        // Check if any crops are visible after filtering
+        function checkVisibleCrops() {
+            const visibleCrops = document.querySelectorAll('.crop-card[style="display: block"], .crop-card:not([style*="display"])');
+            if (visibleCrops.length === 0 && document.querySelectorAll('.crop-card').length > 0) {
+                document.getElementById('no-crops-found').style.display = 'block';
+            } else {
+                document.getElementById('no-crops-found').style.display = 'none';
+            }
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

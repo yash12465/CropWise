@@ -1,0 +1,333 @@
+{% extends 'layout.html' %}
+
+{% block title %}Reverse Lookup - Crop Advisor{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="reverse-lookup-hero">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Crop Reverse Lookup</h1>
+        <p class="lead">Find the optimal soil and environmental conditions for specific crops</p>
+    </div>
+</section>
+
+<!-- Reverse Lookup Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="section-title text-center mb-4">Select a Crop</h2>
+                <p class="text-center mb-5">Choose a crop to see its optimal growing conditions, including soil parameters and environmental factors</p>
+                
+                <div class="input-section">
+                    <form id="reverse-lookup-form">
+                        <div class="mb-4">
+                            <label for="crop-select" class="form-label">Crop Name</label>
+                            <select class="form-select form-select-lg" id="crop-select" name="crop">
+                                <option value="" selected disabled>Select a crop</option>
+                                <!-- Crop options will be loaded dynamically via JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">View Optimal Conditions</button>
+                        </div>
+                    </form>
+                    
+                    <!-- Loading Spinner -->
+                    <div id="reverse-loading-spinner" class="loading-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Retrieving crop information...</p>
+                    </div>
+                </div>
+                
+                <!-- Conditions Results Section -->
+                <div id="conditions-section" class="results-section mt-4">
+                    <div class="text-center mb-4">
+                        <h3 class="crop-name" id="conditions-crop-name">Rice</h3>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card mb-4">
+                                <div class="card-header">Crop Description</div>
+                                <div class="card-body">
+                                    <p id="conditions-crop-description" class="crop-description"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Optimal Growing Conditions</div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Parameter</th>
+                                                    <th>Optimal Range</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="conditions-table">
+                                                <!-- Conditions will be loaded dynamically -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">Parameter Ranges</div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="range-chart" class="comparison-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="/" class="btn btn-outline-primary me-2">Try Crop Recommendation</a>
+                        <a href="/crop_encyclopedia" class="btn btn-secondary">View Crop Encyclopedia</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Parameter Explanation Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Understanding Soil Parameters</h2>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header secondary">
+                        <h5 class="mb-0">Macronutrients (NPK)</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Nitrogen (N):</strong> Essential for leaf growth and protein formation. Deficiency results in yellowing leaves and stunted growth.</p>
+                        <div class="mt-3 mb-3">
+                            <p class="mb-1"><small>Typical Range for Most Crops:</small></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-primary" role="progressbar" style="width: 65%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small>Low (0 kg/ha)</small>
+                                <small>High (140 kg/ha)</small>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Phosphorus (P):</strong> Critical for root development, flowering, and fruit set. Low P leads to poor flowering and root growth.</p>
+                        <div class="mt-3 mb-3">
+                            <p class="mb-1"><small>Typical Range for Most Crops:</small></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-primary" role="progressbar" style="width: 55%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small>Low (5 kg/ha)</small>
+                                <small>High (145 kg/ha)</small>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Potassium (K):</strong> Regulates water uptake, strengthens stems, and improves disease resistance. Deficiency causes weak stems and susceptibility to disease.</p>
+                        <div class="mt-3">
+                            <p class="mb-1"><small>Typical Range for Most Crops:</small></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-primary" role="progressbar" style="width: 35%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small>Low (5 kg/ha)</small>
+                                <small>High (205 kg/ha)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header accent">
+                        <h5 class="mb-0">pH and Soil Properties</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>pH Level:</strong> Affects nutrient availability and microbial activity in soil. Most crops prefer slightly acidic to neutral pH.</p>
+                        <div class="mt-3 mb-4">
+                            <p class="mb-1"><small>pH Scale:</small></p>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 35%" title="Acidic (0-5)"></div>
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 15%" title="Slightly Acidic (5-6.5)"></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 10%" title="Neutral (6.5-7.5)"></div>
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 15%" title="Slightly Alkaline (7.5-9)"></div>
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" title="Alkaline (9-14)"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small>Acidic (0)</small>
+                                <small>Neutral (7)</small>
+                                <small>Alkaline (14)</small>
+                            </div>
+                            <p class="mt-3">Most crops prefer pH between 5.5 and 7.5, where nutrients are most available. Some crops like blueberries prefer acidic soils (4.0-5.5), while others like asparagus prefer slightly alkaline soils (7.0-8.0).</p>
+                        </div>
+                        
+                        <p><strong>Soil Structure:</strong> While not directly measured in our parameters, soil structure affects water retention, drainage, and root growth. Good structure allows for the right balance of water and air in the soil.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">Environmental Factors</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Temperature:</strong> Affects plant metabolic processes, germination, and reproductive development. Each crop has an optimal temperature range.</p>
+                        <div class="mt-3 mb-3">
+                            <p class="mb-1"><small>Temperature Range:</small></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-accent" role="progressbar" style="width: 70%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small>Cold (0°C)</small>
+                                <small>Hot (50°C)</small>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Humidity:</strong> The amount of water vapor in the air affects transpiration rates and disease susceptibility. Some crops require high humidity, while others prefer drier conditions.</p>
+                        <div class="mt-3 mb-3">
+                            <p class="mb-1"><small>Humidity Range:</small></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-accent" role="progressbar" style="width: 100%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small>Dry (0%)</small>
+                                <small>Humid (100%)</small>
+                            </div>
+                        </div>
+                        
+                        <p><strong>Rainfall:</strong> Total precipitation affects water availability for plants. Crops have varying water requirements throughout their growth cycle.</p>
+                        <div class="mt-3">
+                            <p class="mb-1"><small>Rainfall Range:</small></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-accent" role="progressbar" style="width: 80%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <small>Low (0mm)</small>
+                                <small>High (300mm)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Adaptation Strategies Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Adapting Your Growing Conditions</h2>
+        
+        <div class="row mb-5">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header secondary">
+                        <h5 class="mb-0">Soil Amendment Strategies</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3">Adjusting Nutrient Levels</h6>
+                        <ul>
+                            <li><strong>Increase Nitrogen:</strong> Add compost, manure, blood meal, or nitrogen-rich fertilizers.</li>
+                            <li><strong>Increase Phosphorus:</strong> Incorporate bone meal, rock phosphate, or phosphorus-rich fertilizers.</li>
+                            <li><strong>Increase Potassium:</strong> Add wood ash, granite dust, or potassium-rich fertilizers.</li>
+                            <li><strong>Decrease Nutrients:</strong> Grow nutrient-depleting cover crops, increase watering (for leaching), or balance with other nutrients.</li>
+                        </ul>
+                        
+                        <h6 class="card-subtitle mt-4 mb-3">Adjusting pH</h6>
+                        <ul>
+                            <li><strong>Lower pH (make more acidic):</strong> Add elemental sulfur, aluminum sulfate, or organic materials like pine needles and peat moss.</li>
+                            <li><strong>Raise pH (make more alkaline):</strong> Add agricultural lime, wood ash, or dolomite lime.</li>
+                        </ul>
+                        <p class="mt-3"><em>Note: Soil amendments take time to affect soil properties. Test soil regularly to monitor changes.</em></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header accent">
+                        <h5 class="mb-0">Environmental Adaptation</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3">Managing Temperature</h6>
+                        <ul>
+                            <li><strong>Too Cold:</strong> Use row covers, cold frames, greenhouses, mulch for insulation, or select cold-hardy varieties.</li>
+                            <li><strong>Too Hot:</strong> Provide shade cloth, increase watering, use light-colored mulch to reflect heat, or adjust planting times for cooler seasons.</li>
+                        </ul>
+                        
+                        <h6 class="card-subtitle mt-4 mb-3">Humidity Control</h6>
+                        <ul>
+                            <li><strong>Too Dry:</strong> Use drip irrigation, mulch to retain moisture, create windbreaks, and improve soil organic matter.</li>
+                            <li><strong>Too Humid:</strong> Increase plant spacing for better air circulation, avoid overhead watering, and prune for better airflow.</li>
+                        </ul>
+                        
+                        <h6 class="card-subtitle mt-4 mb-3">Water Management</h6>
+                        <ul>
+                            <li><strong>Too Little Rainfall:</strong> Implement irrigation systems, use water-efficient techniques like drip irrigation, mulch to reduce evaporation.</li>
+                            <li><strong>Too Much Rainfall:</strong> Improve drainage with raised beds, drainage ditches, or French drains, select water-tolerant varieties.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <p class="lead mb-4">Remember that while you can't control all environmental factors, choosing crops well-suited to your natural conditions is often more sustainable than trying to significantly alter your growing environment.</p>
+            <a href="/" class="btn btn-primary btn-lg">Get Personalized Crop Recommendations</a>
+        </div>
+    </div>
+</section>
+
+<!-- Initialize the crop selection -->
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if URL has a crop parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const cropParam = urlParams.get('crop');
+        
+        if (cropParam) {
+            // Wait for crop options to load, then set the selected crop and submit
+            const checkCropOptions = setInterval(function() {
+                const cropSelect = document.getElementById('crop-select');
+                if (cropSelect && cropSelect.options.length > 1) {
+                    clearInterval(checkCropOptions);
+                    
+                    // Find and select the option
+                    for (let i = 0; i < cropSelect.options.length; i++) {
+                        if (cropSelect.options[i].value === cropParam) {
+                            cropSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // Submit the form
+                    document.getElementById('reverse-lookup-form').dispatchEvent(new Event('submit'));
+                }
+            }, 100);
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
