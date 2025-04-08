@@ -87,13 +87,24 @@ function displayResults(data) {
     const cropConfidenceElement = document.getElementById('crop-confidence');
     const cropDescriptionElement = document.getElementById('crop-description');
     
-    // Set crop name and confidence
+    console.log("Recommendation data:", data);
+    
+    // Set crop name
     cropNameElement.textContent = capitalizeFirstLetter(data.crop);
-    cropConfidenceElement.textContent = `${Math.round(data.confidence_scores[data.crop])}% Confidence`;
+    
+    // Set confidence if the element exists (might not be in all templates)
+    if (cropConfidenceElement) {
+        const confidence = data.confidence_scores[data.crop];
+        // Ensure confidence is a valid number
+        const confidenceValue = !isNaN(confidence) ? Math.round(confidence) : "N/A";
+        cropConfidenceElement.textContent = `${confidenceValue}% Confidence`;
+    }
     
     // Display the results section
     resultsSection.style.display = 'block';
-    resultsSection.classList.add('fade-in');
+    if (resultsSection.classList) {
+        resultsSection.classList.add('fade-in');
+    }
     
     // Get optimal conditions for the crop
     fetch(`/api/crop_conditions?crop=${data.crop}`)
@@ -101,18 +112,25 @@ function displayResults(data) {
         .then(conditionsData => {
             if (conditionsData.success) {
                 // Set crop description
-                cropDescriptionElement.textContent = conditionsData.conditions.description;
+                cropDescriptionElement.textContent = conditionsData.conditions.description || 
+                    "A suitable crop for your soil conditions.";
                 
                 // Update parameter table
                 updateParameterTable(data, conditionsData.conditions);
                 
                 // Create charts
                 createConfidenceChart(data.confidence_scores);
-                createParameterComparisonChart(data, conditionsData.conditions);
+                
+                // Create parameter comparison chart if the function exists
+                if (typeof createParameterComparisonChart === 'function') {
+                    createParameterComparisonChart(data, conditionsData.conditions);
+                }
             }
         })
         .catch(error => {
             console.error('Error getting crop conditions:', error);
+            // Still show the chart even if we can't get conditions
+            createConfidenceChart(data.confidence_scores);
         });
     
     // Scroll to results

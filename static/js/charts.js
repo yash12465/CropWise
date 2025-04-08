@@ -20,10 +20,21 @@ function createConfidenceChart(confidenceScores) {
     const accentColor = '#FFA000';
     const otherColors = ['#4CAF50', '#81C784'];
     
+    // Ensure proper color assignment
+    const barColors = [];
+    for (let i = 0; i < top5Crops.length; i++) {
+        if (i === 0) barColors.push(primaryColor); 
+        else if (i === 1) barColors.push(secondaryColor);
+        else if (i === 2) barColors.push(accentColor);
+        else barColors.push(otherColors[i % otherColors.length]);
+    }
+    
     // Create a horizontal bar chart
     if (window.confidenceChart) {
         window.confidenceChart.destroy();
     }
+    
+    console.log("Creating chart with scores:", top5Scores);
     
     window.confidenceChart = new Chart(ctx, {
         type: 'bar',
@@ -32,13 +43,15 @@ function createConfidenceChart(confidenceScores) {
             datasets: [{
                 label: 'Confidence Score (%)',
                 data: top5Scores,
-                backgroundColor: [primaryColor, secondaryColor, accentColor, ...otherColors],
-                borderColor: [primaryColor, secondaryColor, accentColor, ...otherColors],
+                backgroundColor: barColors,
+                borderColor: barColors,
                 borderWidth: 1
             }]
         },
         options: {
             indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: false
@@ -54,7 +67,7 @@ function createConfidenceChart(confidenceScores) {
             scales: {
                 x: {
                     beginAtZero: true,
-                    max: 100,
+                    max: Math.max(...top5Scores) * 1.1, // Dynamic scale
                     title: {
                         display: true,
                         text: 'Confidence (%)'
