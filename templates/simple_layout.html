@@ -3,265 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Simple Crop Advisor{% endblock %}</title>
+    <title>{% block title %}AI-Powered Crop Recommendation System{% endblock %}</title>
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        :root {
-            --primary: #2E7D32;
-            --secondary: #8BC34A;
-            --background: #F5F7F5;
-            --text: #263238;
-            --accent: #FFA000;
-        }
-        
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .navbar {
-            background-color: var(--primary);
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            color: white !important;
-        }
-        
-        .navbar-nav .nav-link {
-            color: rgba(255, 255, 255, 0.85) !important;
-            font-weight: 600;
-        }
-        
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            color: white !important;
-        }
-        
-        .hero-section {
-            background-color: rgba(46, 125, 50, 0.1);
-            padding: 3rem 0;
-            text-align: center;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #1B5E20;
-            border-color: #1B5E20;
-        }
-        
-        .btn-secondary {
-            background-color: var(--secondary);
-            border-color: var(--secondary);
-        }
-        
-        .btn-accent {
-            background-color: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-        
-        .card {
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: none;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-header {
-            background-color: var(--primary);
-            color: white;
-            font-weight: bold;
-            border-radius: 0.5rem 0.5rem 0 0 !important;
-        }
-        
-        .section-title {
-            color: var(--primary);
-            margin-bottom: 2rem;
-            font-weight: 700;
-        }
-        
-        .footer {
-            background-color: var(--primary);
-            color: white;
-            padding: 2rem 0;
-            margin-top: auto;
-        }
-        
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-        }
-        
-        .feature-card {
-            padding: 1.5rem;
-            height: 100%;
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .input-section {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .results-section {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-top: 1rem;
-            display: none;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        .range-value {
-            font-weight: bold;
-            margin-left: 0.5rem;
-            color: var(--accent);
-        }
-        
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-        
-        .crop-name {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .parameter-row {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            padding: 0.5rem 0;
-        }
-        
-        @media (max-width: 768px) {
-            .hero-section {
-                padding: 2rem 0;
-            }
-        }
-    </style>
-    
-    {% block extra_css %}{% endblock %}
+    <!-- Page-specific styles -->
+    {% block styles %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-seedling me-2"></i>Simple Crop Advisor
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" class="me-2" width="36" height="36">
+                <span>FarmWise AI</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Home</a>
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Crop Tools
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/crop_encyclopedia">Crop Encyclopedia</a></li>
+                            <li><a class="dropdown-item" href="/reverse_lookup">Crop Finder</a></li>
+                            <li><a class="dropdown-item" href="/yield_predictor">Yield Predictor</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Farm Management
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/soil_health">Soil Health</a></li>
+                            <li><a class="dropdown-item" href="/weather_dashboard">Weather Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/pest_disease_identification">Pest & Disease ID</a></li>
+                            <li><a class="dropdown-item" href="/farming_calendar">Farming Calendar</a></li>
+                            <li><a class="dropdown-item" href="/irrigation_planner">Irrigation Planner</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Market & Sustainability
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/market_prices">Market Prices</a></li>
+                            <li><a class="dropdown-item" href="/carbon_footprint_calculator">Carbon Footprint</a></li>
+                            <li><a class="dropdown-item" href="/farm_equipment_guide">Equipment Guide</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/soil_health' %}active{% endif %}" href="/soil_health">Soil Health</a>
+                        <a class="nav-link" href="/data_upload">Data Upload</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/yield_predictor' %}active{% endif %}" href="/yield_predictor">Yield Predictor</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/data_upload' %}active{% endif %}" href="/data_upload">Upload Data</a>
+                        <a class="nav-link" href="/about">About</a>
                     </li>
                 </ul>
             </div>
         </div>
-    </nav>
-    
+    </header>
+
     <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
     </main>
-    
+
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3">Simple Crop Advisor</h5>
-                    <p>An offline AI-powered crop recommendation system to help farmers make informed decisions about crop selection.</p>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>FarmWise AI</h5>
+                    <p class="text-muted">An AI-powered crop recommendation and farming management platform.</p>
                 </div>
-                <div class="col-md-6">
-                    <h5 class="mb-3">Quick Links</h5>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="footer-links">
-                                <li><a href="/">Home</a></li>
-                                <li><a href="/soil_health">Soil Health</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="footer-links">
-                                <li><a href="/yield_predictor">Yield Predictor</a></li>
-                                <li><a href="/data_upload">Upload Data</a></li>
-                            </ul>
-                        </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-light">Home</a></li>
+                        <li><a href="/crop_encyclopedia" class="text-light">Crop Encyclopedia</a></li>
+                        <li><a href="/weather_dashboard" class="text-light">Weather Dashboard</a></li>
+                        <li><a href="/about" class="text-light">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#" class="text-light"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube"></i></a>
                     </div>
                 </div>
             </div>
-            <hr class="mt-4 mb-4" style="border-color: rgba(255,255,255,0.2);">
+            <hr class="my-4">
             <div class="text-center">
-                <p class="mb-0">&copy; 2025 Simple Crop Advisor. All rights reserved.</p>
+                <p class="mb-0">&copy; 2025 FarmWise AI. All rights reserved.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    {% block extra_js %}{% endblock %}
+    <!-- Page-specific scripts -->
+    {% block scripts %}{% endblock %}
 </body>
 </html>

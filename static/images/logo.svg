@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="55" fill="#2E7D32" />
+  <circle cx="60" cy="60" r="50" fill="#8BC34A" />
+  
+  <!-- Wheat/plant symbol -->
+  <path d="M60 30 C60 30, 60 75, 60 90" stroke="#FFA000" stroke-width="4" fill="none" />
+  
+  <!-- Leafs -->
+  <path d="M60 50 C45 40, 30 50, 40 65 C35 70, 50 75, 60 60" fill="#2E7D32" />
+  <path d="M60 50 C75 40, 90 50, 80 65 C85 70, 70 75, 60 60" fill="#2E7D32" />
+  <path d="M60 65 C45 55, 30 65, 40 80 C35 85, 50 90, 60 75" fill="#2E7D32" />
+  <path d="M60 65 C75 55, 90 65, 80 80 C85 85, 70 90, 60 75" fill="#2E7D32" />
+  
+  <!-- Circular graph line representing data -->
+  <circle cx="60" cy="60" r="40" stroke="#FFF" stroke-width="2" fill="none" stroke-dasharray="5,5" />
+  
+  <!-- Farm field lines -->
+  <rect x="30" y="90" width="60" height="15" fill="#8e5c22" />
+  <line x1="35" y1="92" x2="85" y2="92" stroke="#5e3a11" stroke-width="1" />
+  <line x1="35" y1="96" x2="85" y2="96" stroke="#5e3a11" stroke-width="1" />
+  <line x1="35" y1="100" x2="85" y2="100" stroke="#5e3a11" stroke-width="1" />
+  
+  <!-- Gear icon representing technology -->
+  <circle cx="85" cy="35" r="15" fill="#F5F7F5" />
+  <circle cx="85" cy="35" r="8" fill="#8BC34A" />
+  <path d="M85 20 L85 25 M85 45 L85 50 M70 35 L75 35 M95 35 L100 35 M74 24 L77 27 M93 43 L96 46 M74 46 L77 43 M93 27 L96 24" stroke="#263238" stroke-width="3" />
+</svg>

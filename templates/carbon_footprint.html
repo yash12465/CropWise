@@ -1,0 +1,511 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Carbon Footprint Calculator - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Carbon Footprint Calculator</h1>
+        <p class="lead mb-4">Measure and reduce your farm's environmental impact</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Calculator Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Farm Carbon Calculator</h3>
+                        <p class="text-center mb-4">Enter your farm data to calculate your approximate carbon footprint</p>
+                        
+                        <form id="carbon-calculator-form" class="mb-4">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="farm-size" class="form-label">Farm Size (hectares)</label>
+                                    <input type="number" class="form-control" id="farm-size" name="farm_size" min="0.1" step="0.1" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="crop-type" class="form-label">Primary Crop</label>
+                                    <select class="form-select" id="crop-type" name="crop_type" required>
+                                        <option value="" selected disabled>Select a crop...</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="maize">Maize</option>
+                                        <option value="beans">Beans</option>
+                                        <option value="potatoes">Potatoes</option>
+                                        <option value="cotton">Cotton</option>
+                                        <option value="coffee">Coffee</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fertilizer-amount" class="form-label">Fertilizer Usage (kg/year)</label>
+                                    <input type="number" class="form-control" id="fertilizer-amount" name="fertilizer_amount" min="0" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="machinery-hours" class="form-label">Machinery Usage (hours/year)</label>
+                                    <input type="number" class="form-control" id="machinery-hours" name="machinery_hours" min="0" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="irrigation-water" class="form-label">Irrigation Water (cubic meters/year)</label>
+                                    <input type="number" class="form-control" id="irrigation-water" name="irrigation_water" min="0" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sustainable-practices" class="form-label">Sustainable Practices</label>
+                                    <select class="form-select" id="sustainable-practices" name="sustainable_practices">
+                                        <option value="none">None</option>
+                                        <option value="minimal">Minimal (1-2 practices)</option>
+                                        <option value="moderate">Moderate (3-5 practices)</option>
+                                        <option value="extensive">Extensive (6+ practices)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Calculate Footprint</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Loading Spinner -->
+                        <div id="loading-spinner" class="text-center my-5" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Calculating carbon footprint...</p>
+                        </div>
+                        
+                        <!-- Results Section -->
+                        <div id="results-container" class="mt-4" style="display: none;">
+                            <h4 class="text-center mb-4">Carbon Footprint Results</h4>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-primary">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Total Emissions</h5>
+                                            <p class="display-4 mb-0 text-primary" id="total-emissions">0</p>
+                                            <p class="text-muted">tonnes CO₂e per year</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-success">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Net Footprint</h5>
+                                            <p class="display-4 mb-0 text-success" id="net-footprint">0</p>
+                                            <p class="text-muted">tonnes CO₂e per year</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5>Emissions Breakdown</h5>
+                                    <div class="chart-container" style="position: relative; height: 300px;">
+                                        <canvas id="emissions-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5>Carbon Sequestration Potential</h5>
+                                <div class="progress mb-2" style="height: 25px;">
+                                    <div class="progress-bar bg-success" id="sequestration-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0 tonnes CO₂e</div>
+                                </div>
+                                <p class="text-muted small">Estimated carbon that could be captured by your farm through sustainable practices.</p>
+                            </div>
+                            
+                            <div class="card border-info mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">Recommendations to Reduce Your Footprint</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush" id="recommendations-list">
+                                        <!-- Recommendations will be added here -->
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mb-3">
+                                <button class="btn btn-outline-secondary" onclick="window.print()">
+                                    <i class="bi bi-printer"></i> Print Results
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Error Alert -->
+                        <div id="error-alert" class="alert alert-danger" role="alert" style="display: none;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span id="error-message">An error occurred. Please try again.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sustainable Practices Guide -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Sustainable Farming Practices</h3>
+                        <p class="card-text">Implementing these practices can help reduce your farm's carbon footprint:</p>
+                        
+                        <div class="accordion" id="sustainablePracticesAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingSoil">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSoil" aria-expanded="true" aria-controls="collapseSoil">
+                                        Soil Management
+                                    </button>
+                                </h2>
+                                <div id="collapseSoil" class="accordion-collapse collapse show" aria-labelledby="headingSoil" data-bs-parent="#sustainablePracticesAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-arrow-repeat text-success me-2"></i> No-Till Farming</h5>
+                                                        <p class="card-text">Minimizing soil disturbance reduces carbon dioxide release and increases carbon sequestration in soil.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-flower1 text-success me-2"></i> Cover Crops</h5>
+                                                        <p class="card-text">Planting crops like legumes or grasses during off-seasons prevents soil erosion and adds organic matter.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-recycle text-success me-2"></i> Crop Rotation</h5>
+                                                        <p class="card-text">Rotating crops improves soil health, reduces pests, and can minimize fertilizer requirements.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-tree text-success me-2"></i> Agroforestry</h5>
+                                                        <p class="card-text">Integrating trees with crops or pasture captures carbon while providing multiple benefits.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingResource">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseResource" aria-expanded="false" aria-controls="collapseResource">
+                                        Resource Efficiency
+                                    </button>
+                                </h2>
+                                <div id="collapseResource" class="accordion-collapse collapse" aria-labelledby="headingResource" data-bs-parent="#sustainablePracticesAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-droplet text-primary me-2"></i> Precision Irrigation</h5>
+                                                        <p class="card-text">Drip irrigation and soil moisture sensors can reduce water usage by 30-70% while maintaining or improving yields.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-geo-alt text-primary me-2"></i> Precision Agriculture</h5>
+                                                        <p class="card-text">Using GPS, sensors, and data analysis to apply inputs only where and when needed reduces waste and emissions.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-sun text-primary me-2"></i> Renewable Energy</h5>
+                                                        <p class="card-text">Solar, wind, or biomass energy can power farm operations with significantly lower emissions.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-vector-pen text-primary me-2"></i> Organic Fertilizers</h5>
+                                                        <p class="card-text">Using compost, manure, and other organic amendments reduces the carbon footprint of synthetic fertilizers.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingLivestock">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLivestock" aria-expanded="false" aria-controls="collapseLivestock">
+                                        Livestock & Methane Management
+                                    </button>
+                                </h2>
+                                <div id="collapseLivestock" class="accordion-collapse collapse" aria-labelledby="headingLivestock" data-bs-parent="#sustainablePracticesAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-cup-hot text-warning me-2"></i> Feed Additives</h5>
+                                                        <p class="card-text">Certain feed additives can reduce methane emissions from ruminant livestock by 20-30%.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-grid text-warning me-2"></i> Rotational Grazing</h5>
+                                                        <p class="card-text">Moving livestock between pastures improves soil health, increases carbon sequestration, and can reduce methane emissions.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-lightning text-warning me-2"></i> Methane Digesters</h5>
+                                                        <p class="card-text">Capturing methane from manure can produce renewable energy while preventing a potent greenhouse gas from entering the atmosphere.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-water text-warning me-2"></i> Improved Rice Management</h5>
+                                                        <p class="card-text">Alternate wetting and drying of rice fields can reduce methane emissions by up to 50% compared to continuous flooding.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carbon Markets -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Carbon Markets & Incentives</h3>
+                        <p class="card-text">Farmers who adopt sustainable practices may be eligible for financial incentives:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Carbon Credits</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Carbon credits can be earned by implementing practices that reduce emissions or sequester carbon. These credits can then be sold to companies looking to offset their emissions.</p>
+                                        <h6>Eligible Practices:</h6>
+                                        <ul>
+                                            <li>No-till farming</li>
+                                            <li>Cover crops</li>
+                                            <li>Agroforestry</li>
+                                            <li>Improved grazing management</li>
+                                            <li>Methane capture</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">Government Programs</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Many countries and regions offer financial incentives, subsidies, or tax benefits for agricultural practices that reduce carbon footprint:</p>
+                                        <ul>
+                                            <li>Conservation program payments</li>
+                                            <li>Environmental stewardship incentives</li>
+                                            <li>Renewable energy tax credits</li>
+                                            <li>Water conservation rebates</li>
+                                        </ul>
+                                        <p class="mt-2">Check with your local agricultural extension office for programs available in your area.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle form submission
+        const calculatorForm = document.getElementById('carbon-calculator-form');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const resultsContainer = document.getElementById('results-container');
+        const errorAlert = document.getElementById('error-alert');
+        const errorMessage = document.getElementById('error-message');
+        
+        let emissionsChart = null;
+        
+        calculatorForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Hide results and errors
+            resultsContainer.style.display = 'none';
+            errorAlert.style.display = 'none';
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            
+            // Get form data
+            const formData = new FormData(calculatorForm);
+            
+            // Send data to API
+            fetch('/api/carbon_footprint', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingSpinner.style.display = 'none';
+                
+                if (data.success) {
+                    displayResults(data);
+                    resultsContainer.style.display = 'block';
+                } else {
+                    errorMessage.textContent = data.error || 'An error occurred while calculating the carbon footprint.';
+                    errorAlert.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                loadingSpinner.style.display = 'none';
+                errorMessage.textContent = 'Network error: Unable to process the request.';
+                errorAlert.style.display = 'block';
+                console.error('Error:', error);
+            });
+        });
+        
+        // Display carbon footprint results
+        function displayResults(data) {
+            // Update total emissions and net footprint
+            document.getElementById('total-emissions').textContent = data.emissions.total;
+            document.getElementById('net-footprint').textContent = data.net_footprint;
+            
+            // Update sequestration bar
+            const sequestrationBar = document.getElementById('sequestration-bar');
+            const sequestrationPercentage = (data.sequestration_potential / data.emissions.total * 100).toFixed(0);
+            sequestrationBar.style.width = `${Math.min(sequestrationPercentage, 100)}%`;
+            sequestrationBar.textContent = `${data.sequestration_potential} tonnes CO₂e`;
+            sequestrationBar.setAttribute('aria-valuenow', sequestrationPercentage);
+            
+            // Create or update emissions chart
+            createEmissionsChart(data.emissions);
+            
+            // Display recommendations
+            const recommendationsList = document.getElementById('recommendations-list');
+            recommendationsList.innerHTML = '';
+            
+            if (data.recommendations && data.recommendations.length > 0) {
+                data.recommendations.forEach(recommendation => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerHTML = `<i class="bi bi-check-circle-fill text-success me-2"></i> ${recommendation}`;
+                    recommendationsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.innerHTML = 'Your farm is already implementing good practices. Continue monitoring and improving your sustainability efforts.';
+                recommendationsList.appendChild(li);
+            }
+        }
+        
+        // Create emissions chart
+        function createEmissionsChart(emissions) {
+            const ctx = document.getElementById('emissions-chart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (emissionsChart) {
+                emissionsChart.destroy();
+            }
+            
+            // Prepare data
+            const labels = ['Land Use', 'Fertilizer', 'Machinery', 'Irrigation'];
+            const data = [
+                emissions.land_use,
+                emissions.fertilizer,
+                emissions.machinery,
+                emissions.irrigation
+            ];
+            
+            // Create chart
+            emissionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Emissions (tonnes CO₂e)',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(54, 162, 235, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.raw} tonnes CO₂e`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Tonnes CO₂e per year'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

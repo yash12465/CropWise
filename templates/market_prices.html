@@ -1,0 +1,545 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Market Prices - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Market Price Tracker</h1>
+        <p class="lead mb-4">Stay updated with current crop prices to optimize your selling decisions</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Last Updated Info -->
+                <div class="alert alert-info mb-4">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <div>
+                            <strong>Last Updated:</strong> {{ market_data.last_updated|default('N/A') }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Price Cards -->
+                <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
+                    {% for crop_name, price_data in market_data.prices.items() %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm price-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h3 class="card-title text-capitalize">{{ crop_name }}</h3>
+                                    <span class="badge {{ price_data.trend == 'up' ? 'bg-success' : 'bg-danger' }} rounded-pill">
+                                        <i class="bi {{ price_data.trend == 'up' ? 'bi-arrow-up' : 'bi-arrow-down' }}"></i>
+                                        {{ price_data.percent_change|abs }}%
+                                    </span>
+                                </div>
+                                
+                                <div class="price-info mb-3">
+                                    <div class="current-price">
+                                        <h4>${{ price_data.current_price }}</h4>
+                                        <p class="text-muted">{{ price_data.unit }}</p>
+                                    </div>
+                                    <div class="price-change">
+                                        <p class="mb-0 {{ price_data.trend == 'up' ? 'text-success' : 'text-danger' }}">
+                                            <i class="bi {{ price_data.trend == 'up' ? 'bi-arrow-up-right' : 'bi-arrow-down-right' }}"></i>
+                                            {% if price_data.trend == 'up' %}
+                                                +${{ (price_data.current_price - price_data.last_month_price)|round(2) }}
+                                            {% else %}
+                                                -${{ (price_data.last_month_price - price_data.current_price)|round(2) }}
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-muted small">from last month</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="price-chart">
+                                    <canvas id="chart-{{ crop_name }}" width="100%" height="80"></canvas>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">Last Month: ${{ price_data.last_month_price }}</span>
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#priceDetailModal" data-crop="{{ crop_name }}">
+                                        Details <i class="bi bi-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Market Overview -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Market Overview</h3>
+                        <p>The agricultural commodity market is influenced by various factors including weather conditions, global supply and demand, government policies, and seasonal production cycles.</p>
+                        
+                        <h4 class="mt-4">Key Market Insights</h4>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="insights-item mb-3">
+                                    <h5><i class="bi bi-graph-up text-success me-2"></i> Rising Crops</h5>
+                                    <ul class="list-group list-group-flush">
+                                        {% set rising_crops = [] %}
+                                        {% for crop_name, price_data in market_data.prices.items() %}
+                                            {% if price_data.trend == 'up' %}
+                                                {% set rising_crops = rising_crops.append(crop_name) %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span class="text-capitalize">{{ crop_name }}</span>
+                                                    <span class="text-success">+{{ price_data.percent_change }}%</span>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if rising_crops|length == 0 %}
+                                            <li class="list-group-item">No rising crops at the moment</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="insights-item mb-3">
+                                    <h5><i class="bi bi-graph-down text-danger me-2"></i> Declining Crops</h5>
+                                    <ul class="list-group list-group-flush">
+                                        {% set declining_crops = [] %}
+                                        {% for crop_name, price_data in market_data.prices.items() %}
+                                            {% if price_data.trend == 'down' %}
+                                                {% set declining_crops = declining_crops.append(crop_name) %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span class="text-capitalize">{{ crop_name }}</span>
+                                                    <span class="text-danger">{{ price_data.percent_change }}%</span>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if declining_crops|length == 0 %}
+                                            <li class="list-group-item">No declining crops at the moment</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4>Market Locations</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Market Name</th>
+                                        <th>Location</th>
+                                        <th>Country</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for market in market_data.markets %}
+                                    <tr>
+                                        <td>{{ market.name }}</td>
+                                        <td>{{ market.location }}</td>
+                                        <td>{{ market.country }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Price Trends and Forecasting -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Price Trends & Market Analysis</h3>
+                        
+                        <h4 class="mt-3">Seasonal Price Patterns</h4>
+                        <p>Agricultural commodities often follow predictable seasonal price patterns based on planting and harvest cycles:</p>
+                        
+                        <div class="accordion mb-4" id="seasonalAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingGrains">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGrains" aria-expanded="true" aria-controls="collapseGrains">
+                                        Grains (Rice, Wheat, Maize)
+                                    </button>
+                                </h2>
+                                <div id="collapseGrains" class="accordion-collapse collapse show" aria-labelledby="headingGrains" data-bs-parent="#seasonalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Grain prices typically decline during harvest periods and gradually increase until the next harvest season:</p>
+                                        <ul>
+                                            <li><strong>Rice:</strong> Prices often drop during the main harvest periods (October-November and April-May in many regions), then gradually rise until the next harvest.</li>
+                                            <li><strong>Wheat:</strong> Usually harvested in summer, with prices typically lower in July-August and rising through winter and spring.</li>
+                                            <li><strong>Maize:</strong> Prices typically decrease during the main harvest season (September-November) and rise until the next harvest.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingVegetables">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVegetables" aria-expanded="false" aria-controls="collapseVegetables">
+                                        Vegetables & Fruits
+                                    </button>
+                                </h2>
+                                <div id="collapseVegetables" class="accordion-collapse collapse" aria-labelledby="headingVegetables" data-bs-parent="#seasonalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Vegetable prices often show high seasonality and are strongly influenced by local supply and weather conditions:</p>
+                                        <ul>
+                                            <li><strong>Tomatoes:</strong> Prices typically bottom during peak harvest seasons and rise during off-seasons.</li>
+                                            <li><strong>Potatoes:</strong> Prices are generally lowest right after harvest and rise gradually as storage supplies diminish.</li>
+                                            <li><strong>Onions:</strong> Seasonal price patterns with lowest prices during harvest periods and increasing prices as storage stocks decrease.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCash">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCash" aria-expanded="false" aria-controls="collapseCash">
+                                        Cash Crops (Cotton, Coffee)
+                                    </button>
+                                </h2>
+                                <div id="collapseCash" class="accordion-collapse collapse" aria-labelledby="headingCash" data-bs-parent="#seasonalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Cash crops often have more complex price patterns influenced by global demand and supply:</p>
+                                        <ul>
+                                            <li><strong>Cotton:</strong> Prices often decline during the harvest season (October-December) and rise during the growing season.</li>
+                                            <li><strong>Coffee:</strong> Price patterns vary by region and coffee type, but are heavily influenced by Brazilian production cycles (as the world's largest producer).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4>Market Strategies for Farmers</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-calendar-check me-2 text-primary"></i> Timing Your Sales</h5>
+                                        <p class="card-text">Consider these strategies to optimize when you sell your crops:</p>
+                                        <ul>
+                                            <li>Avoid selling immediately after harvest when prices are typically lowest.</li>
+                                            <li>If storage is available, hold a portion of your crop to sell later when prices rise.</li>
+                                            <li>Monitor price trends and forecast information to time your sales optimally.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-graph-up-arrow me-2 text-primary"></i> Diversification</h5>
+                                        <p class="card-text">Strategies to reduce market risk:</p>
+                                        <ul>
+                                            <li>Grow multiple crops with different harvest periods to spread price risk.</li>
+                                            <li>Consider value-added processing to sell products with more stable prices.</li>
+                                            <li>Explore direct marketing channels to capture more of the market value.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Price Detail Modal -->
+<div class="modal fade" id="priceDetailModal" tabindex="-1" aria-labelledby="priceDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="priceDetailModalLabel">Price Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content-placeholder">
+                    <p>Loading price details...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create charts for each crop
+        {% for crop_name, price_data in market_data.prices.items() %}
+        createPriceChart('{{ crop_name }}', {{ price_data.last_month_price }}, {{ price_data.current_price }});
+        {% endfor %}
+        
+        // Handle modal data loading
+        const priceDetailModal = document.getElementById('priceDetailModal');
+        priceDetailModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const crop = button.getAttribute('data-crop');
+            const modalTitle = priceDetailModal.querySelector('.modal-title');
+            const modalBody = document.getElementById('modal-content-placeholder');
+            
+            modalTitle.textContent = `${crop.charAt(0).toUpperCase() + crop.slice(1)} Price Details`;
+            
+            // Fetch price details for the crop
+            fetch(`/api/market_prices?crop=${crop}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const priceData = data.price_data;
+                        modalBody.innerHTML = `
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="price-detail-card p-3 border rounded mb-3">
+                                        <h4>Current Price</h4>
+                                        <h2 class="mb-0">$${priceData.current_price.toFixed(2)}</h2>
+                                        <p class="text-muted">${priceData.unit}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="price-detail-card p-3 border rounded mb-3">
+                                        <h4>Last Month</h4>
+                                        <h2 class="mb-0">$${priceData.last_month_price.toFixed(2)}</h2>
+                                        <p class="text-muted">${priceData.unit}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="price-change-info p-3 border rounded mb-4">
+                                <h4 class="mb-3">Price Change</h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h3 class="${priceData.trend === 'up' ? 'text-success' : 'text-danger'}">
+                                            <i class="bi ${priceData.trend === 'up' ? 'bi-arrow-up-right' : 'bi-arrow-down-right'}"></i>
+                                            ${priceData.trend === 'up' ? '+' : ''}${priceData.percent_change}%
+                                        </h3>
+                                        <p class="text-muted mb-0">from last month</p>
+                                    </div>
+                                    <div class="amount-change">
+                                        <h3 class="${priceData.trend === 'up' ? 'text-success' : 'text-danger'}">
+                                            ${priceData.trend === 'up' ? '+' : '-'}$${Math.abs(priceData.current_price - priceData.last_month_price).toFixed(2)}
+                                        </h3>
+                                        <p class="text-muted mb-0">amount change</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="mb-3">Simulated Historical Price Trend</h4>
+                            <div class="historical-chart-container mb-4" style="height: 300px;">
+                                <canvas id="modal-chart-${crop}"></canvas>
+                            </div>
+                            
+                            <h4>Market Analysis</h4>
+                            <p>The ${crop} market has shown a ${priceData.trend === 'up' ? 'positive' : 'negative'} trend over the past month with a ${Math.abs(priceData.percent_change)}% ${priceData.trend === 'up' ? 'increase' : 'decrease'} in price.</p>
+                            <p>${generateMarketAnalysis(crop, priceData.trend)}</p>
+                        `;
+                        
+                        // Create detailed historical price chart
+                        createHistoricalChart(crop, priceData);
+                    } else {
+                        modalBody.innerHTML = `<div class="alert alert-danger">Error loading price details: ${data.error}</div>`;
+                    }
+                })
+                .catch(error => {
+                    modalBody.innerHTML = `<div class="alert alert-danger">Error loading price details. Please try again later.</div>`;
+                    console.error('Error:', error);
+                });
+        });
+        
+        // Function to create price charts for each crop
+        function createPriceChart(cropName, lastMonthPrice, currentPrice) {
+            const ctx = document.getElementById(`chart-${cropName}`).getContext('2d');
+            
+            const trend = currentPrice > lastMonthPrice ? 'up' : 'down';
+            const color = trend === 'up' ? '#28a745' : '#dc3545';
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: generateDates(30),
+                    datasets: [{
+                        label: 'Price',
+                        data: generatePriceData(lastMonthPrice, currentPrice, 30),
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        borderColor: color,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Function to create detailed historical chart
+        function createHistoricalChart(cropName, priceData) {
+            const ctx = document.getElementById(`modal-chart-${cropName}`).getContext('2d');
+            
+            const trend = priceData.trend;
+            const color = trend === 'up' ? '#28a745' : '#dc3545';
+            
+            // Generate last 6 months of simulated data
+            const months = ['January', 'February', 'March', 'April', 'May', 'June'];
+            const historicalPrices = generateSimulatedHistoricalData(priceData.last_month_price, priceData.current_price, 6);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Price ($)',
+                        data: historicalPrices,
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        borderColor: '#007bff',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `$${context.raw.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Generate dates for the chart
+        function generateDates(days) {
+            const dates = [];
+            const today = new Date();
+            
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(today.getDate() - i);
+                dates.push(date.toLocaleDateString());
+            }
+            
+            return dates;
+        }
+        
+        // Generate price data for the chart
+        function generatePriceData(startPrice, endPrice, days) {
+            const prices = [];
+            const priceDiff = endPrice - startPrice;
+            
+            for (let i = 0; i < days; i++) {
+                // Create a slightly randomized price trend
+                const progress = i / (days - 1);
+                const randomFactor = (Math.random() - 0.5) * 0.5; // Small random fluctuation
+                const price = startPrice + (priceDiff * progress) + (startPrice * randomFactor);
+                prices.push(Math.max(price, 0)); // Ensure no negative prices
+            }
+            
+            return prices;
+        }
+        
+        // Generate simulated historical data
+        function generateSimulatedHistoricalData(lastMonthPrice, currentPrice, months) {
+            const prices = [];
+            
+            // Start with a price that's plausible looking back 6 months
+            let basePrice = lastMonthPrice * (0.9 + Math.random() * 0.2); // Start 10-30% different from last month
+            prices.push(basePrice);
+            
+            // Generate the first 4 months with reasonable fluctuations
+            for (let i = 1; i < months - 1; i++) {
+                const randomFactor = (Math.random() - 0.5) * 0.1; // ±5% fluctuation
+                basePrice = basePrice * (1 + randomFactor);
+                prices.push(basePrice);
+            }
+            
+            // Add the last month price
+            prices.push(lastMonthPrice);
+            
+            // Add current price
+            prices.push(currentPrice);
+            
+            return prices;
+        }
+        
+        // Generate market analysis text based on crop and trend
+        function generateMarketAnalysis(crop, trend) {
+            if (trend === 'up') {
+                switch(crop.toLowerCase()) {
+                    case 'rice':
+                        return 'The global rice market has seen strong demand, particularly from Asian countries. Weather factors in major producing regions and reduced plantings have also contributed to the price increase.';
+                    case 'wheat':
+                        return 'Wheat prices have been supported by increased demand for food products and concerns about crop conditions in major exporting countries. Supply chain issues have also contributed to the upward pressure.';
+                    case 'maize':
+                        return 'Strong demand for animal feed and ethanol production has supported maize prices. Additionally, weather concerns in key growing regions have limited supply expansion.';
+                    case 'beans':
+                        return 'Bean prices have increased due to strong domestic and export demand. Plant-based protein trends continue to support legume markets globally.';
+                    case 'tomatoes':
+                        return 'Tomato prices have risen due to seasonal factors and increased transportation costs. Strong retail and food service demand has also supported prices.';
+                    case 'potatoes':
+                        return 'Potato prices have increased due to reduced acreage and strong processing demand. Transportation and storage costs have also contributed to the price increase.';
+                    default:
+                        return 'The market has shown positive momentum due to strong demand and potentially limited supply. Continued monitoring of supply chain factors and production conditions is advised.';
+                }
+            } else {
+                switch(crop.toLowerCase()) {
+                    case 'rice':
+                        return 'The rice market has experienced downward pressure due to improved harvest prospects in major producing regions. Increased production has led to higher supply levels.';
+                    case 'wheat':
+                        return 'Wheat prices have fallen due to improved crop conditions and higher production forecasts in major exporting countries. Competition among exporters has also pressured prices.';
+                    case 'maize':
+                        return 'Maize prices have decreased due to favorable growing conditions and increased planted area. Slower feed demand has also contributed to the price decline.';
+                    case 'onions':
+                        return 'Onion prices have decreased due to seasonal harvest increases and improved storage conditions. Market oversupply has prompted price adjustments.';
+                    case 'cabbage':
+                        return 'Cabbage prices have fallen due to seasonal factors and increased production. Good growing conditions have contributed to higher yields and market supply.';
+                    default:
+                        return 'The market has shown downward momentum primarily due to improved supply conditions. Monitoring storage capabilities and adjusting marketing plans may be beneficial in the current market environment.';
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

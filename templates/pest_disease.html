@@ -1,0 +1,562 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Pest & Disease Identification - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Pest & Disease Identification</h1>
+        <p class="lead mb-4">Quickly identify and treat common pests and diseases affecting your crops</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Identification Tool Card -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Crop Health Diagnostic Tool</h3>
+                        
+                        <form id="identification-form" class="mb-4">
+                            <div class="mb-3">
+                                <label for="crop-select" class="form-label">Select Crop</label>
+                                <select id="crop-select" class="form-select" required>
+                                    <option value="" selected disabled>Choose a crop...</option>
+                                    {% for crop in crops %}
+                                    <option value="{{ crop }}">{{ crop|capitalize }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="symptoms-input" class="form-label">Enter Symptoms</label>
+                                <textarea id="symptoms-input" class="form-control" rows="3" placeholder="Enter observed symptoms separated by commas (e.g., yellow leaves, wilting, holes in leaves)" required></textarea>
+                                <div class="form-text">Be as specific as possible for more accurate identification.</div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5>Common Symptoms</h5>
+                                <div class="common-symptoms">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Yellow leaves" id="symptom1">
+                                                <label class="form-check-label" for="symptom1">Yellow leaves</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Wilting" id="symptom2">
+                                                <label class="form-check-label" for="symptom2">Wilting</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Holes in leaves" id="symptom3">
+                                                <label class="form-check-label" for="symptom3">Holes in leaves</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Spots on leaves" id="symptom4">
+                                                <label class="form-check-label" for="symptom4">Spots on leaves</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Stunted growth" id="symptom5">
+                                                <label class="form-check-label" for="symptom5">Stunted growth</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="White powdery substance" id="symptom6">
+                                                <label class="form-check-label" for="symptom6">White powdery substance</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Insects visible" id="symptom7">
+                                                <label class="form-check-label" for="symptom7">Insects visible</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input symptom-checkbox" type="checkbox" value="Curled leaves" id="symptom8">
+                                                <label class="form-check-label" for="symptom8">Curled leaves</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Identify Issue</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Loading Spinner -->
+                        <div id="loading-spinner" class="text-center my-5" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Analyzing symptoms...</p>
+                        </div>
+                        
+                        <!-- Results Section -->
+                        <div id="results-container" style="display: none;">
+                            <h4 class="mb-3">Identification Results</h4>
+                            
+                            <div id="no-matches" class="alert alert-info" style="display: none;">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                No matching pests or diseases found with the given symptoms. Please try adding more specific symptoms or consult with a local agricultural extension office.
+                            </div>
+                            
+                            <div id="matches-container"></div>
+                        </div>
+                        
+                        <!-- Error Alert -->
+                        <div id="error-alert" class="alert alert-danger" role="alert" style="display: none;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span id="error-message">An error occurred. Please try again.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pest & Disease Encyclopedia -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Pest & Disease Encyclopedia</h3>
+                        <p class="card-text">Browse common pests and diseases by crop type:</p>
+                        
+                        <div class="encyclopedia-filter mb-4">
+                            <label for="encyclopedia-crop-select" class="form-label">Select Crop</label>
+                            <select id="encyclopedia-crop-select" class="form-select">
+                                <option value="" selected disabled>Choose a crop...</option>
+                                {% for crop in crops %}
+                                <option value="{{ crop }}">{{ crop|capitalize }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div id="encyclopedia-loading" class="text-center my-5" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading encyclopedia data...</p>
+                        </div>
+                        
+                        <div id="encyclopedia-content" style="display: none;">
+                            <ul class="nav nav-tabs mb-3" id="encyclopediaTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="pests-tab" data-bs-toggle="tab" data-bs-target="#pests-content" type="button" role="tab" aria-controls="pests-content" aria-selected="true">Pests</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="diseases-tab" data-bs-toggle="tab" data-bs-target="#diseases-content" type="button" role="tab" aria-controls="diseases-content" aria-selected="false">Diseases</button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="encyclopediaTabContent">
+                                <div class="tab-pane fade show active" id="pests-content" role="tabpanel" aria-labelledby="pests-tab">
+                                    <div id="pests-container" class="accordion"></div>
+                                </div>
+                                <div class="tab-pane fade" id="diseases-content" role="tabpanel" aria-labelledby="diseases-tab">
+                                    <div id="diseases-container" class="accordion"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="encyclopedia-error" class="alert alert-warning" style="display: none;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span id="encyclopedia-error-message">No data available for the selected crop.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Prevention Tips -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Prevention & Best Practices</h3>
+                        <p class="card-text">Implementing prevention strategies is more effective than treating pests and diseases after they appear.</p>
+                        
+                        <div class="accordion" id="preventionAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCultural">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCultural" aria-expanded="true" aria-controls="collapseCultural">
+                                        Cultural Practices
+                                    </button>
+                                </h2>
+                                <div id="collapseCultural" class="accordion-collapse collapse show" aria-labelledby="headingCultural" data-bs-parent="#preventionAccordion">
+                                    <div class="accordion-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-arrow-repeat text-primary me-2"></i> Crop Rotation</h5>
+                                                <p>Avoid planting the same crop in the same area for consecutive seasons. Rotate with unrelated crops to break pest and disease cycles.</p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-droplet text-primary me-2"></i> Proper Irrigation</h5>
+                                                <p>Water at the base of plants and in the morning to allow foliage to dry during the day. Avoid overhead irrigation which promotes leaf diseases.</p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-scissors text-primary me-2"></i> Sanitation</h5>
+                                                <p>Remove and destroy infected plant parts and debris. Clean tools between plants when working with infected specimens.</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingBiological">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBiological" aria-expanded="false" aria-controls="collapseBiological">
+                                        Biological Controls
+                                    </button>
+                                </h2>
+                                <div id="collapseBiological" class="accordion-collapse collapse" aria-labelledby="headingBiological" data-bs-parent="#preventionAccordion">
+                                    <div class="accordion-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-bug text-primary me-2"></i> Beneficial Insects</h5>
+                                                <p>Introduce and encourage beneficial insects like ladybugs, lacewings, and parasitic wasps that prey on common pests.</p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-flower1 text-primary me-2"></i> Companion Planting</h5>
+                                                <p>Plant pest-repelling herbs and flowers among your crops. For example, marigolds repel nematodes, and basil repels certain insects from tomatoes.</p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-tree text-primary me-2"></i> Microbial Products</h5>
+                                                <p>Use bacterial and fungal products like Bacillus thuringiensis (Bt) and Trichoderma that target specific pests while sparing beneficial organisms.</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMonitoring">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonitoring" aria-expanded="false" aria-controls="collapseMonitoring">
+                                        Monitoring & Early Detection
+                                    </button>
+                                </h2>
+                                <div id="collapseMonitoring" class="accordion-collapse collapse" aria-labelledby="headingMonitoring" data-bs-parent="#preventionAccordion">
+                                    <div class="accordion-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-calendar-check text-primary me-2"></i> Regular Inspection</h5>
+                                                <p>Inspect your crops weekly, checking both upper and lower leaf surfaces, stems, and soil for signs of pests or diseases.</p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-sticky text-primary me-2"></i> Sticky Traps</h5>
+                                                <p>Use yellow and blue sticky cards to trap and monitor flying insects like aphids, whiteflies, and thrips.</p>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <h5><i class="bi bi-journal-text text-primary me-2"></i> Record Keeping</h5>
+                                                <p>Maintain records of pest occurrences, treatments, and their effectiveness to better predict and prevent future problems.</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle symptom checkboxes
+        const symptomCheckboxes = document.querySelectorAll('.symptom-checkbox');
+        const symptomsInput = document.getElementById('symptoms-input');
+        
+        symptomCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSymptomsInput);
+        });
+        
+        function updateSymptomsInput() {
+            const selectedSymptoms = [];
+            symptomCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedSymptoms.push(checkbox.value);
+                }
+            });
+            
+            // Add selected symptoms to the input field
+            if (selectedSymptoms.length > 0) {
+                const currentText = symptomsInput.value.trim();
+                const currentSymptoms = currentText ? currentText.split(',').map(s => s.trim()) : [];
+                
+                // Add only new symptoms, avoid duplicates
+                selectedSymptoms.forEach(symptom => {
+                    if (!currentSymptoms.includes(symptom)) {
+                        currentSymptoms.push(symptom);
+                    }
+                });
+                
+                symptomsInput.value = currentSymptoms.join(', ');
+            }
+        }
+        
+        // Handle identification form submission
+        const identificationForm = document.getElementById('identification-form');
+        const cropSelect = document.getElementById('crop-select');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const resultsContainer = document.getElementById('results-container');
+        const noMatches = document.getElementById('no-matches');
+        const matchesContainer = document.getElementById('matches-container');
+        const errorAlert = document.getElementById('error-alert');
+        const errorMessage = document.getElementById('error-message');
+        
+        identificationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const crop = cropSelect.value;
+            const symptoms = symptomsInput.value.trim();
+            
+            if (!crop || !symptoms) {
+                errorMessage.textContent = 'Please select a crop and enter symptoms.';
+                errorAlert.style.display = 'block';
+                return;
+            }
+            
+            // Reset UI
+            resultsContainer.style.display = 'none';
+            noMatches.style.display = 'none';
+            matchesContainer.innerHTML = '';
+            errorAlert.style.display = 'none';
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            
+            // Send identification request
+            const formData = new FormData();
+            formData.append('crop', crop);
+            formData.append('symptoms', symptoms);
+            
+            fetch('/api/identify_pest_disease', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingSpinner.style.display = 'none';
+                
+                if (data.success) {
+                    if (data.matches && data.matches.length > 0) {
+                        // Display matches
+                        displayMatches(data.matches);
+                    } else {
+                        // No matches found
+                        noMatches.style.display = 'block';
+                    }
+                    resultsContainer.style.display = 'block';
+                } else {
+                    // Error occurred
+                    errorMessage.textContent = data.error || 'An error occurred while identifying the issue.';
+                    errorAlert.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                loadingSpinner.style.display = 'none';
+                errorMessage.textContent = 'Network error: Unable to process the request.';
+                errorAlert.style.display = 'block';
+                console.error('Error:', error);
+            });
+        });
+        
+        // Display identification matches
+        function displayMatches(matches) {
+            matchesContainer.innerHTML = '';
+            
+            matches.forEach((match, index) => {
+                const matchCard = document.createElement('div');
+                matchCard.className = 'card mb-3';
+                
+                // Create a progress bar for match percentage
+                const progressColor = match.match_percentage >= 75 ? 'bg-success' : (match.match_percentage >= 50 ? 'bg-warning' : 'bg-danger');
+                
+                matchCard.innerHTML = `
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">${match.name}</h5>
+                        <span class="badge ${match.type === 'pest' ? 'bg-danger' : 'bg-primary'}">${match.type.toUpperCase()}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span>Match confidence:</span>
+                                <span>${Math.round(match.match_percentage)}%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar ${progressColor}" role="progressbar" style="width: ${match.match_percentage}%" aria-valuenow="${match.match_percentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="matching-symptoms mb-3">
+                            <h6>Matching Symptoms:</h6>
+                            <ul class="list-group list-group-flush">
+                                ${match.matching_symptoms.map(symptom => `
+                                    <li class="list-group-item py-1"><i class="bi bi-check-circle-fill text-success me-2"></i>${symptom}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                        
+                        <div class="accordion" id="accordionMatch${index}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingDescription${index}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDescription${index}" aria-expanded="false">
+                                        Description
+                                    </button>
+                                </h2>
+                                <div id="collapseDescription${index}" class="accordion-collapse collapse" data-bs-parent="#accordionMatch${index}">
+                                    <div class="accordion-body">
+                                        <p>${match.data.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTreatment${index}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTreatment${index}" aria-expanded="false">
+                                        Treatment
+                                    </button>
+                                </h2>
+                                <div id="collapseTreatment${index}" class="accordion-collapse collapse" data-bs-parent="#accordionMatch${index}">
+                                    <div class="accordion-body">
+                                        <p>${match.data.treatment}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingPrevention${index}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrevention${index}" aria-expanded="false">
+                                        Prevention
+                                    </button>
+                                </h2>
+                                <div id="collapsePrevention${index}" class="accordion-collapse collapse" data-bs-parent="#accordionMatch${index}">
+                                    <div class="accordion-body">
+                                        <p>${match.data.prevention}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                matchesContainer.appendChild(matchCard);
+            });
+        }
+        
+        // Encyclopedia functionality
+        const encyclopediaCropSelect = document.getElementById('encyclopedia-crop-select');
+        const encyclopediaLoading = document.getElementById('encyclopedia-loading');
+        const encyclopediaContent = document.getElementById('encyclopedia-content');
+        const encyclopediaError = document.getElementById('encyclopedia-error');
+        const encyclopediaErrorMessage = document.getElementById('encyclopedia-error-message');
+        const pestsContainer = document.getElementById('pests-container');
+        const diseasesContainer = document.getElementById('diseases-container');
+        
+        encyclopediaCropSelect.addEventListener('change', function() {
+            const crop = this.value;
+            
+            if (!crop) {
+                return;
+            }
+            
+            // Reset UI
+            encyclopediaContent.style.display = 'none';
+            encyclopediaError.style.display = 'none';
+            pestsContainer.innerHTML = '';
+            diseasesContainer.innerHTML = '';
+            
+            // Show loading
+            encyclopediaLoading.style.display = 'block';
+            
+            // Fetch pest and disease data
+            fetch(`/api/pests_diseases?crop=${crop}`)
+                .then(response => response.json())
+                .then(data => {
+                    encyclopediaLoading.style.display = 'none';
+                    
+                    if (data.success) {
+                        // Display pests
+                        if (data.pests && data.pests.length > 0) {
+                            displayEncyclopediaItems(data.pests, pestsContainer, 'pest');
+                        } else {
+                            pestsContainer.innerHTML = '<div class="alert alert-info">No pest data available for this crop.</div>';
+                        }
+                        
+                        // Display diseases
+                        if (data.diseases && data.diseases.length > 0) {
+                            displayEncyclopediaItems(data.diseases, diseasesContainer, 'disease');
+                        } else {
+                            diseasesContainer.innerHTML = '<div class="alert alert-info">No disease data available for this crop.</div>';
+                        }
+                        
+                        encyclopediaContent.style.display = 'block';
+                    } else {
+                        encyclopediaErrorMessage.textContent = data.error || 'No data available for the selected crop.';
+                        encyclopediaError.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    encyclopediaLoading.style.display = 'none';
+                    encyclopediaErrorMessage.textContent = 'Network error: Unable to fetch data.';
+                    encyclopediaError.style.display = 'block';
+                    console.error('Error:', error);
+                });
+        });
+        
+        // Display encyclopedia items (pests or diseases)
+        function displayEncyclopediaItems(items, container, type) {
+            container.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                const itemId = `${type}-${index}`;
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+                
+                accordionItem.innerHTML = `
+                    <h2 class="accordion-header" id="heading-${itemId}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${itemId}" aria-expanded="false">
+                            ${item.name}
+                        </button>
+                    </h2>
+                    <div id="collapse-${itemId}" class="accordion-collapse collapse" data-bs-parent="#${container.id}">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-header">Symptoms</div>
+                                        <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                                ${item.symptoms.map(symptom => `
+                                                    <li class="list-group-item py-1">${symptom}</li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <h5 class="mb-3">Description</h5>
+                                    <p>${item.description}</p>
+                                    
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <h5 class="mb-3">Treatment</h5>
+                                            <p>${item.treatment}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="mb-3">Prevention</h5>
+                                            <p>${item.prevention}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(accordionItem);
+            });
+        }
+    });
+</script>
+{% endblock %}

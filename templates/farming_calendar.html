@@ -1,0 +1,490 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Farming Calendar - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Farming Calendar</h1>
+        <p class="lead mb-4">Plan your farming activities with our comprehensive seasonal calendar</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Crop Selection Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Select Crop</h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3">
+                                <form id="crop-selection-form" method="get" action="/farming_calendar">
+                                    <div class="mb-3">
+                                        <select id="crop-select" name="crop" class="form-select form-select-lg">
+                                            {% for crop in available_crops %}
+                                                <option value="{{ crop }}" {% if crop == selected_crop %}selected{% endif %}>
+                                                    {{ crop|capitalize }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">View Calendar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if selected_crop and calendar_data[selected_crop] %}
+                    {% set crop_data = calendar_data[selected_crop] %}
+                    
+                    <!-- Current Season Alert -->
+                    <div class="alert alert-primary mb-4" id="current-season-alert">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar-check fs-4 me-3"></i>
+                            <div>
+                                <h4 class="alert-heading mb-1">Current Season</h4>
+                                <p class="mb-0" id="current-season-text">Determining current season...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seasonal Timeline -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ selected_crop|capitalize }} Growing Timeline</h3>
+                            
+                            <div class="timeline-container my-4">
+                                <div class="timeline-progress-bar progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="timeline-progress"></div>
+                                </div>
+                                
+                                <div class="timeline-months d-flex justify-content-between mb-4">
+                                    {% for month_num in range(1, 13) %}
+                                        <div class="timeline-month">
+                                            <span class="month-label">{{ ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month_num - 1] }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="timeline-seasons">
+                                    <!-- Planting Season -->
+                                    <div class="season-row mb-4">
+                                        <div class="season-icon">
+                                            <i class="bi bi-flower1 text-primary"></i>
+                                        </div>
+                                        <div class="season-label">
+                                            <h5>Planting Season</h5>
+                                            <p class="text-muted mb-2">
+                                                {{ crop_data.planting_season.start.month }}/{{ crop_data.planting_season.start.day }} - 
+                                                {{ crop_data.planting_season.end.month }}/{{ crop_data.planting_season.end.day }}
+                                            </p>
+                                        </div>
+                                        <div class="season-timeline position-relative">
+                                            <div class="season-bar planting-bar" 
+                                                style="left: {{ (crop_data.planting_season.start.month - 1 + crop_data.planting_season.start.day/30) / 12 * 100 }}%; 
+                                                      width: {{ calculateSeasonWidth(crop_data.planting_season.start, crop_data.planting_season.end) }}%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Growing Season -->
+                                    <div class="season-row mb-4">
+                                        <div class="season-icon">
+                                            <i class="bi bi-tree text-success"></i>
+                                        </div>
+                                        <div class="season-label">
+                                            <h5>Growing Season</h5>
+                                            <p class="text-muted mb-2">
+                                                {{ crop_data.growing_season.start.month }}/{{ crop_data.growing_season.start.day }} - 
+                                                {{ crop_data.growing_season.end.month }}/{{ crop_data.growing_season.end.day }}
+                                            </p>
+                                        </div>
+                                        <div class="season-timeline position-relative">
+                                            <div class="season-bar growing-bar" 
+                                                style="left: {{ (crop_data.growing_season.start.month - 1 + crop_data.growing_season.start.day/30) / 12 * 100 }}%; 
+                                                      width: {{ calculateSeasonWidth(crop_data.growing_season.start, crop_data.growing_season.end) }}%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Harvest Season -->
+                                    <div class="season-row mb-4">
+                                        <div class="season-icon">
+                                            <i class="bi bi-basket text-warning"></i>
+                                        </div>
+                                        <div class="season-label">
+                                            <h5>Harvest Season</h5>
+                                            <p class="text-muted mb-2">
+                                                {{ crop_data.harvest_season.start.month }}/{{ crop_data.harvest_season.start.day }} - 
+                                                {{ crop_data.harvest_season.end.month }}/{{ crop_data.harvest_season.end.day }}
+                                            </p>
+                                        </div>
+                                        <div class="season-timeline position-relative">
+                                            <div class="season-bar harvest-bar" 
+                                                style="left: {{ (crop_data.harvest_season.start.month - 1 + crop_data.harvest_season.start.day/30) / 12 * 100 }}%; 
+                                                      width: {{ calculateSeasonWidth(crop_data.harvest_season.start, crop_data.harvest_season.end) }}%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Activities -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Monthly Activities</h3>
+                            <p class="card-text">Key farming activities for {{ selected_crop|capitalize }} throughout the year:</p>
+                            
+                            <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+                                {% for month_num in range(1, 13) %}
+                                    {% set month_name = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][month_num - 1] %}
+                                    
+                                    {% set activities_for_month = [] %}
+                                    {% for activity in crop_data.key_activities %}
+                                        {% if activity.month == month_num %}
+                                            {% set activities_for_month = activities_for_month + [activity.activity] %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    <div class="col">
+                                        <div class="card h-100 {% if activities_for_month|length > 0 %}border-primary{% else %}border-light{% endif %}">
+                                            <div class="card-header {% if activities_for_month|length > 0 %}bg-primary text-white{% else %}bg-light{% endif %}">
+                                                {{ month_name }}
+                                            </div>
+                                            <div class="card-body">
+                                                {% if activities_for_month|length > 0 %}
+                                                    <ul class="list-group list-group-flush">
+                                                        {% for activity in activities_for_month %}
+                                                            <li class="list-group-item">{{ activity }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% else %}
+                                                    <p class="text-muted mb-0">No specific activities this month.</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Best Practices -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ selected_crop|capitalize }} Growing Guide</h3>
+                            
+                            <div class="accordion" id="bestPracticesAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingSoil">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSoil" aria-expanded="true" aria-controls="collapseSoil">
+                                            Soil Preparation
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSoil" class="accordion-collapse collapse show" aria-labelledby="headingSoil" data-bs-parent="#bestPracticesAccordion">
+                                        <div class="accordion-body">
+                                            {{ generateCropGuidance(selected_crop, 'soil') | safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingWatering">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWatering" aria-expanded="false" aria-controls="collapseWatering">
+                                            Irrigation & Watering
+                                        </button>
+                                    </h2>
+                                    <div id="collapseWatering" class="accordion-collapse collapse" aria-labelledby="headingWatering" data-bs-parent="#bestPracticesAccordion">
+                                        <div class="accordion-body">
+                                            {{ generateCropGuidance(selected_crop, 'watering') | safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFertilizing">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFertilizing" aria-expanded="false" aria-controls="collapseFertilizing">
+                                            Fertilizing
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFertilizing" class="accordion-collapse collapse" aria-labelledby="headingFertilizing" data-bs-parent="#bestPracticesAccordion">
+                                        <div class="accordion-body">
+                                            {{ generateCropGuidance(selected_crop, 'fertilizing') | safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingHarvesting">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHarvesting" aria-expanded="false" aria-controls="collapseHarvesting">
+                                            Harvesting & Storage
+                                        </button>
+                                    </h2>
+                                    <div id="collapseHarvesting" class="accordion-collapse collapse" aria-labelledby="headingHarvesting" data-bs-parent="#bestPracticesAccordion">
+                                        <div class="accordion-body">
+                                            {{ generateCropGuidance(selected_crop, 'harvesting') | safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block styles %}
+<style>
+    /* Timeline styling */
+    .timeline-container {
+        padding: 20px 0;
+    }
+    
+    .timeline-month {
+        width: 8.33%;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+    
+    .month-label {
+        display: inline-block;
+        transform: rotate(-45deg);
+        transform-origin: top left;
+        position: relative;
+        top: 20px;
+    }
+    
+    .season-row {
+        display: flex;
+        align-items: center;
+    }
+    
+    .season-icon {
+        flex: 0 0 40px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    .season-label {
+        flex: 0 0 20%;
+        padding-right: 15px;
+    }
+    
+    .season-timeline {
+        flex: 1;
+        height: 30px;
+        background-color: #f5f5f5;
+        border-radius: 15px;
+    }
+    
+    .season-bar {
+        position: absolute;
+        height: 30px;
+        border-radius: 15px;
+    }
+    
+    .planting-bar {
+        background-color: #8BC34A;
+    }
+    
+    .growing-bar {
+        background-color: #2E7D32;
+    }
+    
+    .harvest-bar {
+        background-color: #FFA000;
+    }
+    
+    /* Current month indicator */
+    #timeline-progress {
+        height: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-submit form on crop change
+        const cropSelect = document.getElementById('crop-select');
+        cropSelect.addEventListener('change', function() {
+            document.getElementById('crop-selection-form').submit();
+        });
+        
+        // Get current date
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1; // 1-12
+        const currentDay = currentDate.getDate();
+        
+        // Update timeline progress
+        const yearProgress = (currentMonth - 1 + currentDay / 30) / 12 * 100;
+        document.getElementById('timeline-progress').style.width = `${yearProgress}%`;
+        
+        {% if selected_crop and calendar_data[selected_crop] %}
+            // Determine current season
+            const currentSeasonText = document.getElementById('current-season-text');
+            const cropData = {{ calendar_data[selected_crop]|tojson }};
+            
+            let currentSeason = "Off-season";
+            let nextSeason = "";
+            let nextSeasonStart = "";
+            
+            // Check if in planting season
+            if (isInSeason(currentMonth, currentDay, cropData.planting_season.start, cropData.planting_season.end)) {
+                currentSeason = "Planting Season";
+                nextSeason = "Growing Season";
+                nextSeasonStart = formatDate(cropData.growing_season.start);
+            }
+            // Check if in growing season
+            else if (isInSeason(currentMonth, currentDay, cropData.growing_season.start, cropData.growing_season.end)) {
+                currentSeason = "Growing Season";
+                nextSeason = "Harvest Season";
+                nextSeasonStart = formatDate(cropData.harvest_season.start);
+            }
+            // Check if in harvest season
+            else if (isInSeason(currentMonth, currentDay, cropData.harvest_season.start, cropData.harvest_season.end)) {
+                currentSeason = "Harvest Season";
+                nextSeason = "Planting Season";
+                nextSeasonStart = formatDate(cropData.planting_season.start);
+            }
+            // Determine next season
+            else {
+                // Find the next upcoming season
+                const seasons = [
+                    { name: "Planting Season", start: cropData.planting_season.start },
+                    { name: "Growing Season", start: cropData.growing_season.start },
+                    { name: "Harvest Season", start: cropData.harvest_season.start }
+                ];
+                
+                // Sort seasons by how soon they will start
+                seasons.sort((a, b) => {
+                    const daysToA = daysUntilDate(currentMonth, currentDay, a.start.month, a.start.day);
+                    const daysToB = daysUntilDate(currentMonth, currentDay, b.start.month, b.start.day);
+                    return daysToA - daysToB;
+                });
+                
+                nextSeason = seasons[0].name;
+                nextSeasonStart = formatDate(seasons[0].start);
+            }
+            
+            // Update the text
+            if (currentSeason === "Off-season") {
+                currentSeasonText.innerHTML = `Currently in <strong>Off-season</strong>. Next up: <strong>${nextSeason}</strong> starting on <strong>${nextSeasonStart}</strong>.`;
+                document.getElementById('current-season-alert').classList.remove('alert-primary');
+                document.getElementById('current-season-alert').classList.add('alert-warning');
+            } else {
+                currentSeasonText.innerHTML = `Currently in <strong>${currentSeason}</strong> for {{ selected_crop|capitalize }}. Next up: <strong>${nextSeason}</strong> starting on <strong>${nextSeasonStart}</strong>.`;
+            }
+        {% endif %}
+        
+        // Function to check if current date is within a season
+        function isInSeason(currentMonth, currentDay, seasonStart, seasonEnd) {
+            const currentDate = new Date(2000, currentMonth - 1, currentDay);
+            let startDate = new Date(2000, seasonStart.month - 1, seasonStart.day);
+            let endDate = new Date(2000, seasonEnd.month - 1, seasonEnd.day);
+            
+            // Handle seasons that cross year boundary
+            if (seasonEnd.month < seasonStart.month) {
+                // If current month is less than start month, we're in the second year part
+                if (currentMonth < seasonStart.month) {
+                    startDate = new Date(1999, seasonStart.month - 1, seasonStart.day);
+                } else {
+                    endDate = new Date(2001, seasonEnd.month - 1, seasonEnd.day);
+                }
+            }
+            
+            return currentDate >= startDate && currentDate <= endDate;
+        }
+        
+        // Function to calculate days until a future date
+        function daysUntilDate(currentMonth, currentDay, futureMonth, futureDay) {
+            const today = new Date(2000, currentMonth - 1, currentDay);
+            let futureDate = new Date(2000, futureMonth - 1, futureDay);
+            
+            // If the future date is earlier in the year than today, it's in the next year
+            if (futureDate < today) {
+                futureDate = new Date(2001, futureMonth - 1, futureDay);
+            }
+            
+            const diffTime = futureDate - today;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+        
+        // Function to format date as "Month Day"
+        function formatDate(dateObj) {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            return `${months[dateObj.month - 1]} ${dateObj.day}`;
+        }
+    });
+</script>
+{% endblock %}
+
+{% macro calculateSeasonWidth(start, end) %}
+    {% if end.month < start.month %}
+        {% set width = (12 - start.month + end.month + (end.day - start.day) / 30) / 12 * 100 %}
+    {% else %}
+        {% set width = (end.month - start.month + (end.day - start.day) / 30) / 12 * 100 %}
+    {% endif %}
+    {{ width }}
+{% endmacro %}
+
+{% macro generateCropGuidance(crop, section) %}
+    {% set guidance = {
+        'rice': {
+            'soil': '<p>Rice grows best in clay soils that can hold water. The soil pH should be between 5.5-6.5.</p><ul><li>Prepare paddy fields by plowing and harrowing to create a smooth, level surface.</li><li>Create bunds (raised edges) around fields to retain water.</li><li>Incorporate organic matter into the soil several weeks before planting.</li></ul>',
+            'watering': '<p>Rice is a water-intensive crop requiring flooded conditions during most of its growing period.</p><ul><li>Maintain water depth of 5-10 cm during the growing stage.</li><li>Drain fields about 2 weeks before harvest to facilitate harvesting.</li><li>Practice alternate wetting and drying to save water while maintaining yields.</li></ul>',
+            'fertilizing': '<p>Rice requires balanced nutrition with emphasis on nitrogen.</p><ul><li>Apply basal fertilizer (NPK) before transplanting or sowing.</li><li>Top-dress with nitrogen at tillering and panicle initiation stages.</li><li>Consider applying micronutrients like zinc in deficient soils.</li></ul>',
+            'harvesting': '<p>Rice is ready for harvest when 80-85% of the grains turn golden yellow.</p><ul><li>Cut the crop near ground level using sickles or mechanical harvesters.</li><li>Thresh to separate grains from straw.</li><li>Dry grains to 14% moisture content for safe storage.</li><li>Store in clean, dry, and pest-free containers or bags.</li></ul>'
+        },
+        'maize': {
+            'soil': '<p>Maize prefers well-drained, loamy soils with pH 5.8-7.0.</p><ul><li>Prepare soil by deep plowing to improve root penetration.</li><li>Create raised beds in areas with high rainfall to prevent waterlogging.</li><li>Incorporate well-decomposed manure or compost before planting.</li></ul>',
+            'watering': '<p>Maize is moderately water-intensive, with critical water needs during tasseling and silking stages.</p><ul><li>Provide regular irrigation to maintain soil moisture.</li><li>Ensure 25-40 mm of water per irrigation cycle.</li><li>Increase water supply during tasseling, silking, and grain filling stages.</li></ul>',
+            'fertilizing': '<p>Maize is a heavy feeder requiring adequate NPK nutrition.</p><ul><li>Apply basal dose of NPK at planting.</li><li>Side-dress with nitrogen when plants are 30-45 cm tall.</li><li>Apply another nitrogen dose at tasseling stage for higher yields.</li></ul>',
+            'harvesting': '<p>Harvest maize when kernels are firm and the husks are dry.</p><ul><li>For sweet corn, harvest when kernels are filled with milky fluid.</li><li>For grain, harvest when kernels are hard and glossy.</li><li>Dry maize cobs to 13-14% moisture content for storage.</li><li>Shell and store in cool, dry conditions protected from pests.</li></ul>'
+        },
+        'wheat': {
+            'soil': '<p>Wheat grows best in well-drained loam or clay loam soils with pH 6.0-7.5.</p><ul><li>Prepare a fine, firm seedbed through multiple tillage operations.</li><li>Ensure good drainage to prevent waterlogging.</li><li>Add organic matter to improve soil structure and fertility.</li></ul>',
+            'watering': '<p>Wheat requires moderate moisture with critical water needs during establishment, tillering, and grain filling.</p><ul><li>Ensure adequate soil moisture at sowing.</li><li>Irrigate at crown root initiation, tillering, jointing, flowering, and grain filling stages.</li><li>Avoid over-irrigation as it can promote diseases.</li></ul>',
+            'fertilizing': '<p>Wheat responds well to balanced fertilization.</p><ul><li>Apply basal NPK fertilizer before or at sowing.</li><li>Top-dress with nitrogen at tillering and before heading stages.</li><li>Consider micronutrients like zinc and boron in deficient soils.</li></ul>',
+            'harvesting': '<p>Harvest wheat when grains are hard and moisture content is below 20%.</p><ul><li>Use combines or manual methods depending on farm size.</li><li>Thresh to separate grains from chaff.</li><li>Dry grains to 12-14% moisture content for safe storage.</li><li>Store in clean, dry bins or bags protected from pests.</li></ul>'
+        },
+        'beans': {
+            'soil': '<p>Beans prefer well-drained, light to medium-textured soils with pH 6.0-7.0.</p><ul><li>Prepare soil by plowing and harrowing to create a smooth seedbed.</li><li>Avoid compacted soils which hinder root development.</li><li>Add compost or well-rotted manure to improve soil structure.</li></ul>',
+            'watering': '<p>Beans require consistent moisture, especially during flowering and pod development.</p><ul><li>Maintain even soil moisture throughout the growing season.</li><li>Water deeply but less frequently to encourage deep root growth.</li><li>Avoid overhead irrigation during flowering to prevent flower drop.</li></ul>',
+            'fertilizing': '<p>As legumes, beans can fix atmospheric nitrogen but benefit from starter fertilizer.</p><ul><li>Apply phosphorus and potassium at planting.</li><li>Use a starter fertilizer with low nitrogen content.</li><li>Consider foliar applications of micronutrients during vegetative growth.</li></ul>',
+            'harvesting': '<p>Harvest timing depends on whether growing for fresh snap beans or dry beans.</p><ul><li>For snap beans, harvest when pods are firm, crisp, and before seeds fully develop.</li><li>For dry beans, harvest when pods are dry and seeds rattle inside.</li><li>Dry harvested beans thoroughly to prevent mold.</li><li>Store in airtight containers in a cool, dry place.</li></ul>'
+        },
+        'cotton': {
+            'soil': '<p>Cotton prefers deep, well-drained soils with pH 5.8-8.0.</p><ul><li>Prepare soil by deep plowing to break hardpans.</li><li>Form raised beds in heavy soils or high rainfall areas.</li><li>Add organic matter to improve soil structure and water retention.</li></ul>',
+            'watering': '<p>Cotton has moderate water requirements with critical needs during flowering and boll development.</p><ul><li>Ensure adequate moisture at planting.</li><li>Maintain consistent moisture during square formation and flowering.</li><li>Reduce irrigation during boll opening to prevent boll rot.</li></ul>',
+            'fertilizing': '<p>Cotton requires balanced nutrition with emphasis on nitrogen and potassium.</p><ul><li>Apply basal NPK fertilizer before planting.</li><li>Side-dress with nitrogen at squaring and early flowering stages.</li><li>Consider foliar applications of potassium during boll development.</li></ul>',
+            'harvesting': '<p>Harvest cotton when bolls are fully open and fiber is dry.</p><ul><li>Use mechanical pickers or hand picking depending on farm size.</li><li>Harvest during dry weather to maintain fiber quality.</li><li>Remove trash and dry to appropriate moisture content before ginning.</li><li>Store in dry conditions to prevent fiber deterioration.</li></ul>'
+        }
+    } %}
+    
+    {% if crop in guidance %}
+        {{ guidance[crop][section] }}
+    {% else %}
+        {% set generic_guidance = {
+            'soil': '<p>Most crops benefit from well-drained, fertile soil with adequate organic matter.</p><ul><li>Test soil to determine pH and nutrient levels.</li><li>Prepare a fine seedbed by plowing and harrowing.</li><li>Incorporate compost or well-decomposed manure to improve soil structure and fertility.</li></ul>',
+            'watering': '<p>Proper irrigation is crucial for optimal crop growth and yield.</p><ul><li>Provide consistent moisture throughout the growing season.</li><li>Water deeply but less frequently to encourage deep root growth.</li><li>Adjust irrigation based on crop stage, with increased water during flowering and fruit development.</li></ul>',
+            'fertilizing': '<p>Balanced nutrition is essential for healthy crop growth.</p><ul><li>Apply basal fertilizer before or at planting.</li><li>Consider split applications of nitrogen to reduce leaching.</li><li>Use foliar sprays for micronutrients during vegetative growth.</li></ul>',
+            'harvesting': '<p>Proper harvesting techniques ensure maximum yield and quality.</p><ul><li>Harvest at the appropriate stage of maturity for your specific crop.</li><li>Use clean, sharp tools to minimize damage.</li><li>Dry harvested products to appropriate moisture content for storage.</li><li>Store in clean, dry conditions to maintain quality.</li></ul>'
+        } %}
+        
+        {{ generic_guidance[section] }}
+    {% endif %}
+{% endmacro %}

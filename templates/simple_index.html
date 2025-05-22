@@ -1,214 +1,179 @@
 {% extends 'simple_layout.html' %}
 
-{% block title %}Simple Crop Advisor - AI-Powered Crop Recommendation{% endblock %}
+{% block title %}FarmWise AI - Smart Farming Solutions{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section">
+<!-- Hero Banner -->
+<section class="hero-section py-5">
     <div class="container">
-        <h1 class="display-5 fw-bold mb-3">AI-Powered Crop Recommendation</h1>
-        <p class="lead mb-4">Get personalized crop suggestions based on your soil parameters and environmental conditions</p>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">Smarter Farming with AI</h1>
+                <p class="lead mb-4">
+                    FarmWise AI helps you make data-driven decisions to optimize your crops, 
+                    reduce costs, and increase yields through advanced agricultural intelligence.
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="/crop_encyclopedia" class="btn btn-primary btn-lg px-4 me-md-2">Explore Crops</a>
+                    <a href="#features" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" class="img-fluid" alt="Farm AI" width="400">
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Main Form Section -->
-<section class="py-4">
+<!-- Main Features Section -->
+<section class="py-5" id="features">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <h2 class="section-title text-center mb-4">Get Your Crop Recommendation</h2>
-                
-                <div class="input-section">
-                    <form id="recommendation-form">
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3">
-                                <label for="nitrogen" class="form-label">Nitrogen (N) Content</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="nitrogen" name="nitrogen" min="0" max="140" value="50">
-                                    <span class="range-value ms-3" id="nitrogen-value">50</span>
-                                    <span class="ms-1">kg/ha</span>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="phosphorus" class="form-label">Phosphorus (P) Content</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="phosphorus" name="phosphorus" min="5" max="145" value="50">
-                                    <span class="range-value ms-3" id="phosphorus-value">50</span>
-                                    <span class="ms-1">kg/ha</span>
-                                </div>
-                            </div>
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Comprehensive Farming Solutions</h2>
+            <p class="lead">All the tools you need for successful farming in one platform</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Crop Recommendation -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-plant text-success fs-1"></i>
                         </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3">
-                                <label for="potassium" class="form-label">Potassium (K) Content</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="potassium" name="potassium" min="5" max="205" value="50">
-                                    <span class="range-value ms-3" id="potassium-value">50</span>
-                                    <span class="ms-1">kg/ha</span>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="temperature" class="form-label">Temperature</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="temperature" name="temperature" min="0" max="50" value="25">
-                                    <span class="range-value ms-3" id="temperature-value">25</span>
-                                    <span class="ms-1">°C</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3">
-                                <label for="humidity" class="form-label">Humidity</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="humidity" name="humidity" min="0" max="100" value="65">
-                                    <span class="range-value ms-3" id="humidity-value">65</span>
-                                    <span class="ms-1">%</span>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="ph" class="form-label">pH Value</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="range" class="form-range flex-grow-1" id="ph" name="ph" min="0" max="14" step="0.1" value="6.5">
-                                    <span class="range-value ms-3" id="ph-value">6.5</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="rainfall" class="form-label">Rainfall</label>
-                            <div class="d-flex align-items-center">
-                                <input type="range" class="form-range flex-grow-1" id="rainfall" name="rainfall" min="0" max="300" value="150">
-                                <span class="range-value ms-3" id="rainfall-value">150</span>
-                                <span class="ms-1">mm</span>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <button type="submit" class="btn btn-primary w-100">Get Recommendation</button>
-                            </div>
-                            <div class="col-md-6">
-                                <button type="button" id="find-all-btn" class="btn btn-secondary w-100">Find All Suitable Crops</button>
-                            </div>
-                        </div>
-                    </form>
-                    
-                    <!-- Loading Spinner -->
-                    <div id="loading-spinner" class="loading-spinner">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p class="mt-2">Analyzing your soil parameters...</p>
+                        <h3 class="card-title h4">Crop Recommendation</h3>
+                        <p class="card-text">Get AI-powered recommendations on the best crops to plant based on your soil parameters, climate, and growing conditions.</p>
+                        <a href="/" class="btn btn-outline-primary mt-2">Recommend Crops</a>
                     </div>
                 </div>
-                
-                <!-- Single Recommendation Results -->
-                <div id="results-section" class="results-section mt-4">
-                    <div class="text-center mb-4">
-                        <h3 class="crop-name" id="crop-name">Rice</h3>
-                    </div>
-                    
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-header">Your Soil Parameters</div>
-                                <div class="card-body">
-                                    <div id="parameter-table"></div>
-                                </div>
-                            </div>
+            </div>
+            
+            <!-- Weather Dashboard -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-cloud-sun text-primary fs-1"></i>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-header">Crop Description</div>
-                                <div class="card-body">
-                                    <p id="crop-description" class="crop-description"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card mb-4">
-                                <div class="card-header">Confidence Scores</div>
-                                <div class="card-body">
-                                    <canvas id="confidence-chart" height="200"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                        <h3 class="card-title h4">Weather Dashboard</h3>
+                        <p class="card-text">Stay updated with real-time weather data and forecasts specific to your farming location. Plan activities around weather patterns.</p>
+                        <a href="/weather_dashboard" class="btn btn-outline-primary mt-2">Check Weather</a>
                     </div>
                 </div>
-                
-                <!-- All Suitable Crops Results -->
-                <div id="all-crops-section" class="results-section mt-4">
-                    <h3 class="section-title text-center mb-4">Suitable Crops for Your Soil</h3>
-                    
-                    <div class="card mb-4">
-                        <div class="card-header">Ranked by Suitability</div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Rank</th>
-                                            <th>Crop</th>
-                                            <th>Suitability Score</th>
-                                            <th>Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="suitable-crops-table">
-                                        <!-- Will be populated by JavaScript -->
-                                    </tbody>
-                                </table>
-                            </div>
+            </div>
+            
+            <!-- Pest & Disease Detection -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-bug text-danger fs-1"></i>
                         </div>
+                        <h3 class="card-title h4">Pest & Disease Detection</h3>
+                        <p class="card-text">Identify crop pests and diseases based on symptoms. Get treatment recommendations and preventative measures.</p>
+                        <a href="/pest_disease_identification" class="btn btn-outline-primary mt-2">Identify Issues</a>
                     </div>
-                    
-                    <div id="crop-details-container"></div>
+                </div>
+            </div>
+            
+            <!-- Farming Calendar -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-calendar-check text-info fs-1"></i>
+                        </div>
+                        <h3 class="card-title h4">Farming Calendar</h3>
+                        <p class="card-text">Plan your farming activities with a customized calendar based on your crops. Never miss critical planting or harvesting dates.</p>
+                        <a href="/farming_calendar" class="btn btn-outline-primary mt-2">View Calendar</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Market Prices -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-graph-up-arrow text-success fs-1"></i>
+                        </div>
+                        <h3 class="card-title h4">Market Price Tracker</h3>
+                        <p class="card-text">Stay updated with current crop prices to make informed selling decisions. Track price trends and market forecasts.</p>
+                        <a href="/market_prices" class="btn btn-outline-primary mt-2">Check Prices</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carbon Footprint -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-leaf text-success fs-1"></i>
+                        </div>
+                        <h3 class="card-title h4">Carbon Footprint Calculator</h3>
+                        <p class="card-text">Measure and reduce your farm's environmental impact. Get recommendations for sustainable farming practices.</p>
+                        <a href="/carbon_footprint_calculator" class="btn btn-outline-primary mt-2">Calculate Impact</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="py-4 bg-light">
+<!-- How It Works Section -->
+<section class="py-5 bg-light-sage">
     <div class="container">
-        <h2 class="section-title text-center mb-4">Additional Tools</h2>
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">How It Works</h2>
+            <p class="lead">Simple steps to optimize your farming with FarmWise AI</p>
+        </div>
+        
         <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card feature-card">
-                    <div class="feature-icon text-center">
-                        <i class="fas fa-microscope"></i>
+            <div class="col-lg-10 mx-auto">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <div class="step-circle mb-3 mx-auto">
+                                <span class="display-4">1</span>
+                            </div>
+                            <h3 class="h4">Input Your Data</h3>
+                            <p>Enter your soil parameters, location, and preferences into our system.</p>
+                        </div>
                     </div>
-                    <h3 class="h5 mb-3 text-center" style="color: var(--primary);">Soil Health Analysis</h3>
-                    <p class="mb-3">Analyze your soil's health status and get recommendations for improvement based on NPK levels and pH.</p>
-                    <a href="/soil_health" class="btn btn-sm btn-outline-primary">Analyze Soil</a>
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <div class="step-circle mb-3 mx-auto">
+                                <span class="display-4">2</span>
+                            </div>
+                            <h3 class="h4">AI Analysis</h3>
+                            <p>Our AI engine analyzes your data and provides tailored recommendations.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <div class="step-circle mb-3 mx-auto">
+                                <span class="display-4">3</span>
+                            </div>
+                            <h3 class="h4">Take Action</h3>
+                            <p>Implement recommendations and track results for continuous improvement.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card feature-card">
-                    <div class="feature-icon text-center">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="h5 mb-3 text-center" style="color: var(--primary);">Yield Prediction</h3>
-                    <p class="mb-3">Predict potential yield for specific crops based on your soil parameters and environmental conditions.</p>
-                    <a href="/yield_predictor" class="btn btn-sm btn-outline-primary">Predict Yield</a>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card feature-card">
-                    <div class="feature-icon text-center">
-                        <i class="fas fa-file-csv"></i>
-                    </div>
-                    <h3 class="h5 mb-3 text-center" style="color: var(--primary);">Upload Custom Data</h3>
-                    <p class="mb-3">Enhance the recommendation system by uploading your own crop data in CSV format.</p>
-                    <a href="/data_upload" class="btn btn-sm btn-outline-primary">Upload Data</a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-forest text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Ready to Transform Your Farming?</h2>
+                <p class="lead mb-4">Start using FarmWise AI today and see the difference data-driven farming can make.</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="#" class="btn btn-light btn-lg px-4 gap-3">Get Started Now</a>
                 </div>
             </div>
         </div>
@@ -216,459 +181,53 @@
 </section>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Update range input values
-    const rangeInputs = document.querySelectorAll('input[type="range"]');
-    rangeInputs.forEach(input => {
-        const valueDisplay = document.getElementById(`${input.id}-value`);
-        if (valueDisplay) {
-            // Set initial value
-            valueDisplay.textContent = input.value;
-            
-            // Update on input change
-            input.addEventListener('input', function() {
-                valueDisplay.textContent = this.value;
-            });
-        }
-    });
-    
-    // Handle the recommendation form submission
-    const recommendationForm = document.getElementById('recommendation-form');
-    if (recommendationForm) {
-        recommendationForm.addEventListener('submit', handleRecommendationFormSubmit);
+{% block styles %}
+<style>
+    /* Custom styles for the homepage */
+    .hero-section {
+        background-color: var(--forest-green);
+        color: white;
+        padding: 5rem 0;
+        margin-bottom: 0;
     }
     
-    // Handle find all button click
-    const findAllBtn = document.getElementById('find-all-btn');
-    if (findAllBtn) {
-        findAllBtn.addEventListener('click', handleFindAllCrops);
-    }
-});
-
-// Handle recommendation form submission
-function handleRecommendationFormSubmit(event) {
-    event.preventDefault();
-    
-    // Show loading spinner
-    const loadingSpinner = document.getElementById('loading-spinner');
-    loadingSpinner.style.display = 'block';
-    
-    // Hide previous results
-    document.getElementById('results-section').style.display = 'none';
-    document.getElementById('all-crops-section').style.display = 'none';
-    
-    // Get form data
-    const formData = new FormData(event.target);
-    
-    // Send request to server
-    fetch('/api/recommend', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Hide loading spinner
-        loadingSpinner.style.display = 'none';
-        
-        if (data.success) {
-            displayResults(data);
-        } else {
-            displayError(data.error);
-        }
-    })
-    .catch(error => {
-        // Hide loading spinner
-        loadingSpinner.style.display = 'none';
-        displayError('An error occurred while processing your request. Please try again later.');
-        console.error('Error:', error);
-    });
-}
-
-// Display recommendation results
-function displayResults(data) {
-    const resultsSection = document.getElementById('results-section');
-    const cropNameElement = document.getElementById('crop-name');
-    
-    // Set crop name
-    cropNameElement.textContent = capitalizeFirstLetter(data.crop);
-    
-    // Display the results section
-    resultsSection.style.display = 'block';
-    
-    // Get optimal conditions for the crop
-    fetch(`/api/crop_conditions?crop=${data.crop}`)
-        .then(response => response.json())
-        .then(conditionsData => {
-            if (conditionsData.success) {
-                // Set crop description
-                document.getElementById('crop-description').textContent = conditionsData.conditions.description;
-                
-                // Update parameter table
-                updateParameterTable(data, conditionsData.conditions);
-                
-                // Create confidence chart
-                createConfidenceChart(data.confidence_scores);
-            }
-        })
-        .catch(error => {
-            console.error('Error getting crop conditions:', error);
-        });
-    
-    // Scroll to results
-    resultsSection.scrollIntoView({ behavior: 'smooth' });
-}
-
-// Update parameter table with user values and optimal ranges
-function updateParameterTable(data, conditions) {
-    const parameterTable = document.getElementById('parameter-table');
-    const formData = new FormData(document.getElementById('recommendation-form'));
-    
-    // Clear previous content
-    parameterTable.innerHTML = '';
-    
-    // Define parameters to display
-    const parameters = [
-        { id: 'nitrogen', name: 'Nitrogen (N)', unit: 'kg/ha', min: 'n_min', max: 'n_max' },
-        { id: 'phosphorus', name: 'Phosphorus (P)', unit: 'kg/ha', min: 'p_min', max: 'p_max' },
-        { id: 'potassium', name: 'Potassium (K)', unit: 'kg/ha', min: 'k_min', max: 'k_max' },
-        { id: 'temperature', name: 'Temperature', unit: '°C', min: 'temperature_min', max: 'temperature_max' },
-        { id: 'humidity', name: 'Humidity', unit: '%', min: 'humidity_min', max: 'humidity_max' },
-        { id: 'ph', name: 'pH', unit: '', min: 'ph_min', max: 'ph_max' },
-        { id: 'rainfall', name: 'Rainfall', unit: 'mm', min: 'rainfall_min', max: 'rainfall_max' }
-    ];
-    
-    // Create rows for each parameter
-    parameters.forEach(param => {
-        const value = formData.get(param.id);
-        const row = document.createElement('div');
-        row.className = 'parameter-row';
-        
-        const parameterName = document.createElement('div');
-        parameterName.className = 'parameter-name';
-        parameterName.textContent = param.name;
-        
-        const parameterValue = document.createElement('div');
-        parameterValue.className = 'parameter-value';
-        
-        const valueSpan = document.createElement('span');
-        valueSpan.textContent = `${value} ${param.unit}`;
-        
-        const optimalRange = document.createElement('div');
-        optimalRange.className = 'optimal-range';
-        optimalRange.textContent = `Optimal: ${conditions[param.min].toFixed(1)} - ${conditions[param.max].toFixed(1)} ${param.unit}`;
-        
-        parameterValue.appendChild(valueSpan);
-        parameterValue.appendChild(optimalRange);
-        
-        row.appendChild(parameterName);
-        row.appendChild(parameterValue);
-        
-        parameterTable.appendChild(row);
-    });
-}
-
-// Handle find all suitable crops
-function handleFindAllCrops(event) {
-    event.preventDefault();
-    
-    // Show loading spinner
-    const loadingSpinner = document.getElementById('loading-spinner');
-    loadingSpinner.style.display = 'block';
-    
-    // Hide previous results
-    document.getElementById('results-section').style.display = 'none';
-    document.getElementById('all-crops-section').style.display = 'none';
-    
-    // Get form data
-    const formData = new FormData(document.getElementById('recommendation-form'));
-    
-    // Send request to server
-    fetch('/api/suitable_crops', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Hide loading spinner
-        loadingSpinner.style.display = 'none';
-        
-        if (data.success) {
-            displaySuitableCrops(data.suitable_crops);
-        } else {
-            displayError(data.error);
-        }
-    })
-    .catch(error => {
-        // Hide loading spinner
-        loadingSpinner.style.display = 'none';
-        displayError('An error occurred while processing your request. Please try again later.');
-        console.error('Error:', error);
-    });
-}
-
-// Display suitable crops
-function displaySuitableCrops(crops) {
-    const allCropsSection = document.getElementById('all-crops-section');
-    const cropsTable = document.getElementById('suitable-crops-table');
-    
-    // Clear previous content
-    cropsTable.innerHTML = '';
-    
-    // Create rows for each crop
-    crops.forEach((crop, index) => {
-        const row = document.createElement('tr');
-        
-        const rankCell = document.createElement('td');
-        rankCell.textContent = index + 1;
-        
-        const cropCell = document.createElement('td');
-        cropCell.textContent = capitalizeFirstLetter(crop.crop);
-        
-        const scoreCell = document.createElement('td');
-        const score = Math.round(crop.score);
-        scoreCell.innerHTML = `
-            <div class="d-flex align-items-center">
-                <div class="progress flex-grow-1" style="height: 10px;">
-                    <div class="progress-bar bg-success" style="width: ${score}%"></div>
-                </div>
-                <span class="ms-2">${score}%</span>
-            </div>
-        `;
-        
-        const detailsCell = document.createElement('td');
-        const detailsBtn = document.createElement('button');
-        detailsBtn.className = 'btn btn-sm btn-outline-primary';
-        detailsBtn.textContent = 'View Details';
-        detailsBtn.dataset.crop = crop.crop;
-        detailsBtn.dataset.scores = JSON.stringify(crop.parameter_scores);
-        detailsBtn.addEventListener('click', function() {
-            showCropDetails(this.dataset.crop, JSON.parse(this.dataset.scores));
-        });
-        detailsCell.appendChild(detailsBtn);
-        
-        row.appendChild(rankCell);
-        row.appendChild(cropCell);
-        row.appendChild(scoreCell);
-        row.appendChild(detailsCell);
-        
-        cropsTable.appendChild(row);
-    });
-    
-    // Display the section
-    allCropsSection.style.display = 'block';
-    
-    // Scroll to results
-    allCropsSection.scrollIntoView({ behavior: 'smooth' });
-}
-
-// Show details for a specific crop
-function showCropDetails(cropName, scores) {
-    const detailsContainer = document.getElementById('crop-details-container');
-    
-    // Clear previous details
-    detailsContainer.innerHTML = '';
-    
-    // Fetch crop conditions
-    fetch(`/api/crop_conditions?crop=${cropName}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const conditions = data.conditions;
-                
-                // Create details card
-                const detailsCard = document.createElement('div');
-                detailsCard.className = 'card mb-4';
-                detailsCard.innerHTML = `
-                    <div class="card-header">Details for ${capitalizeFirstLetter(cropName)}</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h5 class="mb-3">Parameter Scores</h5>
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Parameter</th>
-                                            <th>Score</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Nitrogen</td>
-                                            <td>${createScoreBar(scores.nitrogen)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Phosphorus</td>
-                                            <td>${createScoreBar(scores.phosphorus)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Potassium</td>
-                                            <td>${createScoreBar(scores.potassium)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Temperature</td>
-                                            <td>${createScoreBar(scores.temperature)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Humidity</td>
-                                            <td>${createScoreBar(scores.humidity)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>pH</td>
-                                            <td>${createScoreBar(scores.ph)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Rainfall</td>
-                                            <td>${createScoreBar(scores.rainfall)}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-5">
-                                <h5 class="mb-3">Crop Description</h5>
-                                <p>${conditions.description}</p>
-                                <h5 class="mb-3 mt-4">Optimal Conditions</h5>
-                                <ul>
-                                    <li>N: ${conditions.n_min.toFixed(1)} - ${conditions.n_max.toFixed(1)} kg/ha</li>
-                                    <li>P: ${conditions.p_min.toFixed(1)} - ${conditions.p_max.toFixed(1)} kg/ha</li>
-                                    <li>K: ${conditions.k_min.toFixed(1)} - ${conditions.k_max.toFixed(1)} kg/ha</li>
-                                    <li>Temperature: ${conditions.temperature_min.toFixed(1)} - ${conditions.temperature_max.toFixed(1)} °C</li>
-                                    <li>Humidity: ${conditions.humidity_min.toFixed(1)} - ${conditions.humidity_max.toFixed(1)} %</li>
-                                    <li>pH: ${conditions.ph_min.toFixed(1)} - ${conditions.ph_max.toFixed(1)}</li>
-                                    <li>Rainfall: ${conditions.rainfall_min.toFixed(1)} - ${conditions.rainfall_max.toFixed(1)} mm</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                detailsContainer.appendChild(detailsCard);
-                
-                // Scroll to details
-                detailsCard.scrollIntoView({ behavior: 'smooth' });
-            }
-        })
-        .catch(error => {
-            console.error('Error getting crop details:', error);
-        });
-}
-
-// Create a score bar for parameters
-function createScoreBar(score) {
-    const roundedScore = Math.round(score);
-    let colorClass = 'bg-danger';
-    
-    if (roundedScore >= 75) {
-        colorClass = 'bg-success';
-    } else if (roundedScore >= 50) {
-        colorClass = 'bg-warning';
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
     }
     
-    return `
-        <div class="d-flex align-items-center">
-            <div class="progress flex-grow-1" style="height: 8px;">
-                <div class="progress-bar ${colorClass}" style="width: ${roundedScore}%"></div>
-            </div>
-            <span class="ms-2">${roundedScore}%</span>
-        </div>
-    `;
-}
-
-// Create a chart showing confidence scores for different crops
-function createConfidenceChart(confidenceScores) {
-    const ctx = document.getElementById('confidence-chart').getContext('2d');
-    
-    // Convert confidence scores object to arrays for the chart
-    const crops = Object.keys(confidenceScores).map(crop => capitalizeFirstLetter(crop));
-    const scores = Object.values(confidenceScores);
-    
-    // Sort by score (descending)
-    const combinedData = crops.map((crop, i) => ({ crop, score: scores[i] }));
-    combinedData.sort((a, b) => b.score - a.score);
-    
-    // Get top 5 crops
-    const top5Crops = combinedData.slice(0, 5).map(item => item.crop);
-    const top5Scores = combinedData.slice(0, 5).map(item => item.score);
-    
-    // Define colors
-    const primaryColor = '#2E7D32';
-    const secondaryColor = '#8BC34A';
-    const accentColor = '#FFA000';
-    const otherColors = ['#4CAF50', '#81C784'];
-    
-    // Create a horizontal bar chart
-    if (window.confidenceChart) {
-        window.confidenceChart.destroy();
+    .step-circle {
+        width: 80px;
+        height: 80px;
+        background-color: var(--leaf-green);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    window.confidenceChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: top5Crops,
-            datasets: [{
-                label: 'Confidence Score (%)',
-                data: top5Scores,
-                backgroundColor: [primaryColor, secondaryColor, accentColor, ...otherColors],
-                borderColor: [primaryColor, secondaryColor, accentColor, ...otherColors],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `Confidence: ${context.raw.toFixed(2)}%`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: {
-                        display: true,
-                        text: 'Confidence (%)'
-                    }
-                }
-            }
+    .feature-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 3rem 0;
         }
-    });
-}
-
-// Display error message
-function displayError(message) {
-    const errorAlert = document.createElement('div');
-    errorAlert.className = 'alert alert-danger alert-dismissible fade show';
-    errorAlert.setAttribute('role', 'alert');
-    errorAlert.innerHTML = `
-        <strong>Error:</strong> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-    
-    const formContainer = document.querySelector('.input-section');
-    formContainer.insertBefore(errorAlert, formContainer.firstChild);
-    
-    // Automatically dismiss after 5 seconds
-    setTimeout(() => {
-        errorAlert.classList.remove('show');
-        setTimeout(() => {
-            errorAlert.remove();
-        }, 300);
-    }, 5000);
-}
-
-// Helper function to capitalize the first letter of each word
-function capitalizeFirstLetter(string) {
-    return string.split(' ').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-}
-</script>
+        
+        .display-4 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
 {% endblock %}

@@ -1,0 +1,191 @@
+/* 
+ * Custom CSS for FarmWise AI
+ * A comprehensive farming platform with crop recommendation
+ */
+
+:root {
+  /* Color palette */
+  --forest-green: #2E7D32;
+  --leaf-green: #8BC34A;
+  --light-sage: #F5F7F5;
+  --dark-slate: #263238;
+  --harvest-gold: #FFA000;
+  --error-red: #D32F2F;
+  --warning-orange: #F57C00;
+  --success-green: #388E3C;
+  --info-blue: #0288D1;
+}
+
+/* General styling */
+body {
+  font-family: 'Nunito', 'Open Sans', sans-serif;
+  background-color: var(--light-sage);
+  color: var(--dark-slate);
+}
+
+/* Hero section styling */
+.hero-section {
+  background-color: var(--forest-green);
+  color: white;
+  padding: 3rem 0;
+  margin-bottom: 2rem;
+}
+
+/* Card styling */
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: var(--forest-green);
+  border-color: var(--forest-green);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #1B5E20;
+  border-color: #1B5E20;
+}
+
+.btn-outline-primary {
+  color: var(--forest-green);
+  border-color: var(--forest-green);
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+  background-color: var(--forest-green);
+  border-color: var(--forest-green);
+}
+
+/* Form styling */
+.form-control:focus, .form-select:focus {
+  border-color: var(--leaf-green);
+  box-shadow: 0 0 0 0.25rem rgba(139, 195, 74, 0.25);
+}
+
+/* Navigation styling */
+.navbar-dark {
+  background-color: var(--forest-green) !important;
+}
+
+.dropdown-item:active {
+  background-color: var(--leaf-green);
+}
+
+/* Feature card styling */
+.feature-card {
+  border-left: 4px solid var(--leaf-green);
+}
+
+/* Results section styling */
+.results-section {
+  background-color: rgba(139, 195, 74, 0.1);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Season timeline styling */
+.season-bar {
+  height: 30px;
+  border-radius: 15px;
+}
+
+/* Price card styling */
+.price-card .price-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price-card .current-price h4 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.price-card .price-change p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Chart containers */
+.chart-container {
+  min-height: 250px;
+}
+
+/* Weather widgets */
+.weather-details .bi {
+  font-size: 1.5rem;
+}
+
+/* Custom text colors */
+.text-forest {
+  color: var(--forest-green);
+}
+
+.text-leaf {
+  color: var(--leaf-green);
+}
+
+.text-harvest {
+  color: var(--harvest-gold);
+}
+
+/* Custom backgrounds */
+.bg-light-sage {
+  background-color: var(--light-sage);
+}
+
+.bg-leaf {
+  background-color: var(--leaf-green);
+}
+
+.bg-forest {
+  background-color: var(--forest-green);
+}
+
+.bg-harvest {
+  background-color: var(--harvest-gold);
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 2rem 0;
+  }
+  
+  .price-card .price-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .season-label {
+    flex: 0 0 30%;
+  }
+}
+
+/* Print styles for reports */
+@media print {
+  .navbar, .footer, .hero-section {
+    display: none;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
