@@ -1,0 +1,431 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Weather Dashboard - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Weather Dashboard</h1>
+        <p class="lead mb-4">Get real-time weather data and forecasts for your farming area</p>
+    </div>
+</section>
+
+<!-- Main Form Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Location Search -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-3">Search Your Location</h3>
+                        <form id="location-form" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="location-input" name="location" placeholder="Enter city name or postal code" value="{{ location }}">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div id="weather-loading" class="text-center my-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Fetching weather data...</p>
+                </div>
+                
+                <!-- Current Weather Card -->
+                <div id="current-weather-container" class="mb-4" style="display: none;">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3 class="card-title" id="weather-location">Current Weather</h3>
+                                    <h4 class="text-muted" id="weather-date"></h4>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <img id="weather-icon" src="" alt="Weather icon" class="me-3" style="width: 64px; height: 64px;">
+                                        <div>
+                                            <h2 id="weather-temp" class="mb-0"></h2>
+                                            <p id="weather-description" class="mb-0"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="weather-details mt-3">
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-droplet me-2 text-primary"></i>
+                                                    <div>
+                                                        <div>Humidity</div>
+                                                        <strong id="weather-humidity"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-wind me-2 text-primary"></i>
+                                                    <div>
+                                                        <div>Wind</div>
+                                                        <strong id="weather-wind"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-cloud-rain me-2 text-primary"></i>
+                                                    <div>
+                                                        <div>Rainfall</div>
+                                                        <strong id="weather-rainfall"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-thermometer-half me-2 text-primary"></i>
+                                                    <div>
+                                                        <div>Feels Like</div>
+                                                        <strong id="weather-feels-like"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 5-Day Forecast Section -->
+                <div id="forecast-container" class="mb-4" style="display: none;">
+                    <h3 class="mb-3">5-Day Forecast</h3>
+                    <div class="row" id="forecast-row">
+                        <!-- Forecast cards will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Farming recommendations based on weather -->
+                <div id="farming-recommendations" class="card shadow-sm mb-4" style="display: none;">
+                    <div class="card-body">
+                        <h3 class="card-title">Farming Recommendations</h3>
+                        <p class="card-text">Based on the current weather conditions, here are some recommendations for your farming activities:</p>
+                        <ul id="recommendations-list" class="list-group list-group-flush">
+                            <!-- Recommendations will be added here -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Error Alert -->
+                <div id="weather-error" class="alert alert-danger" role="alert" style="display: none;">
+                    <h4 class="alert-heading">Weather Data Unavailable</h4>
+                    <p id="error-message">Unable to fetch weather data. Please try again later or check your location.</p>
+                    <hr>
+                    <p class="mb-0">
+                        To use this feature, the administrator needs to add an OpenWeatherMap API key.
+                    </p>
+                </div>
+                
+                <!-- Weather Impact on Crops -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Weather Impact on Crops</h3>
+                        <p class="card-text">Understanding how weather affects your crops is essential for successful farming. Here's how different weather conditions impact crop growth:</p>
+                        
+                        <div class="accordion" id="weatherImpactAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTemperature">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTemperature" aria-expanded="true" aria-controls="collapseTemperature">
+                                        Temperature
+                                    </button>
+                                </h2>
+                                <div id="collapseTemperature" class="accordion-collapse collapse show" aria-labelledby="headingTemperature" data-bs-parent="#weatherImpactAccordion">
+                                    <div class="accordion-body">
+                                        <p>Temperature affects the rate of plant growth, flowering, and fruiting. Each crop has an optimal temperature range:</p>
+                                        <ul>
+                                            <li><strong>Too cold:</strong> Slows growth, may cause frost damage</li>
+                                            <li><strong>Too hot:</strong> Can cause heat stress, wilting, and reduced yields</li>
+                                        </ul>
+                                        <p>Many crops need a specific number of "growing degree days" (accumulated heat units) to reach maturity.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingRainfall">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRainfall" aria-expanded="false" aria-controls="collapseRainfall">
+                                        Rainfall & Humidity
+                                    </button>
+                                </h2>
+                                <div id="collapseRainfall" class="accordion-collapse collapse" aria-labelledby="headingRainfall" data-bs-parent="#weatherImpactAccordion">
+                                    <div class="accordion-body">
+                                        <p>Water is essential for plant growth, but balance is key:</p>
+                                        <ul>
+                                            <li><strong>Too little rainfall:</strong> Drought stress, wilting, reduced yields</li>
+                                            <li><strong>Too much rainfall:</strong> Waterlogging, root diseases, nutrient leaching</li>
+                                            <li><strong>High humidity:</strong> Can promote fungal diseases and reduce transpiration</li>
+                                            <li><strong>Low humidity:</strong> Increases water demand and can cause drought stress</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingWind">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWind" aria-expanded="false" aria-controls="collapseWind">
+                                        Wind
+                                    </button>
+                                </h2>
+                                <div id="collapseWind" class="accordion-collapse collapse" aria-labelledby="headingWind" data-bs-parent="#weatherImpactAccordion">
+                                    <div class="accordion-body">
+                                        <p>Wind affects plants in several ways:</p>
+                                        <ul>
+                                            <li><strong>Moderate wind:</strong> Helps with pollination and strengthens stems</li>
+                                            <li><strong>Strong wind:</strong> Can cause physical damage, lodging (falling over), and increased water loss</li>
+                                            <li><strong>Hot, dry winds:</strong> Can rapidly deplete soil moisture and cause crop desiccation</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingExtreme">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExtreme" aria-expanded="false" aria-controls="collapseExtreme">
+                                        Extreme Weather Events
+                                    </button>
+                                </h2>
+                                <div id="collapseExtreme" class="accordion-collapse collapse" aria-labelledby="headingExtreme" data-bs-parent="#weatherImpactAccordion">
+                                    <div class="accordion-body">
+                                        <p>Extreme weather events can have devastating impacts on crops:</p>
+                                        <ul>
+                                            <li><strong>Hail:</strong> Direct physical damage to plants and fruits</li>
+                                            <li><strong>Frost:</strong> Can kill sensitive plants or damage flowering/fruiting stages</li>
+                                            <li><strong>Floods:</strong> Root damage, soil erosion, disease proliferation</li>
+                                            <li><strong>Drought:</strong> Yield reduction, crop failure in severe cases</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationForm = document.getElementById('location-form');
+        const locationInput = document.getElementById('location-input');
+        const weatherLoading = document.getElementById('weather-loading');
+        const currentWeatherContainer = document.getElementById('current-weather-container');
+        const forecastContainer = document.getElementById('forecast-container');
+        const farmingRecommendations = document.getElementById('farming-recommendations');
+        const weatherError = document.getElementById('weather-error');
+        const errorMessage = document.getElementById('error-message');
+        const recommendationsList = document.getElementById('recommendations-list');
+        
+        // Hide loading initially
+        weatherLoading.style.display = 'none';
+        
+        // Handle location form submission
+        locationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const location = locationInput.value.trim();
+            if (!location) {
+                return;
+            }
+            
+            // Show loading
+            weatherLoading.style.display = 'block';
+            currentWeatherContainer.style.display = 'none';
+            forecastContainer.style.display = 'none';
+            farmingRecommendations.style.display = 'none';
+            weatherError.style.display = 'none';
+            
+            // Fetch current weather
+            fetchWeather(location);
+            
+            // Update URL without reloading
+            const url = new URL(window.location);
+            url.searchParams.set('location', location);
+            window.history.pushState({}, '', url);
+        });
+        
+        // Fetch weather data for a location
+        function fetchWeather(location) {
+            // Fetch current weather
+            fetch(`/api/weather/current?location=${encodeURIComponent(location)}`)
+                .then(response => response.json())
+                .then(data => {
+                    weatherLoading.style.display = 'none';
+                    
+                    if (data.success) {
+                        displayCurrentWeather(data);
+                        
+                        // Fetch forecast after current weather is successful
+                        fetch(`/api/weather/forecast?location=${encodeURIComponent(location)}`)
+                            .then(response => response.json())
+                            .then(forecastData => {
+                                if (forecastData.success) {
+                                    displayForecast(forecastData);
+                                    generateFarmingRecommendations(data, forecastData);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching forecast:', error);
+                            });
+                    } else {
+                        displayError(data.error || 'Unable to fetch weather data');
+                    }
+                })
+                .catch(error => {
+                    weatherLoading.style.display = 'none';
+                    displayError('Network error: Unable to connect to weather service');
+                    console.error('Error:', error);
+                });
+        }
+        
+        // Display current weather
+        function displayCurrentWeather(data) {
+            const weather = data.weather;
+            const location = data.location;
+            
+            // Display location and date
+            document.getElementById('weather-location').textContent = `${location.name}, ${location.country}`;
+            const date = new Date(weather.timestamp * 1000);
+            document.getElementById('weather-date').textContent = date.toLocaleDateString(undefined, { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Display temperature and description
+            document.getElementById('weather-temp').textContent = `${Math.round(weather.temperature.current)}°C`;
+            document.getElementById('weather-description').textContent = weather.description.charAt(0).toUpperCase() + weather.description.slice(1);
+            
+            // Display weather details
+            document.getElementById('weather-humidity').textContent = `${weather.humidity}%`;
+            document.getElementById('weather-wind').textContent = `${weather.wind.speed} m/s`;
+            document.getElementById('weather-rainfall').textContent = `${weather.rainfall ? weather.rainfall['1h'] : 0} mm`;
+            document.getElementById('weather-feels-like').textContent = `${Math.round(weather.temperature.feels_like)}°C`;
+            
+            // Set weather icon
+            const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+            document.getElementById('weather-icon').src = iconUrl;
+            
+            // Show the weather container
+            currentWeatherContainer.style.display = 'block';
+        }
+        
+        // Display forecast
+        function displayForecast(data) {
+            const forecastRow = document.getElementById('forecast-row');
+            forecastRow.innerHTML = '';
+            
+            data.forecast.forEach(day => {
+                const date = new Date(day.date);
+                const dayName = date.toLocaleDateString(undefined, { weekday: 'short' });
+                const monthDay = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                
+                const forecastCard = document.createElement('div');
+                forecastCard.className = 'col';
+                forecastCard.innerHTML = `
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">${dayName}</h5>
+                            <p class="text-muted small">${monthDay}</p>
+                            <img src="https://openweathermap.org/img/wn/${day.icon}@2x.png" alt="${day.description}" class="my-2" style="width: 50px; height: 50px;">
+                            <p class="card-text">${Math.round(day.temperature.max)}° / ${Math.round(day.temperature.min)}°</p>
+                            <p class="text-muted small">${day.description}</p>
+                            <div class="d-flex justify-content-around mt-2">
+                                <small><i class="bi bi-droplet"></i> ${Math.round(day.humidity)}%</small>
+                                <small><i class="bi bi-cloud-rain"></i> ${day.rainfall.toFixed(1)}mm</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                forecastRow.appendChild(forecastCard);
+            });
+            
+            forecastContainer.style.display = 'block';
+        }
+        
+        // Generate farming recommendations based on weather
+        function generateFarmingRecommendations(currentData, forecastData) {
+            const weather = currentData.weather;
+            const recommendations = [];
+            
+            // Temperature recommendations
+            if (weather.temperature.current < 10) {
+                recommendations.push("Cold temperatures detected. Protect sensitive crops with row covers or greenhouses.");
+            } else if (weather.temperature.current > 30) {
+                recommendations.push("High temperatures detected. Ensure adequate irrigation and consider shade cloth for sensitive crops.");
+            }
+            
+            // Humidity recommendations
+            if (weather.humidity > 80) {
+                recommendations.push("High humidity detected. Monitor crops for fungal diseases and ensure good air circulation.");
+            } else if (weather.humidity < 30) {
+                recommendations.push("Low humidity detected. Increase irrigation frequency to prevent water stress.");
+            }
+            
+            // Rainfall recommendations
+            const hasRain = weather.rainfall && (weather.rainfall['1h'] > 0 || weather.rainfall['3h'] > 0);
+            let rainInForecast = false;
+            
+            if (forecastData && forecastData.success) {
+                rainInForecast = forecastData.forecast.some(day => day.rainfall > 5);
+            }
+            
+            if (hasRain) {
+                recommendations.push("Recent rainfall detected. Hold off on irrigation and avoid working in wet fields to prevent soil compaction.");
+            } else if (rainInForecast) {
+                recommendations.push("Significant rainfall expected in the forecast. Plan harvesting activities accordingly and ensure proper drainage systems are working.");
+            } else {
+                recommendations.push("Dry conditions detected. Monitor soil moisture levels and adjust irrigation as needed.");
+            }
+            
+            // Wind recommendations
+            if (weather.wind.speed > 8) {
+                recommendations.push("Strong winds detected. Secure young plants and structures. Consider windbreaks for long-term protection.");
+            }
+            
+            // Display recommendations
+            if (recommendations.length > 0) {
+                recommendationsList.innerHTML = '';
+                recommendations.forEach(rec => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerHTML = `<i class="bi bi-check-circle-fill text-success me-2"></i> ${rec}`;
+                    recommendationsList.appendChild(li);
+                });
+                farmingRecommendations.style.display = 'block';
+            }
+        }
+        
+        // Display error message
+        function displayError(message) {
+            errorMessage.textContent = message;
+            weatherError.style.display = 'block';
+        }
+        
+        // Fetch weather for initial location
+        if (locationInput.value.trim()) {
+            // Simulate a form submission to load the weather
+            locationForm.dispatchEvent(new Event('submit'));
+        }
+    });
+</script>
+{% endblock %}

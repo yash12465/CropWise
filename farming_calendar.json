@@ -1,0 +1,942 @@
+{
+  "rice": {
+    "planting_season": {
+      "start": {
+        "month": 5,
+        "day": 1
+      },
+      "end": {
+        "month": 6,
+        "day": 15
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 6,
+        "day": 15
+      },
+      "end": {
+        "month": 9,
+        "day": 15
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 9,
+        "day": 15
+      },
+      "end": {
+        "month": 10,
+        "day": 31
+      }
+    },
+    "key_activities": [
+      {
+        "month": 4,
+        "activity": "Prepare soil and seedbeds"
+      },
+      {
+        "month": 5,
+        "activity": "Sow seeds or transplant seedlings"
+      },
+      {
+        "month": 6,
+        "activity": "Apply fertilizer and manage water levels"
+      },
+      {
+        "month": 7,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Maintain water levels and prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Drain fields before harvest"
+      },
+      {
+        "month": 10,
+        "activity": "Harvest and dry rice grains"
+      }
+    ]
+  },
+  "maize": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 15
+      },
+      "end": {
+        "month": 5,
+        "day": 15
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 15
+      },
+      "end": {
+        "month": 7,
+        "day": 31
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 1
+      },
+      "end": {
+        "month": 9,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil with fertilizer"
+      },
+      {
+        "month": 3,
+        "activity": "Plant seeds when soil temperature is warm enough"
+      },
+      {
+        "month": 4,
+        "activity": "Monitor for weeds and pests"
+      },
+      {
+        "month": 5,
+        "activity": "Apply side-dressing of nitrogen"
+      },
+      {
+        "month": 6,
+        "activity": "Monitor for corn borers and other pests"
+      },
+      {
+        "month": 7,
+        "activity": "Ensure adequate irrigation during tasseling"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest when kernels are dented"
+      }
+    ]
+  },
+  "wheat": {
+    "planting_season": {
+      "start": {
+        "month": 9,
+        "day": 15
+      },
+      "end": {
+        "month": 11,
+        "day": 15
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 11,
+        "day": 15
+      },
+      "end": {
+        "month": 5,
+        "day": 15
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 5,
+        "day": 15
+      },
+      "end": {
+        "month": 7,
+        "day": 15
+      }
+    },
+    "key_activities": [
+      {
+        "month": 8,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 9,
+        "activity": "Plant winter wheat"
+      },
+      {
+        "month": 10,
+        "activity": "Apply pre-emergent herbicides"
+      },
+      {
+        "month": 3,
+        "activity": "Apply nitrogen fertilizer as growth resumes"
+      },
+      {
+        "month": 4,
+        "activity": "Monitor for rust and other diseases"
+      },
+      {
+        "month": 5,
+        "activity": "Prepare harvest equipment"
+      },
+      {
+        "month": 6,
+        "activity": "Harvest when grain moisture is proper"
+      }
+    ]
+  },
+  "Soyabeans": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "beans": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "peas": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "groundnuts": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "cowpeas": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "banana": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "mango": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "grapes": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "watermelon": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "apple": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "orange": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "cotton": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  },
+  "coffee": {
+    "planting_season": {
+      "start": {
+        "month": 3,
+        "day": 1
+      },
+      "end": {
+        "month": 5,
+        "day": 30
+      }
+    },
+    "growing_season": {
+      "start": {
+        "month": 5,
+        "day": 30
+      },
+      "end": {
+        "month": 8,
+        "day": 30
+      }
+    },
+    "harvest_season": {
+      "start": {
+        "month": 8,
+        "day": 30
+      },
+      "end": {
+        "month": 10,
+        "day": 30
+      }
+    },
+    "key_activities": [
+      {
+        "month": 2,
+        "activity": "Prepare soil for planting"
+      },
+      {
+        "month": 3,
+        "activity": "Begin planting in warm areas"
+      },
+      {
+        "month": 4,
+        "activity": "Continue planting as soil warms"
+      },
+      {
+        "month": 5,
+        "activity": "Monitor for pests and diseases"
+      },
+      {
+        "month": 8,
+        "activity": "Prepare for harvest"
+      },
+      {
+        "month": 9,
+        "activity": "Harvest when mature"
+      }
+    ]
+  }
+}

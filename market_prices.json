@@ -1,0 +1,88 @@
+{
+  "last_updated": "2025-05-22T07:35:48.742038",
+  "prices": {
+    "rice": {
+      "current_price": 24.5,
+      "last_month_price": 22.75,
+      "unit": "per 50kg",
+      "trend": "up",
+      "percent_change": 7.69
+    },
+    "wheat": {
+      "current_price": 18.2,
+      "last_month_price": 19.4,
+      "unit": "per 50kg",
+      "trend": "down",
+      "percent_change": -6.19
+    },
+    "maize": {
+      "current_price": 14.75,
+      "last_month_price": 13.9,
+      "unit": "per 50kg",
+      "trend": "up",
+      "percent_change": 6.12
+    },
+    "beans": {
+      "current_price": 89.0,
+      "last_month_price": 85.5,
+      "unit": "per 50kg",
+      "trend": "up",
+      "percent_change": 4.09
+    },
+    "potatoes": {
+      "current_price": 32.5,
+      "last_month_price": 35.75,
+      "unit": "per 50kg",
+      "trend": "down",
+      "percent_change": -9.09
+    },
+    "tomatoes": {
+      "current_price": 45.0,
+      "last_month_price": 38.25,
+      "unit": "per 20kg box",
+      "trend": "up",
+      "percent_change": 17.65
+    },
+    "onions": {
+      "current_price": 28.75,
+      "last_month_price": 30.0,
+      "unit": "per 25kg",
+      "trend": "down",
+      "percent_change": -4.17
+    },
+    "cabbage": {
+      "current_price": 15.9,
+      "last_month_price": 14.75,
+      "unit": "per 30kg",
+      "trend": "up",
+      "percent_change": 7.8
+    }
+  },
+  "markets": [
+    {
+      "name": "Central Farmers Market",
+      "location": "New Delhi",
+      "country": "India"
+    },
+    {
+      "name": "Global Agri-Trade Center",
+      "location": "Chicago",
+      "country": "USA"
+    },
+    {
+      "name": "European Crop Exchange",
+      "location": "Paris",
+      "country": "France"
+    },
+    {
+      "name": "Agricultural Products Market",
+      "location": "Beijing",
+      "country": "China"
+    },
+    {
+      "name": "Southern Hemisphere Exchange",
+      "location": "S\u00e3o Paulo",
+      "country": "Brazil"
+    }
+  ]
+}
