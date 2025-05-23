@@ -351,13 +351,13 @@ def farm_equipment_guide():
 def recommend_crop():
     try:
         # Get soil parameters from form
-        n_value = request.form.get('nitrogen')
-        p_value = request.form.get('phosphorus')
-        k_value = request.form.get('potassium')
-        temp_value = request.form.get('temperature')
-        humidity_value = request.form.get('humidity')
-        ph_value = request.form.get('ph')
-        rainfall_value = request.form.get('rainfall')
+        n_value = request.form.get('nitrogen', '')
+        p_value = request.form.get('phosphorus', '')
+        k_value = request.form.get('potassium', '')
+        temp_value = request.form.get('temperature', '')
+        humidity_value = request.form.get('humidity', '')
+        ph_value = request.form.get('ph', '')
+        rainfall_value = request.form.get('rainfall', '')
         
         # Validate and convert parameters
         if not all([n_value, p_value, k_value, temp_value, humidity_value, ph_value, rainfall_value]):

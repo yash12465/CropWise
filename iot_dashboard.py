@@ -140,7 +140,7 @@ class IoTSensorManager:
     def get_latest_readings(self, farm_id):
         """Get the latest sensor readings for a farm"""
         if farm_id not in self.sensor_data:
-            return None
+            return {}
             
         farm = self.sensor_data[farm_id]
         latest_readings = {}
@@ -239,6 +239,9 @@ class IoTSensorManager:
             return []
             
         latest_readings = self.get_latest_readings(farm_id)
+        if not latest_readings:
+            return []
+            
         alerts = []
         
         for sensor_type, reading in latest_readings.items():

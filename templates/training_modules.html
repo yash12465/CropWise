@@ -1,0 +1,221 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Training Modules - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Interactive Training Modules</h1>
+        <p class="lead mb-4">Learn modern farming techniques through interactive lessons in your language</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Language Selection -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-3">Select Your Preferred Language</h3>
+                        <div class="row justify-content-center mb-2">
+                            <div class="col-md-8">
+                                <select class="form-select form-select-lg mb-3" id="language-selector">
+                                    <option value="en" selected>English</option>
+                                    <option value="hi">हिन्दी (Hindi)</option>
+                                    <option value="mr">मराठी (Marathi)</option>
+                                    <option value="ta">தமிழ் (Tamil)</option>
+                                    <option value="te">తెలుగు (Telugu)</option>
+                                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p class="text-center text-muted">All training content will be displayed in your selected language</p>
+                    </div>
+                </div>
+                
+                <!-- Featured Courses -->
+                <h3 class="mb-4">Featured Courses</h3>
+                
+                <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="{{ url_for('static', filename='images/soilhealth.jpg') }}" class="card-img-top" alt="Soil Health Management" onerror="this.src='https://placehold.co/600x400?text=Soil+Health'">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-success">Beginner</span>
+                                    <small class="text-muted">4 Lessons</small>
+                                </div>
+                                <h5 class="card-title">Soil Health Management</h5>
+                                <p class="card-text">Learn how to test, manage and improve your soil fertility for better crop yields.</p>
+                                <a href="#" class="btn btn-primary">Start Course</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="{{ url_for('static', filename='images/irrigation.jpg') }}" class="card-img-top" alt="Modern Irrigation Techniques" onerror="this.src='https://placehold.co/600x400?text=Irrigation'">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-warning text-dark">Intermediate</span>
+                                    <small class="text-muted">6 Lessons</small>
+                                </div>
+                                <h5 class="card-title">Modern Irrigation Techniques</h5>
+                                <p class="card-text">Master water-saving irrigation methods including drip systems and sprinklers.</p>
+                                <a href="#" class="btn btn-primary">Start Course</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="{{ url_for('static', filename='images/pest.jpg') }}" class="card-img-top" alt="Pest Management" onerror="this.src='https://placehold.co/600x400?text=Pest+Management'">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-success">Beginner</span>
+                                    <small class="text-muted">5 Lessons</small>
+                                </div>
+                                <h5 class="card-title">Integrated Pest Management</h5>
+                                <p class="card-text">Identify common pests and learn natural and chemical control methods.</p>
+                                <a href="#" class="btn btn-primary">Start Course</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course Categories -->
+                <h3 class="mb-4">Course Categories</h3>
+                
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="card border-success mb-3">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">Crop Production</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Basic Farming Techniques</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Crop Rotation Practices</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Seed Selection & Treatment</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Intercropping Methods</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Harvest & Post-harvest</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="#" class="btn btn-outline-success btn-sm">View All Courses</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-primary mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Resource Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Water Conservation</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Soil Fertility Management</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Organic Fertilizer Production</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Land Preparation</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Sustainable Farming</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="#" class="btn btn-outline-primary btn-sm">View All Courses</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning mb-3">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">Technology & Business</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Farm Record Keeping</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Agricultural Marketing</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Modern Farm Technology</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Smartphone Apps for Farmers</a></li>
+                                    <li class="list-group-item"><a href="#" class="text-decoration-none">Financial Management</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <a href="#" class="btn btn-outline-warning btn-sm">View All Courses</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video Training Section -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <h3 class="card-title">Video Tutorials</h3>
+                        <p class="card-text">Learn through step-by-step video demonstrations with local experts</p>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="{{ url_for('static', filename='images/video-thumb-1.jpg') }}" class="img-fluid" alt="Video Thumbnail" onerror="this.src='https://placehold.co/600x400?text=Video+Tutorial'">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Setting up Drip Irrigation</h5>
+                                        <p class="text-muted"><small>By Dr. Rajesh Kumar | 15:32 min</small></p>
+                                        <p class="card-text">A complete guide to installing a drip irrigation system for vegetable crops.</p>
+                                        <a href="#" class="btn btn-outline-primary">Watch Video</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="{{ url_for('static', filename='images/video-thumb-2.jpg') }}" class="img-fluid" alt="Video Thumbnail" onerror="this.src='https://placehold.co/600x400?text=Video+Tutorial'">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Natural Pest Control Methods</h5>
+                                        <p class="text-muted"><small>By Anita Desai | 12:45 min</small></p>
+                                        <p class="card-text">Learn how to make and apply natural pest control solutions using locally available ingredients.</p>
+                                        <a href="#" class="btn btn-outline-primary">Watch Video</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Community Learning -->
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3 class="card-title">Join Farmer Learning Communities</h3>
+                                <p class="card-text">Connect with other farmers in your area to share knowledge, experiences, and best practices. Our WhatsApp groups are moderated by agricultural experts who provide regular guidance.</p>
+                                <button class="btn btn-success">Join WhatsApp Group</button>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="bi bi-people-fill text-success" style="font-size: 5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Language selector functionality
+        const languageSelector = document.getElementById('language-selector');
+        
+        languageSelector.addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            // Redirect to same page with language parameter
+            window.location.href = `?lang=${selectedLanguage}`;
+        });
+    });
+</script>
+{% endblock %}

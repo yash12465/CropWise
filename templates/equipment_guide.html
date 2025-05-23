@@ -1,0 +1,863 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Farm Equipment Guide - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Farm Equipment Guide</h1>
+        <p class="lead mb-4">Find the right equipment for your farm size and crops</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Equipment Finder -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Equipment Recommendation Tool</h3>
+                        <p class="text-center mb-4">Get personalized equipment recommendations based on your farm profile</p>
+                        
+                        <form id="equipment-finder-form" class="mb-4">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="farm-size" class="form-label">Farm Size (hectares)</label>
+                                    <input type="number" class="form-control" id="farm-size" min="0.1" step="0.1" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="farm-type" class="form-label">Primary Farming Type</label>
+                                    <select class="form-select" id="farm-type" required>
+                                        <option value="" selected disabled>Select type...</option>
+                                        <option value="field-crops">Field Crops (Wheat, Rice, etc.)</option>
+                                        <option value="vegetables">Vegetables</option>
+                                        <option value="fruit">Fruit Orchards</option>
+                                        <option value="mixed">Mixed Farming</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="budget-range" class="form-label">Budget Range</label>
+                                    <select class="form-select" id="budget-range" required>
+                                        <option value="" selected disabled>Select budget...</option>
+                                        <option value="low">Low (₹50,000 - ₹2,00,000)</option>
+                                        <option value="medium">Medium (₹2,00,000 - ₹10,00,000)</option>
+                                        <option value="high">High (₹10,00,000+)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="current-equipment" class="form-label">Current Equipment Level</label>
+                                    <select class="form-select" id="current-equipment" required>
+                                        <option value="" selected disabled>Select level...</option>
+                                        <option value="minimal">Minimal (Hand tools, small implements)</option>
+                                        <option value="basic">Basic (Small tractor, basic implements)</option>
+                                        <option value="moderate">Moderate (Medium equipment set)</option>
+                                        <option value="advanced">Advanced (Modern equipment)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Key Challenges (Select all that apply)</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="labor" id="challenge-labor">
+                                        <label class="form-check-label" for="challenge-labor">
+                                            Labor shortage
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="efficiency" id="challenge-efficiency">
+                                        <label class="form-check-label" for="challenge-efficiency">
+                                            Improving efficiency
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="precision" id="challenge-precision">
+                                        <label class="form-check-label" for="challenge-precision">
+                                            Precision farming
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="sustainability" id="challenge-sustainability">
+                                        <label class="form-check-label" for="challenge-sustainability">
+                                            Sustainability
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="special-needs" class="form-label">Any Special Requirements</label>
+                                    <textarea class="form-control" id="special-needs" rows="4" placeholder="Enter any special needs or requirements..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Get Equipment Recommendations</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Recommendations Section -->
+                        <div id="recommendations-container" style="display: none;">
+                            <h4 class="mb-4 text-center">Recommended Equipment</h4>
+                            
+                            <div class="alert alert-info mb-3">
+                                <div class="d-flex">
+                                    <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+                                    <div>
+                                        <p class="mb-0">Recommendations are tailored based on your farm profile and budget. Consider government subsidies available for farm mechanization through schemes like Sub-Mission on Agricultural Mechanization (SMAM).</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recommendations Tabs -->
+                            <ul class="nav nav-tabs mb-3" id="equipmentTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="essential-tab" data-bs-toggle="tab" data-bs-target="#essential-content" type="button" role="tab" aria-controls="essential-content" aria-selected="true">Essential</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="recommended-tab" data-bs-toggle="tab" data-bs-target="#recommended-content" type="button" role="tab" aria-controls="recommended-content" aria-selected="false">Recommended</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced-content" type="button" role="tab" aria-controls="advanced-content" aria-selected="false">Advanced Options</button>
+                                </li>
+                            </ul>
+                            
+                            <!-- Tab Content -->
+                            <div class="tab-content mb-4" id="equipmentTabContent">
+                                <!-- Essential Equipment -->
+                                <div class="tab-pane fade show active" id="essential-content" role="tabpanel" aria-labelledby="essential-tab">
+                                    <div id="essential-equipment-list">
+                                        <!-- Equipment cards will be added here by JavaScript -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Recommended Equipment -->
+                                <div class="tab-pane fade" id="recommended-content" role="tabpanel" aria-labelledby="recommended-tab">
+                                    <div id="recommended-equipment-list">
+                                        <!-- Equipment cards will be added here by JavaScript -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Advanced Equipment -->
+                                <div class="tab-pane fade" id="advanced-content" role="tabpanel" aria-labelledby="advanced-tab">
+                                    <div id="advanced-equipment-list">
+                                        <!-- Equipment cards will be added here by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Total Investment Summary -->
+                            <div class="card bg-light mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Investment Summary</h5>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p><strong>Essential Equipment:</strong> <span id="essential-cost">₹0</span></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p><strong>Recommended Additions:</strong> <span id="recommended-cost">₹0</span></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p><strong>Advanced Options:</strong> <span id="advanced-cost">₹0</span></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                        <h5>Estimated Total:</h5>
+                                        <h5 id="total-investment">₹0</h5>
+                                    </div>
+                                    <div class="alert alert-success mt-2 mb-0">
+                                        <i class="bi bi-info-circle me-2"></i> 
+                                        <span id="subsidy-message">You may be eligible for up to 40% subsidy through government schemes. Contact your local KVK or agriculture office for details.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Financing Options -->
+                            <div class="card border-primary mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Financing Options</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Several financing options are available to help you acquire the recommended equipment:</p>
+                                    <ul>
+                                        <li><strong>Kisan Credit Card (KCC):</strong> Low-interest loans for agricultural equipment</li>
+                                        <li><strong>Agricultural Term Loans:</strong> Available from commercial banks, co-operative banks, and regional rural banks</li>
+                                        <li><strong>NABARD Refinance Scheme:</strong> Refinancing options for agricultural equipment</li>
+                                        <li><strong>Custom Hiring Centers:</strong> Rent equipment instead of purchasing</li>
+                                    </ul>
+                                    <p>Interest rates typically range from 7-12% depending on loan amount and bank policies.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Equipment Categories -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <h3 class="card-title">Equipment Categories</h3>
+                        <p class="card-text">Explore different types of agricultural equipment by category:</p>
+                        
+                        <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tillage Equipment</h5>
+                                        <ul class="list-unstyled">
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Plows</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Cultivators</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Harrows</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Rotavators</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sowing Equipment</h5>
+                                        <ul class="list-unstyled">
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Seed Drills</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Planters</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Transplanters</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Seed-cum-Fertilizer Drills</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Harvesting Equipment</h5>
+                                        <ul class="list-unstyled">
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Combine Harvesters</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Reapers</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Threshers</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Root Harvesters</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Irrigation Equipment</h5>
+                                        <ul class="list-unstyled">
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Pumps & Motors</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Drip Systems</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Sprinklers</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Solar Pumps</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Plant Protection</h5>
+                                        <ul class="list-unstyled">
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Sprayers</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Dusters</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Foggers</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Drone Sprayers</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Post-Harvest</h5>
+                                        <ul class="list-unstyled">
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Cleaners & Graders</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Dryers</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Storage Solutions</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> Processing Equipment</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Smart Farming Technology -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Smart Farming Technology</h3>
+                        <p class="card-text">Modern agricultural technology to improve efficiency and productivity:</p>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-geo-alt text-primary me-2"></i> GPS Guidance Systems</h5>
+                                        <p class="card-text">Enables precise navigation of farm machinery, reducing overlap and improving efficiency. Available as retrofit kits for existing tractors.</p>
+                                        <p><strong>Cost Range:</strong> ₹50,000 - ₹2,00,000</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-moisture text-primary me-2"></i> Soil Sensors</h5>
+                                        <p class="card-text">Monitor soil moisture, temperature, and nutrient levels in real-time to optimize irrigation and fertilization.</p>
+                                        <p><strong>Cost Range:</strong> ₹5,000 - ₹50,000</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-robot text-primary me-2"></i> Agricultural Drones</h5>
+                                        <p class="card-text">Used for crop monitoring, spraying, and mapping. Provides visual data to identify issues before they affect yield.</p>
+                                        <p><strong>Cost Range:</strong> ₹30,000 - ₹5,00,000</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-cloud-check text-primary me-2"></i> Farm Management Software</h5>
+                                        <p class="card-text">Digital platforms to track and manage all aspects of farm operations, from planting to harvest.</p>
+                                        <p><strong>Cost Range:</strong> ₹5,000 - ₹50,000 annual subscription</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const equipmentFinderForm = document.getElementById('equipment-finder-form');
+        const recommendationsContainer = document.getElementById('recommendations-container');
+        
+        // Equipment database (would normally be server-side)
+        const equipmentDatabase = {
+            tractors: [
+                { 
+                    id: 'mini-tractor', 
+                    name: 'Mini Tractor (20-25 HP)',
+                    description: 'Suitable for small farms with limited space. Versatile for various farming operations.',
+                    farmTypes: ['vegetables', 'mixed', 'fruit'],
+                    farmSize: { min: 0.5, max: 5 },
+                    budgetLevel: ['low', 'medium'],
+                    price: 350000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                { 
+                    id: 'utility-tractor', 
+                    name: 'Utility Tractor (35-50 HP)',
+                    description: 'All-purpose tractor suitable for medium-sized farms. Good balance of power and economy.',
+                    farmTypes: ['field-crops', 'mixed', 'vegetables'],
+                    farmSize: { min: 2, max: 20 },
+                    budgetLevel: ['medium'],
+                    price: 650000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                { 
+                    id: 'row-crop-tractor', 
+                    name: 'Row Crop Tractor (60-75 HP)',
+                    description: 'Higher power tractor suitable for extensive field operations and heavy-duty work.',
+                    farmTypes: ['field-crops', 'mixed'],
+                    farmSize: { min: 10, max: 100 },
+                    budgetLevel: ['medium', 'high'],
+                    price: 1200000,
+                    imageUrl: '#',
+                    category: 'essential'
+                }
+            ],
+            tillage: [
+                {
+                    id: 'rotavator-small',
+                    name: 'Rotavator (4 feet)',
+                    description: 'Pulverizes soil and incorporates residue. Ideal for seedbed preparation.',
+                    farmTypes: ['vegetables', 'mixed', 'field-crops'],
+                    farmSize: { min: 0.5, max: 10 },
+                    budgetLevel: ['low', 'medium'],
+                    price: 60000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                {
+                    id: 'cultivator-9tyne',
+                    name: '9-Tyne Cultivator',
+                    description: 'For primary and secondary tillage operations. Breaks soil and uproots weeds.',
+                    farmTypes: ['field-crops', 'mixed'],
+                    farmSize: { min: 2, max: 20 },
+                    budgetLevel: ['low', 'medium'],
+                    price: 35000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                {
+                    id: 'disc-harrow',
+                    name: 'Disc Harrow (8x8)',
+                    description: 'Breaks soil clods and prepares seedbed. Essential for field crops.',
+                    farmTypes: ['field-crops', 'mixed'],
+                    farmSize: { min: 5, max: 50 },
+                    budgetLevel: ['medium'],
+                    price: 75000,
+                    imageUrl: '#',
+                    category: 'essential'
+                }
+            ],
+            sowing: [
+                {
+                    id: 'seed-drill-small',
+                    name: 'Seed Drill (9 Rows)',
+                    description: 'Places seeds at proper depth and spacing. Ensures uniform germination.',
+                    farmTypes: ['field-crops', 'mixed'],
+                    farmSize: { min: 2, max: 20 },
+                    budgetLevel: ['medium'],
+                    price: 70000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                {
+                    id: 'seed-fert-drill',
+                    name: 'Seed-cum-Fertilizer Drill',
+                    description: 'Places seed and fertilizer simultaneously. Improves efficiency and reduces labor.',
+                    farmTypes: ['field-crops', 'mixed'],
+                    farmSize: { min: 5, max: 50 },
+                    budgetLevel: ['medium', 'high'],
+                    price: 95000,
+                    imageUrl: '#',
+                    category: 'recommended'
+                },
+                {
+                    id: 'transplanter',
+                    name: 'Vegetable Transplanter',
+                    description: 'Semi-automatic transplanter for vegetable seedlings. Reduces labor and improves spacing.',
+                    farmTypes: ['vegetables'],
+                    farmSize: { min: 1, max: 20 },
+                    budgetLevel: ['medium', 'high'],
+                    price: 120000,
+                    imageUrl: '#',
+                    category: 'recommended'
+                }
+            ],
+            irrigation: [
+                {
+                    id: 'water-pump-5hp',
+                    name: '5 HP Water Pump',
+                    description: 'For irrigation water lifting and transfer. Essential for most farming operations.',
+                    farmTypes: ['field-crops', 'vegetables', 'mixed', 'fruit'],
+                    farmSize: { min: 0.5, max: 10 },
+                    budgetLevel: ['low', 'medium'],
+                    price: 25000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                {
+                    id: 'drip-system-basic',
+                    name: 'Drip Irrigation System (Basic)',
+                    description: 'Water-efficient irrigation system ideal for row crops and orchards.',
+                    farmTypes: ['vegetables', 'fruit'],
+                    farmSize: { min: 0.5, max: 10 },
+                    budgetLevel: ['medium'],
+                    price: 45000,
+                    imageUrl: '#',
+                    category: 'recommended'
+                },
+                {
+                    id: 'sprinkler-system',
+                    name: 'Sprinkler Irrigation System',
+                    description: 'Suitable for field crops and vegetables. More efficient than flood irrigation.',
+                    farmTypes: ['field-crops', 'vegetables', 'mixed'],
+                    farmSize: { min: 1, max: 20 },
+                    budgetLevel: ['medium'],
+                    price: 60000,
+                    imageUrl: '#',
+                    category: 'recommended'
+                }
+            ],
+            protection: [
+                {
+                    id: 'knapsack-sprayer',
+                    name: 'Knapsack Sprayer (16L)',
+                    description: 'Manual backpack sprayer for small-scale application of pesticides and fertilizers.',
+                    farmTypes: ['vegetables', 'mixed', 'fruit', 'field-crops'],
+                    farmSize: { min: 0.1, max: 5 },
+                    budgetLevel: ['low'],
+                    price: 2000,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                {
+                    id: 'power-sprayer',
+                    name: 'Power Sprayer',
+                    description: 'Engine-powered sprayer for efficient application of chemicals. Covers larger areas quickly.',
+                    farmTypes: ['field-crops', 'vegetables', 'mixed', 'fruit'],
+                    farmSize: { min: 2, max: 50 },
+                    budgetLevel: ['medium'],
+                    price: 35000,
+                    imageUrl: '#',
+                    category: 'recommended'
+                },
+                {
+                    id: 'boom-sprayer',
+                    name: 'Tractor-mounted Boom Sprayer',
+                    description: 'Covers wide swaths for efficient spraying of large fields.',
+                    farmTypes: ['field-crops'],
+                    farmSize: { min: 10, max: 100 },
+                    budgetLevel: ['medium', 'high'],
+                    price: 120000,
+                    imageUrl: '#',
+                    category: 'advanced'
+                }
+            ],
+            harvesting: [
+                {
+                    id: 'sickle-improved',
+                    name: 'Improved Sickle Set',
+                    description: 'Enhanced manual harvesting tools for small-scale operations.',
+                    farmTypes: ['vegetables', 'mixed', 'field-crops'],
+                    farmSize: { min: 0.1, max: 5 },
+                    budgetLevel: ['low'],
+                    price: 1500,
+                    imageUrl: '#',
+                    category: 'essential'
+                },
+                {
+                    id: 'reaper-small',
+                    name: 'Self-propelled Reaper',
+                    description: 'Small machine for harvesting wheat, rice, and other grains. Significant labor savings.',
+                    farmTypes: ['field-crops', 'mixed'],
+                    farmSize: { min: 2, max: 20 },
+                    budgetLevel: ['medium'],
+                    price: 120000,
+                    imageUrl: '#',
+                    category: 'recommended'
+                },
+                {
+                    id: 'combine-harvester',
+                    name: 'Mini Combine Harvester',
+                    description: 'Complete harvesting solution for grain crops. Cuts, threshes and cleans in one operation.',
+                    farmTypes: ['field-crops'],
+                    farmSize: { min: 10, max: 100 },
+                    budgetLevel: ['high'],
+                    price: 1200000,
+                    imageUrl: '#',
+                    category: 'advanced'
+                }
+            ],
+            smartFarming: [
+                {
+                    id: 'soil-sensors-basic',
+                    name: 'Basic Soil Sensors Kit',
+                    description: 'Set of sensors to monitor soil moisture, temperature, and pH. Helps optimize irrigation and inputs.',
+                    farmTypes: ['vegetables', 'fruit', 'field-crops', 'mixed'],
+                    farmSize: { min: 0.5, max: 100 },
+                    budgetLevel: ['medium', 'high'],
+                    price: 15000,
+                    imageUrl: '#',
+                    category: 'advanced'
+                },
+                {
+                    id: 'weather-station',
+                    name: 'Farm Weather Station',
+                    description: 'Monitors local weather conditions including rainfall, humidity, temperature, and wind.',
+                    farmTypes: ['vegetables', 'fruit', 'field-crops', 'mixed'],
+                    farmSize: { min: 2, max: 100 },
+                    budgetLevel: ['medium', 'high'],
+                    price: 30000,
+                    imageUrl: '#',
+                    category: 'advanced'
+                },
+                {
+                    id: 'drone-basic',
+                    name: 'Agricultural Drone (Basic)',
+                    description: 'For crop monitoring and assessment. Helps identify issues before they become visible from the ground.',
+                    farmTypes: ['vegetables', 'fruit', 'field-crops', 'mixed'],
+                    farmSize: { min: 5, max: 100 },
+                    budgetLevel: ['high'],
+                    price: 80000,
+                    imageUrl: '#',
+                    category: 'advanced'
+                }
+            ]
+        };
+        
+        // Handle form submission
+        equipmentFinderForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const farmSize = parseFloat(document.getElementById('farm-size').value);
+            const farmType = document.getElementById('farm-type').value;
+            const budgetRange = document.getElementById('budget-range').value;
+            const equipmentLevel = document.getElementById('current-equipment').value;
+            
+            // Get challenges
+            const challenges = [];
+            if (document.getElementById('challenge-labor').checked) challenges.push('labor');
+            if (document.getElementById('challenge-efficiency').checked) challenges.push('efficiency');
+            if (document.getElementById('challenge-precision').checked) challenges.push('precision');
+            if (document.getElementById('challenge-sustainability').checked) challenges.push('sustainability');
+            
+            // Generate recommendations
+            const recommendations = generateRecommendations(farmSize, farmType, budgetRange, equipmentLevel, challenges);
+            
+            // Display recommendations
+            displayRecommendations(recommendations);
+            
+            // Show recommendations container
+            recommendationsContainer.style.display = 'block';
+            
+            // Scroll to recommendations
+            recommendationsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Generate equipment recommendations based on farm profile
+        function generateRecommendations(farmSize, farmType, budgetRange, equipmentLevel, challenges) {
+            const allEquipment = [
+                ...equipmentDatabase.tractors,
+                ...equipmentDatabase.tillage,
+                ...equipmentDatabase.sowing,
+                ...equipmentDatabase.irrigation,
+                ...equipmentDatabase.protection,
+                ...equipmentDatabase.harvesting,
+                ...equipmentDatabase.smartFarming
+            ];
+            
+            // Filter equipment based on farm size, type, and budget
+            const filteredEquipment = allEquipment.filter(item => {
+                const sizeMatch = farmSize >= item.farmSize.min && farmSize <= item.farmSize.max;
+                const typeMatch = item.farmTypes.includes(farmType);
+                const budgetMatch = item.budgetLevel.includes(budgetRange);
+                
+                return sizeMatch && typeMatch && budgetMatch;
+            });
+            
+            // Adjust based on current equipment level
+            let adjustedEquipment = [...filteredEquipment];
+            if (equipmentLevel === 'minimal') {
+                // Prioritize essential equipment for farms with minimal existing equipment
+                adjustedEquipment.forEach(item => {
+                    if (item.category === 'essential') item.priority = 10;
+                    else if (item.category === 'recommended') item.priority = 5;
+                    else item.priority = 1;
+                });
+            } else if (equipmentLevel === 'basic') {
+                // For basic equipment, balance between essential upgrades and recommended additions
+                adjustedEquipment.forEach(item => {
+                    if (item.category === 'essential') item.priority = 7;
+                    else if (item.category === 'recommended') item.priority = 8;
+                    else item.priority = 3;
+                });
+            } else if (equipmentLevel === 'moderate') {
+                // For moderate equipment, focus on recommended and advanced options
+                adjustedEquipment.forEach(item => {
+                    if (item.category === 'essential') item.priority = 3;
+                    else if (item.category === 'recommended') item.priority = 8;
+                    else item.priority = 7;
+                });
+            } else if (equipmentLevel === 'advanced') {
+                // For advanced equipment, prioritize only new advanced equipment
+                adjustedEquipment.forEach(item => {
+                    if (item.category === 'essential') item.priority = 1;
+                    else if (item.category === 'recommended') item.priority = 5;
+                    else item.priority = 10;
+                });
+            }
+            
+            // Adjust based on challenges
+            if (challenges.includes('labor')) {
+                // Prioritize labor-saving equipment
+                adjustedEquipment.forEach(item => {
+                    if (['reaper-small', 'combine-harvester', 'transplanter', 'seed-drill-small'].includes(item.id)) {
+                        item.priority += 3;
+                        item.highlightFeature = 'Labor Saving';
+                    }
+                });
+            }
+            
+            if (challenges.includes('efficiency')) {
+                // Prioritize efficiency-improving equipment
+                adjustedEquipment.forEach(item => {
+                    if (['seed-fert-drill', 'power-sprayer', 'boom-sprayer'].includes(item.id)) {
+                        item.priority += 3;
+                        item.highlightFeature = 'Efficiency Booster';
+                    }
+                });
+            }
+            
+            if (challenges.includes('precision')) {
+                // Prioritize precision agriculture equipment
+                adjustedEquipment.forEach(item => {
+                    if (['soil-sensors-basic', 'weather-station', 'drone-basic'].includes(item.id)) {
+                        item.priority += 3;
+                        item.highlightFeature = 'Precision Farming';
+                    }
+                });
+            }
+            
+            if (challenges.includes('sustainability')) {
+                // Prioritize sustainable farming equipment
+                adjustedEquipment.forEach(item => {
+                    if (['drip-system-basic', 'sprinkler-system', 'soil-sensors-basic'].includes(item.id)) {
+                        item.priority += 3;
+                        item.highlightFeature = 'Sustainable Farming';
+                    }
+                });
+            }
+            
+            // Sort by priority
+            adjustedEquipment.sort((a, b) => b.priority - a.priority);
+            
+            // Group by category
+            const essentialEquipment = adjustedEquipment.filter(item => item.category === 'essential');
+            const recommendedEquipment = adjustedEquipment.filter(item => item.category === 'recommended');
+            const advancedEquipment = adjustedEquipment.filter(item => item.category === 'advanced');
+            
+            return {
+                essential: essentialEquipment.slice(0, 4), // Top 4 essential items
+                recommended: recommendedEquipment.slice(0, 3), // Top 3 recommended items
+                advanced: advancedEquipment.slice(0, 3) // Top 3 advanced items
+            };
+        }
+        
+        // Display equipment recommendations
+        function displayRecommendations(recommendations) {
+            // Display essential equipment
+            const essentialList = document.getElementById('essential-equipment-list');
+            essentialList.innerHTML = '';
+            
+            if (recommendations.essential.length === 0) {
+                essentialList.innerHTML = '<div class="alert alert-info">No essential equipment recommendations match your criteria.</div>';
+            } else {
+                const essentialRow = document.createElement('div');
+                essentialRow.className = 'row row-cols-1 row-cols-md-2 g-4';
+                
+                recommendations.essential.forEach(item => {
+                    const card = createEquipmentCard(item);
+                    essentialRow.appendChild(card);
+                });
+                
+                essentialList.appendChild(essentialRow);
+            }
+            
+            // Display recommended equipment
+            const recommendedList = document.getElementById('recommended-equipment-list');
+            recommendedList.innerHTML = '';
+            
+            if (recommendations.recommended.length === 0) {
+                recommendedList.innerHTML = '<div class="alert alert-info">No recommended equipment suggestions match your criteria.</div>';
+            } else {
+                const recommendedRow = document.createElement('div');
+                recommendedRow.className = 'row row-cols-1 row-cols-md-2 g-4';
+                
+                recommendations.recommended.forEach(item => {
+                    const card = createEquipmentCard(item);
+                    recommendedRow.appendChild(card);
+                });
+                
+                recommendedList.appendChild(recommendedRow);
+            }
+            
+            // Display advanced equipment
+            const advancedList = document.getElementById('advanced-equipment-list');
+            advancedList.innerHTML = '';
+            
+            if (recommendations.advanced.length === 0) {
+                advancedList.innerHTML = '<div class="alert alert-info">No advanced equipment options match your criteria.</div>';
+            } else {
+                const advancedRow = document.createElement('div');
+                advancedRow.className = 'row row-cols-1 row-cols-md-2 g-4';
+                
+                recommendations.advanced.forEach(item => {
+                    const card = createEquipmentCard(item);
+                    advancedRow.appendChild(card);
+                });
+                
+                advancedList.appendChild(advancedRow);
+            }
+            
+            // Update cost summary
+            updateCostSummary(recommendations);
+        }
+        
+        // Create an equipment card
+        function createEquipmentCard(item) {
+            const col = document.createElement('div');
+            col.className = 'col';
+            
+            let badgeHTML = '';
+            if (item.highlightFeature) {
+                badgeHTML = `<span class="badge bg-success position-absolute top-0 end-0 m-2">${item.highlightFeature}</span>`;
+            }
+            
+            col.innerHTML = `
+                <div class="card h-100 position-relative">
+                    ${badgeHTML}
+                    <div class="card-body">
+                        <h5 class="card-title">${item.name}</h5>
+                        <p class="card-text">${item.description}</p>
+                        <p class="text-primary fw-bold">₹${item.price.toLocaleString()}</p>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Suitable for: ${formatFarmSize(item.farmSize)} hectares</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="alert('Feature coming soon!')">Details</button>
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+        
+        // Format farm size range for display
+        function formatFarmSize(sizeRange) {
+            if (sizeRange.max >= 100) {
+                return `${sizeRange.min}+`;
+            } else {
+                return `${sizeRange.min}-${sizeRange.max}`;
+            }
+        }
+        
+        // Update cost summary
+        function updateCostSummary(recommendations) {
+            const essentialCost = recommendations.essential.reduce((sum, item) => sum + item.price, 0);
+            const recommendedCost = recommendations.recommended.reduce((sum, item) => sum + item.price, 0);
+            const advancedCost = recommendations.advanced.reduce((sum, item) => sum + item.price, 0);
+            const totalCost = essentialCost + recommendedCost + advancedCost;
+            
+            document.getElementById('essential-cost').textContent = `₹${essentialCost.toLocaleString()}`;
+            document.getElementById('recommended-cost').textContent = `₹${recommendedCost.toLocaleString()}`;
+            document.getElementById('advanced-cost').textContent = `₹${advancedCost.toLocaleString()}`;
+            document.getElementById('total-investment').textContent = `₹${totalCost.toLocaleString()}`;
+            
+            // Update subsidy message based on total cost
+            const subsidyMessage = document.getElementById('subsidy-message');
+            if (totalCost <= 200000) {
+                subsidyMessage.textContent = 'You may be eligible for up to 40% subsidy through SMAM for small equipment purchases. Contact your local KVK for details.';
+            } else if (totalCost <= 1000000) {
+                subsidyMessage.textContent = 'You may be eligible for 25-40% subsidy depending on equipment type through government schemes like SMAM and RKVY.';
+            } else {
+                subsidyMessage.textContent = 'For large equipment purchases, custom hiring services or cooperative purchasing may be more economical. Subsidies of 25-35% may apply.';
+            }
+        }
+    });
+</script>
+{% endblock %}

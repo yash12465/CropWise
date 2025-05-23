@@ -1,0 +1,503 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}PM-KISAN Eligibility Checker - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">PM-KISAN Eligibility Checker</h1>
+        <p class="lead mb-4">Check your eligibility for PM-KISAN benefits and track your payments</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Information Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">About PM-KISAN Scheme</h3>
+                        <p class="card-text">Pradhan Mantri Kisan Samman Nidhi (PM-KISAN) is a Central Sector scheme with 100% funding from the Government of India. Under the Scheme, income support of ₹6,000 per year is provided to all eligible farmer families across the country in three equal installments of ₹2,000 every four months.</p>
+                        
+                        <div class="alert alert-info mb-3">
+                            <div class="d-flex">
+                                <i class="bi bi-info-circle-fill fs-4 me-2"></i>
+                                <div>
+                                    <p class="mb-0">The scheme aims to supplement the financial needs of the farmers in procuring various inputs to ensure proper crop health and appropriate yields, commensurate with the anticipated farm income.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-body text-center py-4">
+                                        <i class="bi bi-currency-rupee text-success" style="font-size: 2.5rem;"></i>
+                                        <h5 class="mt-3">₹6,000</h5>
+                                        <p class="text-muted">Annual Support</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-body text-center py-4">
+                                        <i class="bi bi-people text-success" style="font-size: 2.5rem;"></i>
+                                        <h5 class="mt-3">11+ Crore</h5>
+                                        <p class="text-muted">Farmer Families</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-body text-center py-4">
+                                        <i class="bi bi-calendar-check text-success" style="font-size: 2.5rem;"></i>
+                                        <h5 class="mt-3">3 Installments</h5>
+                                        <p class="text-muted">Every 4 Months</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Eligibility Checker -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Check Your Eligibility</h3>
+                        <p class="text-center mb-4">Fill in the details below to check if you're eligible for PM-KISAN benefits</p>
+                        
+                        <form id="eligibility-form" class="mb-4">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="farmer-name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="farmer-name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="farmer-category" class="form-label">Farmer Category</label>
+                                    <select class="form-select" id="farmer-category" required>
+                                        <option value="" selected disabled>Select category...</option>
+                                        <option value="marginal">Marginal Farmer (< 1 hectare)</option>
+                                        <option value="small">Small Farmer (1-2 hectares)</option>
+                                        <option value="medium">Medium Farmer (2-5 hectares)</option>
+                                        <option value="large">Large Farmer (> 5 hectares)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="land-ownership" class="form-label">Land Ownership Status</label>
+                                    <select class="form-select" id="land-ownership" required>
+                                        <option value="" selected disabled>Select status...</option>
+                                        <option value="own">Own Land with Documents</option>
+                                        <option value="leased">Leased Land with Agreement</option>
+                                        <option value="share">Sharecropper</option>
+                                        <option value="no-document">No Documentation</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="land-area" class="form-label">Land Area (Hectares)</label>
+                                    <input type="number" class="form-control" id="land-area" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="income-status" class="form-label">Annual Income Status</label>
+                                    <select class="form-select" id="income-status" required>
+                                        <option value="" selected disabled>Select status...</option>
+                                        <option value="below2l">Below ₹2 Lakh</option>
+                                        <option value="above2l">Above ₹2 Lakh</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="occupation" class="form-label">Primary Occupation</label>
+                                    <select class="form-select" id="occupation" required>
+                                        <option value="" selected disabled>Select occupation...</option>
+                                        <option value="farming">Farming</option>
+                                        <option value="service">Government Service</option>
+                                        <option value="business">Business</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">Do any of the following apply to you?</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="institutional" id="check-institutional">
+                                        <label class="form-check-label" for="check-institutional">
+                                            Institutional land owner (universities, trusts, etc.)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="taxpayer" id="check-taxpayer">
+                                        <label class="form-check-label" for="check-taxpayer">
+                                            Income tax payer
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="pensioner" id="check-pensioner">
+                                        <label class="form-check-label" for="check-pensioner">
+                                            Receiving pension over ₹10,000 per month
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="govt" id="check-govt">
+                                        <label class="form-check-label" for="check-govt">
+                                            Government employee or retired government employee
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Check Eligibility</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Results Section -->
+                        <div id="results-container" class="mt-4" style="display: none;">
+                            <h4 class="text-center mb-4">Eligibility Results</h4>
+                            
+                            <div id="eligible-container" style="display: none;">
+                                <div class="alert alert-success">
+                                    <div class="d-flex">
+                                        <i class="bi bi-check-circle-fill fs-1 me-3"></i>
+                                        <div>
+                                            <h4 class="alert-heading">You may be eligible for PM-KISAN!</h4>
+                                            <p>Based on the information provided, you appear to meet the basic eligibility criteria for the PM-KISAN scheme.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card border-success mb-4">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">Next Steps to Apply</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ol>
+                                            <li class="mb-2">Visit your nearest Common Service Center (CSC) or Agriculture Department office</li>
+                                            <li class="mb-2">Bring the following documents:
+                                                <ul>
+                                                    <li>Aadhaar Card</li>
+                                                    <li>Land Records (Khata/Khasra/Khatauni)</li>
+                                                    <li>Bank Account Passbook (with IFSC code)</li>
+                                                    <li>Mobile number linked to Aadhaar</li>
+                                                </ul>
+                                            </li>
+                                            <li class="mb-2">Fill and submit the PM-KISAN registration form</li>
+                                            <li class="mb-2">You can also apply online through the <a href="https://pmkisan.gov.in/" target="_blank">PM-KISAN Portal</a></li>
+                                        </ol>
+                                        <div class="alert alert-info mb-0">
+                                            <i class="bi bi-info-circle me-2"></i> 
+                                            Final eligibility is determined by local agriculture officials after document verification.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="ineligible-container" style="display: none;">
+                                <div class="alert alert-danger">
+                                    <div class="d-flex">
+                                        <i class="bi bi-x-circle-fill fs-1 me-3"></i>
+                                        <div>
+                                            <h4 class="alert-heading">You may not be eligible for PM-KISAN</h4>
+                                            <p>Based on the information provided, you may not meet the eligibility criteria for the PM-KISAN scheme.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Potential Reasons for Ineligibility</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul id="ineligibility-reasons">
+                                            <!-- Reasons will be added here by JavaScript -->
+                                        </ul>
+                                        <div class="alert alert-info mb-0">
+                                            <i class="bi bi-info-circle me-2"></i> 
+                                            If you believe there is an error in this assessment, please visit your local Agriculture Department office for clarification.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="other-schemes-container">
+                                <h5 class="mb-3">Other Government Schemes You May Be Eligible For</h5>
+                                <div class="row row-cols-1 row-cols-md-3 g-4">
+                                    <div class="col">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Soil Health Card Scheme</h5>
+                                                <p class="card-text">Get detailed soil analysis and recommendations for your farmland.</p>
+                                                <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Pradhan Mantri Fasal Bima Yojana</h5>
+                                                <p class="card-text">Crop insurance coverage for eligible farmers.</p>
+                                                <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Kisan Credit Card</h5>
+                                                <p class="card-text">Get access to credit for agricultural needs at subsidized interest rates.</p>
+                                                <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Tracker -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">PM-KISAN Payment Tracker</h3>
+                        <p class="card-text">If you're already enrolled in PM-KISAN, you can check your payment status below</p>
+                        
+                        <form id="payment-tracker-form" class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="aadhaar-number" class="form-label">Aadhaar Number</label>
+                                    <input type="text" class="form-control" id="aadhaar-number" placeholder="XXXX XXXX XXXX" pattern="[0-9]{4}[\s]?[0-9]{4}[\s]?[0-9]{4}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="mobile-number" class="form-label">Mobile Number</label>
+                                    <input type="tel" class="form-control" id="mobile-number" placeholder="XXXXX XXXXX" pattern="[0-9]{5}[\s]?[0-9]{5}" required>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">Check Status</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            You can also check your payment status on the official <a href="https://pmkisan.gov.in/" target="_blank">PM-KISAN Portal</a> or by calling the PM-KISAN Helpline at <strong>155261</strong> or <strong>1800-115-526</strong>.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Common Questions -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Frequently Asked Questions</h3>
+                        
+                        <div class="accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Who is eligible for PM-KISAN?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>All landholding farmer families with cultivable land holding are eligible, subject to exclusions such as:</p>
+                                        <ul>
+                                            <li>Institutional land holders</li>
+                                            <li>Farmer families with members who are income tax payers</li>
+                                            <li>Members who are/were holding constitutional posts</li>
+                                            <li>Professionals such as doctors, engineers, lawyers, CA, etc.</li>
+                                            <li>Present or retired government employees with pension over ₹10,000</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        How much financial assistance is provided?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>Under PM-KISAN, eligible farmer families receive financial assistance of ₹6,000 per year, paid in three equal installments of ₹2,000 every four months.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        What documents are required for registration?
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>The following documents are required:</p>
+                                        <ul>
+                                            <li>Aadhaar Card</li>
+                                            <li>Land Records (Khata/Khasra/Khatauni or equivalent)</li>
+                                            <li>Bank Account Details with IFSC code</li>
+                                            <li>Mobile number (preferably linked to Aadhaar)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        How can I update my bank account details?
+                                    </button>
+                                </h2>
+                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p>You can update your bank account details through:</p>
+                                        <ol>
+                                            <li>Visiting your nearest Common Service Center (CSC)</li>
+                                            <li>Contacting your local Agriculture Department office</li>
+                                            <li>Using the self-service option on the PM-KISAN portal (if available)</li>
+                                        </ol>
+                                        <p>Make sure your account is linked to your Aadhaar for faster processing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const eligibilityForm = document.getElementById('eligibility-form');
+        const resultsContainer = document.getElementById('results-container');
+        const eligibleContainer = document.getElementById('eligible-container');
+        const ineligibleContainer = document.getElementById('ineligible-container');
+        const ineligibilityReasonsList = document.getElementById('ineligibility-reasons');
+        
+        // Handle eligibility form submission
+        eligibilityForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const category = document.getElementById('farmer-category').value;
+            const landOwnership = document.getElementById('land-ownership').value;
+            const landArea = parseFloat(document.getElementById('land-area').value);
+            const incomeStatus = document.getElementById('income-status').value;
+            const occupation = document.getElementById('occupation').value;
+            
+            // Get exclusion conditions
+            const isInstitutional = document.getElementById('check-institutional').checked;
+            const isTaxpayer = document.getElementById('check-taxpayer').checked;
+            const isPensioner = document.getElementById('check-pensioner').checked;
+            const isGovtEmployee = document.getElementById('check-govt').checked;
+            
+            // Check eligibility
+            const ineligibilityReasons = [];
+            
+            if (isInstitutional) {
+                ineligibilityReasons.push("Institutional land owners are not eligible for PM-KISAN.");
+            }
+            
+            if (isTaxpayer) {
+                ineligibilityReasons.push("Income tax payers are not eligible for PM-KISAN.");
+            }
+            
+            if (isPensioner) {
+                ineligibilityReasons.push("Persons receiving pension over ₹10,000 per month are not eligible.");
+            }
+            
+            if (isGovtEmployee) {
+                ineligibilityReasons.push("Current or retired government employees are not eligible.");
+            }
+            
+            if (landOwnership === 'no-document') {
+                ineligibilityReasons.push("Land documentation is required to prove land ownership for PM-KISAN eligibility.");
+            }
+            
+            if (incomeStatus === 'above2l') {
+                ineligibilityReasons.push("Annual income above ₹2 lakh may affect eligibility. Check with local authorities.");
+            }
+            
+            if (occupation !== 'farming') {
+                ineligibilityReasons.push("Primary occupation other than farming may affect eligibility.");
+            }
+            
+            // Display results
+            resultsContainer.style.display = 'block';
+            
+            if (ineligibilityReasons.length > 0) {
+                // Ineligible
+                eligibleContainer.style.display = 'none';
+                ineligibleContainer.style.display = 'block';
+                
+                // Display reasons
+                ineligibilityReasonsList.innerHTML = '';
+                ineligibilityReasons.forEach(reason => {
+                    const li = document.createElement('li');
+                    li.className = 'mb-2';
+                    li.textContent = reason;
+                    ineligibilityReasonsList.appendChild(li);
+                });
+            } else {
+                // Eligible
+                eligibleContainer.style.display = 'block';
+                ineligibleContainer.style.display = 'none';
+            }
+            
+            // Scroll to results
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Handle payment tracker form
+        const paymentTrackerForm = document.getElementById('payment-tracker-form');
+        
+        paymentTrackerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // This would normally send a request to check payment status
+            // For demonstration, we'll show an alert
+            alert('This feature would connect to the PM-KISAN database to check payment status. For actual status, please visit the official PM-KISAN portal.');
+        });
+        
+        // Format Aadhaar number with spaces
+        const aadhaarInput = document.getElementById('aadhaar-number');
+        aadhaarInput.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 12) value = value.slice(0, 12); // Limit to 12 digits
+            
+            // Add spaces after every 4 digits
+            if (value.length > 8) {
+                value = value.slice(0, 4) + ' ' + value.slice(4, 8) + ' ' + value.slice(8);
+            } else if (value.length > 4) {
+                value = value.slice(0, 4) + ' ' + value.slice(4);
+            }
+            
+            this.value = value;
+        });
+        
+        // Format mobile number with space
+        const mobileInput = document.getElementById('mobile-number');
+        mobileInput.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 10) value = value.slice(0, 10); // Limit to 10 digits
+            
+            // Add space after 5 digits
+            if (value.length > 5) {
+                value = value.slice(0, 5) + ' ' + value.slice(5);
+            }
+            
+            this.value = value;
+        });
+    });
+</script>
+{% endblock %}

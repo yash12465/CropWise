@@ -1,0 +1,483 @@
+{% extends 'simple_layout.html' %}
+
+{% block title %}Irrigation Planner - AI-Powered Crop Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">Irrigation Planner</h1>
+        <p class="lead mb-4">Optimize your water usage with smart irrigation planning</p>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Irrigation Calculator -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Water Requirement Calculator</h3>
+                        <p class="text-center mb-4">Calculate optimal water requirements based on your crop and field conditions</p>
+                        
+                        <form id="irrigation-form" class="mb-4">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="crop-select" class="form-label">Crop</label>
+                                    <select id="crop-select" class="form-select" required>
+                                        <option value="" selected disabled>Select crop...</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="maize">Maize</option>
+                                        <option value="cotton">Cotton</option>
+                                        <option value="sugarcane">Sugarcane</option>
+                                        <option value="potato">Potato</option>
+                                        <option value="onion">Onion</option>
+                                        <option value="tomato">Tomato</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="crop-stage" class="form-label">Growth Stage</label>
+                                    <select id="crop-stage" class="form-select" required>
+                                        <option value="" selected disabled>Select stage...</option>
+                                        <option value="initial">Initial Stage</option>
+                                        <option value="development">Development Stage</option>
+                                        <option value="mid-season">Mid-Season Stage</option>
+                                        <option value="late-season">Late Season Stage</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="field-area" class="form-label">Field Area (hectares)</label>
+                                    <input type="number" class="form-control" id="field-area" step="0.01" min="0.01" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="soil-type" class="form-label">Soil Type</label>
+                                    <select id="soil-type" class="form-select" required>
+                                        <option value="" selected disabled>Select soil type...</option>
+                                        <option value="sandy">Sandy (Light)</option>
+                                        <option value="loam">Loam (Medium)</option>
+                                        <option value="clay">Clay (Heavy)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="temperature" class="form-label">Average Temperature (°C)</label>
+                                    <input type="number" class="form-control" id="temperature" step="0.1" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="rainfall" class="form-label">Recent Rainfall (mm)</label>
+                                    <input type="number" class="form-control" id="rainfall" step="0.1" min="0" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="irrigation-method" class="form-label">Irrigation Method</label>
+                                    <select id="irrigation-method" class="form-select" required>
+                                        <option value="" selected disabled>Select method...</option>
+                                        <option value="flood">Flood Irrigation</option>
+                                        <option value="drip">Drip Irrigation</option>
+                                        <option value="sprinkler">Sprinkler System</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="irrigation-efficiency" class="form-label">System Efficiency (%)</label>
+                                    <input type="number" class="form-control" id="irrigation-efficiency" value="70" min="10" max="100" required>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Calculate Water Requirements</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Results Section -->
+                        <div id="results-container" class="mt-4" style="display: none;">
+                            <h4 class="text-center mb-4">Irrigation Recommendation</h4>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-primary h-100">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Water Requirement</h5>
+                                            <p class="display-4 mb-0 text-primary" id="water-requirement">0</p>
+                                            <p class="text-muted">cubic meters per hectare</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-success h-100">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Total Water Needed</h5>
+                                            <p class="display-4 mb-0 text-success" id="total-water">0</p>
+                                            <p class="text-muted">cubic meters total</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card border-info mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">Irrigation Schedule</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Recommended Frequency:</strong> <span id="irrigation-frequency">0</span></p>
+                                            <p><strong>Water per Application:</strong> <span id="water-per-application">0</span> cubic meters</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Next Irrigation:</strong> <span id="next-irrigation">0</span></p>
+                                            <p><strong>Duration:</strong> <span id="irrigation-duration">0</span> hours</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card border-warning mb-4">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="mb-0">Irrigation Efficiency Tips</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush" id="efficiency-tips">
+                                        <!-- Tips will be added here -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Smart Irrigation Guide -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Smart Irrigation Guide</h3>
+                        <p class="card-text">Follow these best practices to optimize your irrigation and save water:</p>
+                        
+                        <div class="accordion" id="irrigationGuideAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingWhen">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWhen" aria-expanded="true" aria-controls="collapseWhen">
+                                        When to Irrigate
+                                    </button>
+                                </h2>
+                                <div id="collapseWhen" class="accordion-collapse collapse show" aria-labelledby="headingWhen" data-bs-parent="#irrigationGuideAccordion">
+                                    <div class="accordion-body">
+                                        <p>The timing of irrigation significantly impacts water use efficiency and crop health:</p>
+                                        <ul>
+                                            <li><strong>Morning irrigation (4-10 AM):</strong> Ideal time as it minimizes evaporation and allows water to penetrate soil before peak heat.</li>
+                                            <li><strong>Avoid mid-day irrigation:</strong> High evaporation rates waste water and can cause leaf scorch in some crops.</li>
+                                            <li><strong>Evening irrigation:</strong> Acceptable but may increase disease risk due to prolonged leaf wetness overnight.</li>
+                                            <li><strong>Check soil moisture:</strong> Irrigate when soil moisture drops to 50% of field capacity (use soil moisture sensors for accuracy).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMethods">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMethods" aria-expanded="false" aria-controls="collapseMethods">
+                                        Irrigation Methods Comparison
+                                    </button>
+                                </h2>
+                                <div id="collapseMethods" class="accordion-collapse collapse" aria-labelledby="headingMethods" data-bs-parent="#irrigationGuideAccordion">
+                                    <div class="accordion-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Method</th>
+                                                        <th>Efficiency</th>
+                                                        <th>Best For</th>
+                                                        <th>Advantages</th>
+                                                        <th>Disadvantages</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Flood Irrigation</td>
+                                                        <td>40-60%</td>
+                                                        <td>Rice, wheat in flat fields</td>
+                                                        <td>Low investment, simple operation</td>
+                                                        <td>High water usage, uneven distribution</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Drip Irrigation</td>
+                                                        <td>90-95%</td>
+                                                        <td>Vegetables, fruits, row crops</td>
+                                                        <td>Water saving, reduces disease, precision application</td>
+                                                        <td>Higher initial cost, requires maintenance</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sprinkler System</td>
+                                                        <td>70-85%</td>
+                                                        <td>Most field crops, lawns</td>
+                                                        <td>Even distribution, good for sloped land</td>
+                                                        <td>Wind drift, evaporation losses</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingWaterSaving">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWaterSaving" aria-expanded="false" aria-controls="collapseWaterSaving">
+                                        Water-Saving Techniques
+                                    </button>
+                                </h2>
+                                <div id="collapseWaterSaving" class="accordion-collapse collapse" aria-labelledby="headingWaterSaving" data-bs-parent="#irrigationGuideAccordion">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-droplet-half text-primary me-2"></i> Mulching</h5>
+                                                        <p class="card-text">Apply a 2-3 inch layer of organic mulch to reduce evaporation by up to 70%, suppress weeds, and regulate soil temperature.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-moisture text-primary me-2"></i> Soil Amendments</h5>
+                                                        <p class="card-text">Add organic matter to improve water retention in sandy soils and drainage in clay soils, enhancing overall water efficiency.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-cloud-rain text-primary me-2"></i> Rainwater Harvesting</h5>
+                                                        <p class="card-text">Collect and store rainwater from rooftops and other surfaces for use during dry periods.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><i class="bi bi-watch text-primary me-2"></i> Deficit Irrigation</h5>
+                                                        <p class="card-text">Strategically reduce irrigation at less sensitive growth stages to encourage deeper rooting while maintaining yields.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const irrigationForm = document.getElementById('irrigation-form');
+        const resultsContainer = document.getElementById('results-container');
+        
+        irrigationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const crop = document.getElementById('crop-select').value;
+            const cropStage = document.getElementById('crop-stage').value;
+            const fieldArea = parseFloat(document.getElementById('field-area').value);
+            const soilType = document.getElementById('soil-type').value;
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const rainfall = parseFloat(document.getElementById('rainfall').value);
+            const irrigationMethod = document.getElementById('irrigation-method').value;
+            const efficiency = parseFloat(document.getElementById('irrigation-efficiency').value) / 100;
+            
+            // Calculate water requirements (simplified calculation for demo)
+            const waterRequirements = calculateWaterRequirements(crop, cropStage, soilType, temperature, rainfall);
+            const adjustedRequirements = waterRequirements / efficiency;
+            const totalWater = adjustedRequirements * fieldArea;
+            
+            // Determine irrigation schedule
+            const schedule = determineIrrigationSchedule(crop, cropStage, soilType, adjustedRequirements, irrigationMethod);
+            
+            // Display results
+            document.getElementById('water-requirement').textContent = Math.round(adjustedRequirements);
+            document.getElementById('total-water').textContent = Math.round(totalWater);
+            document.getElementById('irrigation-frequency').textContent = schedule.frequency;
+            document.getElementById('water-per-application').textContent = Math.round(schedule.waterPerApplication);
+            document.getElementById('next-irrigation').textContent = schedule.nextIrrigation;
+            document.getElementById('irrigation-duration').textContent = schedule.duration;
+            
+            // Display efficiency tips
+            displayEfficiencyTips(irrigationMethod, efficiency, crop, soilType);
+            
+            // Show results
+            resultsContainer.style.display = 'block';
+            
+            // Scroll to results
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Calculate water requirements based on crop, stage, soil, weather
+        function calculateWaterRequirements(crop, stage, soil, temp, rain) {
+            // These would normally be based on more sophisticated models
+            // Using simplified calculations for demonstration
+            
+            // Base water requirements by crop (mm per day)
+            const cropWaterNeeds = {
+                'rice': 8.5,
+                'wheat': 5.0,
+                'maize': 6.0,
+                'cotton': 7.0,
+                'sugarcane': 8.0,
+                'potato': 5.5,
+                'onion': 4.0,
+                'tomato': 5.5
+            };
+            
+            // Stage factors (multiplier)
+            const stageFactors = {
+                'initial': 0.5,
+                'development': 0.8,
+                'mid-season': 1.2,
+                'late-season': 0.7
+            };
+            
+            // Soil factors (water holding capacity adjustment)
+            const soilFactors = {
+                'sandy': 0.7,  // Drains quickly, needs more frequent watering
+                'loam': 1.0,   // Balanced water retention
+                'clay': 1.3    // Holds water longer, needs less frequent watering
+            };
+            
+            // Temperature adjustment (higher temps = more water needed)
+            const tempFactor = 1.0 + (temp - 25) * 0.04;  // 4% increase per degree above 25°C
+            
+            // Calculate daily water need (mm)
+            const dailyNeed = cropWaterNeeds[crop] * stageFactors[stage] * tempFactor;
+            
+            // Convert to 7-day need (cubic meters per hectare)
+            // 1 mm over 1 hectare = 10 cubic meters
+            const weeklyNeed = dailyNeed * 7 * 10;
+            
+            // Adjust for rainfall (subtract rainfall in cubic meters)
+            const adjustedNeed = Math.max(weeklyNeed - (rain * 10), 0);
+            
+            // Adjust for soil type
+            return adjustedNeed * soilFactors[soil];
+        }
+        
+        // Determine irrigation schedule
+        function determineIrrigationSchedule(crop, stage, soil, waterRequirement, method) {
+            // Frequency of irrigation depends on crop, stage, soil, and method
+            let daysPerWeek = 2;  // Default twice per week
+            
+            // Adjust based on crop and stage
+            if (crop === 'rice') {
+                daysPerWeek = 7;  // Daily for rice
+            } else if (method === 'drip') {
+                daysPerWeek = 5;  // More frequent for drip
+            } else if (soil === 'sandy') {
+                daysPerWeek = 4;  // More frequent for sandy soil
+            } else if (soil === 'clay' && method === 'flood') {
+                daysPerWeek = 1;  // Less frequent for clay with flood
+            }
+            
+            // Water per application
+            const waterPerApplication = waterRequirement / daysPerWeek;
+            
+            // Determine next irrigation day
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const today = new Date().getDay();
+            const nextIrrigationDay = days[(today + 1) % 7]; // Next day
+            
+            // Determine irrigation duration (hours)
+            // This would depend on flow rate, which we're assuming for this demo
+            let duration = 2;  // Default hours
+            if (method === 'flood') {
+                duration = waterPerApplication / 50;  // Assuming 50 m³/hour flow rate
+            } else if (method === 'drip') {
+                duration = waterPerApplication / 10;  // Assuming 10 m³/hour flow rate
+            } else if (method === 'sprinkler') {
+                duration = waterPerApplication / 20;  // Assuming 20 m³/hour flow rate
+            }
+            
+            return {
+                frequency: `${daysPerWeek} times per week`,
+                waterPerApplication: waterPerApplication,
+                nextIrrigation: nextIrrigationDay,
+                duration: duration.toFixed(1)
+            };
+        }
+        
+        // Display efficiency tips
+        function displayEfficiencyTips(method, efficiency, crop, soil) {
+            const tipsList = document.getElementById('efficiency-tips');
+            tipsList.innerHTML = '';
+            
+            const tips = [];
+            
+            // Common tips
+            tips.push("Irrigate during early morning to minimize evaporation losses.");
+            
+            // Method-specific tips
+            if (method === 'flood') {
+                tips.push("Level your field properly to ensure even water distribution.");
+                tips.push("Consider switching to more efficient methods like drip irrigation to save 30-60% water.");
+                
+                if (efficiency < 0.5) {
+                    tips.push("Your flood irrigation efficiency is low. Check for excessive runoff and improve field leveling.");
+                }
+            } else if (method === 'drip') {
+                tips.push("Regularly check drip emitters for clogging to maintain uniform water application.");
+                tips.push("Consider using mulch around plants to further reduce evaporation losses.");
+                
+                if (efficiency < 0.8) {
+                    tips.push("Your drip system efficiency is below optimal. Check for leaks and clogged emitters.");
+                }
+            } else if (method === 'sprinkler') {
+                tips.push("Avoid irrigation during windy conditions to minimize drift losses.");
+                tips.push("Check sprinkler pressure regularly for optimal water distribution.");
+                
+                if (efficiency < 0.7) {
+                    tips.push("Your sprinkler efficiency is low. Consider upgrading nozzles or checking for pressure issues.");
+                }
+            }
+            
+            // Crop-specific tips
+            if (crop === 'rice') {
+                tips.push("Consider alternate wetting and drying technique to reduce water use in rice cultivation.");
+            } else if (crop === 'wheat' || crop === 'maize') {
+                tips.push("These crops are sensitive to water stress during flowering. Ensure adequate irrigation during this period.");
+            }
+            
+            // Soil-specific tips
+            if (soil === 'sandy') {
+                tips.push("Sandy soil drains quickly. Consider more frequent irrigation with smaller amounts.");
+                tips.push("Adding organic matter can improve water retention in sandy soils.");
+            } else if (soil === 'clay') {
+                tips.push("Clay soil has poor drainage. Avoid overwatering to prevent waterlogging issues.");
+                tips.push("Consider longer, less frequent irrigation sessions for clay soils.");
+            }
+            
+            // Add tips to the list
+            tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.innerHTML = `<i class="bi bi-water text-primary me-2"></i> ${tip}`;
+                tipsList.appendChild(li);
+            });
+        }
+    });
+</script>
+{% endblock %}

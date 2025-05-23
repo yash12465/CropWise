@@ -311,6 +311,7 @@ class ImagePestDetector:
         # Search for the pest or disease across all crops
         found_in_crops = []
         treatment_info = None
+        issue_type = "unknown"  # Initialize with default value
         
         for crop, data in self.pest_disease_db.items():
             # Search in pests
@@ -349,7 +350,7 @@ class ImagePestDetector:
                 treatment_info["treatment"],
                 "Consult local agricultural extension for region-specific chemical controls"
             ]
-        else:  # disease
+        else:  # disease or unknown
             organic_options = [
                 "Copper-based fungicide (approved for organic use)",
                 "Sulfur dust for powdery mildew issues",
