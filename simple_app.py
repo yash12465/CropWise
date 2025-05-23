@@ -4,18 +4,40 @@ import csv
 import json
 from io import StringIO
 from datetime import datetime
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session, g
+from flask_babel import Babel, gettext as _
 from simple_crop_recommender import SimpleCropRecommender
 from weather_service import weather_service
 from pest_disease_detector import pest_disease_detector
+from config import Config
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 # Create Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
+app.config.from_object(Config)
 app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours
+
+# Initialize Babel for translations
+babel = Babel(app)
+
+# Set up locale selector function
+def get_locale():
+    # Get language from URL parameter
+    language = request.args.get('lang')
+    if language and language in Config.LANGUAGES:
+        session['language'] = language
+        return language
+    
+    # Get language from session
+    if 'language' in session:
+        return session['language']
+    
+    # Default to browser language or English
+    return request.accept_languages.best_match(Config.LANGUAGES.keys()) or 'en'
+    
+babel.init_app(app, locale_selector=get_locale)
 
 # Initialize services
 crop_recommender = SimpleCropRecommender()
